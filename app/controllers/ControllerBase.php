@@ -101,7 +101,10 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		$todays_time = '00:00:00';
 
 		foreach ($results AS $result) {
-			$todays_time = $result->todays_time;
+			if (!is_null($result->todays_time)) {
+				$todays_time = $result->todays_time;
+				break;
+			}
 		}
 
 		return $todays_time;
@@ -115,7 +118,10 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		$months_time = '00:00:00';
 
 		foreach ($results AS $result) {
-			$months_time = $result->months_time;
+			if (!is_null($result->months_time)) {
+				$months_time = $result->months_time;
+				break;
+			}
 		}
 
 		return $months_time;
