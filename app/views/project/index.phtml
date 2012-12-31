@@ -73,7 +73,7 @@
 
 					<table class="table table-bordered table-striped">
 						<tbody>
-								<?php $tasks = $project->getTasks(5); ?>
+								<?php $tasks = $project->getOpenTasks(); ?>
 								<?php if (is_null($tasks)) { ?>
 									<tr>
 										<td class="empty-table">

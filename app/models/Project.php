@@ -112,4 +112,27 @@ class Project extends Phalcon\Mvc\Model
 
         return null;
     }
+
+    public function getOpenTasks($limit=null)
+    {
+        if (!is_null($limit)) {
+            $tasks = Task::find(array(
+                'conditions' => 'project_id=' . $this->id . ' AND status=0',
+                'order' => 'status ASC, created_at DESC',
+                'limit' => $limit,
+            ));
+        }
+        else {
+            $tasks = Task::find(array(
+                'conditions' => 'project_id=' . $this->id . ' AND status=0',
+                'order' => 'status ASC, created_at DESC',
+            ));
+        }
+
+        if (count($tasks) > 0) {
+            return $tasks;
+        }
+
+        return null;
+    }
 }
