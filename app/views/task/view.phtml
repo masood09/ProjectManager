@@ -43,7 +43,7 @@
 						<div class="control-group">
 							<label class="control-label" for="editTaskHours">Hours</label>
 							<div class="controls">
-								<input type="text" class="input-block-level" name="hours" id="editTaskHours" value="<?php echo $task->hours; ?>">
+								<input type="text" class="input-block-level" name="hours" id="editTaskHours" value="<?php echo ($task->hours > 0) ? $task->hours : ''; ?>">
 							</div>
 						</div>
 
