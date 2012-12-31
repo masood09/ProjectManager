@@ -3,7 +3,7 @@
 <?php $project = $task->getProject(); ?>
 
 <div class="row">
-	<div class="span8">
+	<div class="span9">
 		<div class="content_block well">
 			<h4>
 				<?php echo $task->title; ?>
@@ -140,7 +140,7 @@
 		</div>
 	</div>
 
-	<div class="span4">
+	<div class="span3">
 		<?php if ($currentUser->id != $task->assigned_to) { ?>
 			<?php if ($task->isSubscribed($currentUser)) { ?>
 				<?php echo Tag::linkTo(array("task/unsubscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-danger btn-large", "text" => "Unsubscribe")); ?>
@@ -151,7 +151,7 @@
 			<br />
 		<?php } ?>
 
-		<div class="content_block well">
+		<div class="sidebar_block well">
 			<h4>Users participating</h4>
 
 			<ol>
@@ -160,5 +160,7 @@
 				<?php } ?>
 			</ol>
 		</div>
+
+		<?php $this->partial("partials/attendance") ?>
 	</div>
 </div>

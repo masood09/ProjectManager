@@ -70,7 +70,8 @@ body {
 	border: 1px solid #e5e5e5;
 }
 
-div.content_block {
+div.content_block,
+div.sidebar_block {
 	background-color: #fff;
 }
 
@@ -86,4 +87,12 @@ th.a-center {
 
 table td p {
 	margin: 5px 0;
+}
+
+div.sidebar_block {
+	margin-bottom: 20px;
+}
+
+div.sidebar_block button.sidebar_btn {
+	width: 180px;
 }

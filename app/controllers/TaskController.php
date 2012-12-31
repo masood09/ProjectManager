@@ -316,6 +316,7 @@ class TaskController extends ControllerBase
 
 	public function indexAction()
 	{
+		Phalcon\Tag::appendTitle('Your Tasks');
 		$this->view->setVar('tasks', $this->currentUser->getAllTasks());
 	}
 }
