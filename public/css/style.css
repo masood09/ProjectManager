@@ -96,3 +96,7 @@ div.sidebar_block {
 div.sidebar_block button.sidebar_btn {
 	width: 180px;
 }
+
+div.modal form {
+	margin-bottom: 0;
+}
