@@ -126,14 +126,22 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		if ($allowed != Phalcon\Acl::ALLOW) {
 			if ($role == 'guest') {
 				$this->flashSession->error('Please login before you proceed.');
-				$this->response->redirect('user/login');
-				$this->view->disable();
+				$this->dispatcher->forward(
+					array(
+						'controller' => 'user',
+						'action' => 'login'
+					)
+				);
 				return;
 			}
 			else {
 				$this->flashSession->error('You do not have permission to access this area.');
-				$this->response->redirect('project/index');
-				$this->view->disable();
+				$this->dispatcher->forward(
+					array(
+						'controller' => 'project',
+						'action' => 'index'
+					)
+				);
 				return;
 			}
 		}
