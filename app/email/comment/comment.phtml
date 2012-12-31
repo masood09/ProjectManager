@@ -1,0 +1,16 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<p>Hello <?php echo $full_name; ?>,</p>
+
+<p>
+	<?php echo $commenter_name; ?> has posted a comment on the task : <?php echo Tag::linkTo(array('task/view/' . $task->id , 'text' => $task->title)); ?> of project : <?php echo $project->name; ?>
+</p>
+
+<?php echo Markdown($comment->comment); ?>
+
+<p>To view the comment and reply to this please click <?php echo Tag::linkTo(array('task/view/' . $task->id . '#comment-' . $comment->id  , 'text' => 'here')); ?></p>
+
+<p>
+Thanks,<br />
+<?php echo $CompanyName; ?>
+</p>

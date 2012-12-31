@@ -1,0 +1,22 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<p>Hello <?php echo $full_name; ?>,</p>
+
+<p>You have been assigned a task for the project <?php echo $project->name; ?></p>
+
+<p>
+	<strong>Title : </strong><?php echo $task->title; ?><br />
+	<strong>Job ID : </strong><?php echo $task->job_id; ?><br />
+	<strong>Hours : </strong><?php echo $task->hours; ?>
+</p>
+
+<strong>Description:</strong><br />
+
+<?php echo Markdown($task->description); ?>
+
+<p>To view the task and comment on it please click <?php echo Tag::linkTo(array('task/view/' . $task->id  , 'text' => 'here')); ?></p>
+
+<p>
+Thanks,<br />
+<?php echo $CompanyName; ?>
+</p>

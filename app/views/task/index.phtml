@@ -1,0 +1,45 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="row">
+	<div class="span12">
+		<div class="content_block well">
+			<table class="table table-bordered table-striped">
+				<tbody>
+					<?php if (count($tasks) == 0) { ?>
+						<tr>
+							<td class="empty-table">
+								<p>No Tasks for you!</p>
+							</td>
+						</tr>
+					<?php } else { ?>
+						<?php foreach($tasks AS $task) { ?>
+							<tr>
+								<td>
+									<p>
+										<?php echo Tag::linkTo(array('task/view/' . $task->id, 'text' => $task->title)); ?>
+									</p>
+
+									<p>
+										<span class="label label-info">Project : <?php echo $task->getProject()->name; ?></span>&nbsp;&nbsp;&nbsp;
+										<?php if ($task->job_id) { ?>
+											<span class="label label-info">Job ID : <?php echo $task->job_id; ?></span>&nbsp;&nbsp;&nbsp;
+										<?php } ?>
+
+										<span class="label label-info">Assigned to : <?php echo $task->getUser()->full_name; ?></span>&nbsp;&nbsp;&nbsp;
+										<span class="label label-info">Hours : <?php echo $task->hours; ?></span>&nbsp;&nbsp;&nbsp;
+
+										<?php if ($task->status == 0) { ?>
+											<span class="label label-important">Open</span>
+										<?php } else { ?>
+											<span class="label label-success">Closed</span>
+										<?php } ?>
+									</p>
+								</td>
+							</tr>
+						<?php } ?>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

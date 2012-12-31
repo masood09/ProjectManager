@@ -1,0 +1,15 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div id="single_form">
+	<div class="row">
+		<?php echo Tag::form('user/loginpost'); ?>
+			<h2 class="form-signin-heading">Please sign in</h2>
+
+			<input type="text" class="input-block-level" placeholder="Email address" name="email">
+			<input type="password" class="input-block-level" placeholder="Password" name="password">
+			<input type="hidden" name="returnUrl" value="<?php echo $returnUrl; ?>">
+
+			<button class="btn btn-large btn-primary" type="submit">Sign in</button>
+		</form>
+	</div>
+</div>

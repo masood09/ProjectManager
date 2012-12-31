@@ -1,0 +1,233 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="row">
+	<div class="span9">
+		<?php if (count($allProjects) > 0) { ?>
+			<?php foreach($allProjects AS $project) { ?>
+				<div class="content_block well">
+					<div class="block_title">
+						<h4 class="left"><?php echo $project->name; ?></h4>
+
+						<a href="#newTask-<?php echo $project->id; ?>" role="button" class="btn btn-primary right" data-toggle="modal">Add a new task</a>
+
+						<div id="newTask-<?php echo $project->id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+								<h3>Add task for <?php echo $project->name; ?></h3>
+							</div>
+
+							<?php echo Tag::form(array('task/savepost', 'class' => 'form-horizontal')); ?>
+								<div class="modal-body">
+									<div class="control-group">
+										<label class="control-label" for="newTaskJobID-<?php echo $project->id; ?>">Job ID</label>
+										<div class="controls">
+											<input type="text" class="input-block-level" name="job_id" id="newTaskJobID-<?php echo $project->id; ?>">
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label" for="newTaskTitle-<?php echo $project->id; ?>">Title</label>
+										<div class="controls">
+											<input type="text" class="input-block-level" name="title" id="newTaskTitle-<?php echo $project->id; ?>">
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label" for="newTaskDescription-<?php echo $project->id; ?>">Description</label>
+										<div class="controls">
+											<textarea class="input-block-level" name="description" id="newTaskDescription-<?php echo $project->id; ?>" rows="6"></textarea>
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label" for="newTaskHours-<?php echo $project->id; ?>">Hours</label>
+										<div class="controls">
+											<input type="text" class="input-block-level" name="hours" id="newTaskHours-<?php echo $project->id; ?>">
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label" for="newTaskAssigned-<?php echo $project->id; ?>">Assigned to</label>
+										<div class="controls">
+											<select id="newTaskAssigned-<?php echo $project->id; ?>" name="assigned_to">
+												<option value="">-- Please Select</option>
+												<?php foreach($project->getDevelopers() AS $developer) { ?>
+													<option value="<?php echo $developer->id; ?>"><?php echo $developer->full_name; ?></option>
+												<?php } ?>
+											</select>
+										</div>
+									</div>
+
+									<input type="hidden" value="project" name="controller">
+									<input type="hidden" value="index" name="action">
+									<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+								</div>
+
+								<div class="modal-footer">
+									<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+									<button class="btn btn-primary">Save changes</button>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<table class="table table-bordered table-striped">
+						<tbody>
+								<?php $tasks = $project->getTasks(5); ?>
+								<?php if (is_null($tasks)) { ?>
+									<tr>
+										<td class="empty-table">
+											No tasks! Why not add some?
+										</td>
+									</tr>
+								<?php } else { ?>
+									<?php foreach ($tasks AS $task) { ?>
+										<tr>
+											<td>
+												<p>
+													<?php echo Tag::linkTo(array('task/view/' . $task->id, 'text' => $task->title)); ?>
+												</p>
+												<p>
+													<?php if ($task->job_id) { ?>
+														<span class="label label-info">Job ID : <?php echo $task->job_id; ?></span>&nbsp;&nbsp;&nbsp;
+													<?php } ?>
+
+													<span class="label label-info">Assigned to : <?php echo $task->getUser()->full_name; ?></span>&nbsp;&nbsp;&nbsp;
+													<span class="label label-info">Hours : <?php echo $task->hours; ?></span>&nbsp;&nbsp;&nbsp;
+
+													<?php if ($task->status == 0) { ?>
+														<span class="label label-important">Open</span>
+													<?php } else { ?>
+														<span class="label label-success">Closed</span>
+													<?php } ?>
+												</p>
+											</td>
+										</tr>
+									<?php } ?>
+								<?php } ?>
+						</tbody>
+					</table>
+
+					<?php if ($project->isOwner($currentUser)) { ?>
+						<a href="#manageUsers-<?php echo $project->id; ?>" role="button" class="btn btn-mini" data-toggle="modal">Manage users</a>
+						<a href="#editProject-<?php echo $project->id; ?>" role="button" class="btn btn-mini" data-toggle="modal">Edit project</a>
+
+						<div id="manageUsers-<?php echo $project->id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+								<h3>Manage users for <?php echo $project->name; ?></h3>
+							</div>
+
+							<?php echo Tag::form(array('project/saveusers', 'class' => 'form-horizontal')); ?>
+								<div class="modal-body">
+									<?php if (count($developers) > 1) { ?>
+										<div class="control-group">
+											<label class="control-label" for="manageUsersDevelopers-<?php echo $project->id; ?>">Developers</label>
+											<div class="controls">
+												<select multiple="multiple" id="manageUsersDevelopers-<?php echo $project->id; ?>" name="developers[]">
+													<?php foreach($developers AS $developer) { ?>
+														<?php if (!$project->isOwner($developer, false)) { ?>
+															<option value="<?php echo $developer->id; ?>" <?php echo ($project->isInProject($developer)) ? 'selected="selected"' : ''; ?>>
+																<?php echo $developer->full_name; ?>
+															</option>
+														<?php } ?>
+													<?php } ?>
+												</select>
+											</div>
+										</div>
+									<?php } ?>
+
+									<input type="hidden" value="project" name="controller">
+									<input type="hidden" value="index" name="action">
+									<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+								</div>
+
+								<div class="modal-footer">
+									<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+									<button class="btn btn-primary">Save changes</button>
+								</div>
+							</form>
+						</div>
+
+						<div id="editProject-<?php echo $project->id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+								<h3>Edit project <?php echo $project->name; ?></h3>
+							</div>
+
+							<?php echo Tag::form(array('project/savepost', 'class' => 'form-horizontal')); ?>
+								<div class="modal-body">
+									<div class="control-group">
+										<label class="control-label" for="editProjectName-<?php echo $project->id; ?>">Name</label>
+										<div class="controls">
+											<input type="text" class="input-block-level" placeholder="Project Name" name="name" id="editProjectName-<?php echo $project->id; ?>" value="<?php echo $project->name; ?>">
+										</div>
+									</div>
+
+									<div class="control-group">
+										<label class="control-label" for="editProjectDescription-<?php echo $project->id; ?>">Description</label>
+										<div class="controls">
+											<textarea rows="6" class="input-block-level" name="description" placeholder="Project Description" id="editProjectDescription-<?php echo $project->id; ?>"><?php echo $project->description; ?></textarea>
+										</div>
+									</div>
+
+									<input type="hidden" value="project" name="controller">
+									<input type="hidden" value="index" name="action">
+									<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+								</div>
+
+								<div class="modal-footer">
+									<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+									<button class="btn btn-primary">Save changes</button>
+								</div>
+							</form>
+						</div>
+					<?php } ?>
+				</div>
+			<?php } ?>
+		<?php } else { ?>
+			<div class="content_block well well-large">
+				<p>You are not into any project.</p>
+			</div>
+		<?php } ?>
+	</div>
+
+	<div class="span3">
+		<?php if($canCreateProject) { ?>
+			<a href="#newProject" role="button" class="btn btn-primary btn-large" data-toggle="modal">Add a new project</a>
+
+			<div id="newProject" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>Add a new project</h3>
+				</div>
+
+				<?php echo Tag::form(array('project/createpost', 'class' => 'form-horizontal')); ?>
+					<div class="modal-body">
+						<div class="control-group">
+							<label class="control-label" for="newProjectName">Name</label>
+							<div class="controls">
+								<input type="text" class="input-block-level" placeholder="Project Name" name="name" id="newProjectName">
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="newProjectDescription">Description</label>
+							<div class="controls">
+								<textarea rows="6" class="input-block-level" name="description" placeholder="Project Description" id="newProjectDescription"></textarea>
+							</div>
+						</div>
+
+						<input type="hidden" value="project" name="controller">
+						<input type="hidden" value="index" name="action">
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button class="btn btn-primary">Save changes</button>
+					</div>
+				</form>
+			</div>
+		<?php } ?>
+	</div>
+</div>

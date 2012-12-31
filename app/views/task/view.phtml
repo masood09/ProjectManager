@@ -1,0 +1,98 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="row">
+	<div class="span8">
+		<div class="content_block well">
+			<h4><?php echo $task->title; ?></h4>
+
+			<p>
+				<span class="label label-info">Project : <?php echo $task->getProject()->name; ?></span>&nbsp;&nbsp;&nbsp;
+
+				<?php if ($task->job_id) { ?>
+					<span class="label label-info">Job ID : <?php echo $task->job_id; ?></span>&nbsp;&nbsp;&nbsp;
+				<?php } ?>
+
+				<span class="label label-info">Assigned to : <?php echo $task->getUser()->full_name; ?></span>&nbsp;&nbsp;&nbsp;
+				<span class="label label-info">Hours : <?php echo $task->hours; ?></span>&nbsp;&nbsp;&nbsp;
+
+				<?php if ($task->status == 0) { ?>
+					<span class="label label-important">Open</span>
+				<?php } else { ?>
+					<span class="label label-success">Closed</span>
+				<?php } ?>
+			</p>
+
+			<?php if ($task->description) { ?>
+				<div class="task_description well">
+					<?php echo Markdown($task->description); ?>
+				</div>
+			<?php } ?>
+		</div>
+
+		<hr>
+
+		<?php $comments = $task->getComment(); ?>
+
+		<?php if (count($comments) > 0) { ?>
+		<div class="content_block well">
+			<h5>Comments</h5>
+
+			<table class="table table-bordered table-striped">
+				<?php foreach($comments AS $comment) { ?>
+					<tr id="comment-<?php echo $comment->id; ?>">
+						<td>
+							<p class="label label-inverse"><em><b><?php echo $comment->getUser()->full_name; ?></b> wrote on <?php echo $comment->created_at; ?></em></p>
+
+							<div class="comment">
+								<?php echo Markdown($comment->comment); ?>
+							</div>
+						</td>
+					</tr>
+				<?php } ?>
+			</table>
+		</div>
+
+		<?php } ?>
+
+		<div class="content_block well">
+			<h5>Add new comment</h5>
+			<?php echo Tag::form(array("task/addcomment", 'class' => 'form-horizontal')); ?>
+				<textarea class="input-block-level" rows="6" name="comment"></textarea>
+				<input type="hidden" name="task_id" value="<?php echo $task->id; ?>">
+
+				<br /><br />
+				<?php if ($currentUser->id == $task->assigned_to) { ?>
+					<label class="checkbox">
+						<input type="checkbox" name="task_complete" <?php echo ($task->status == 1) ? 'checked="checked"' : ''; ?>>
+						Mark the task as complete.
+					</label>
+					<br />
+				<?php } ?>
+
+				<input type="submit" class="btn btn-primary" value="Add comment">
+			</form>
+		</div>
+	</div>
+
+	<div class="span4">
+		<?php if ($currentUser->id != $task->assigned_to) { ?>
+			<?php if ($task->isSubscribed($currentUser)) { ?>
+				<?php echo Tag::linkTo(array("task/unsubscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-danger btn-large", "text" => "Unsubscribe")); ?>
+			<?php } else { ?>
+				<?php echo Tag::linkTo(array("task/subscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-primary btn-large", "text" => "Subscribe")); ?>
+			<?php } ?>
+			<br />
+			<br />
+		<?php } ?>
+
+		<div class="content_block well">
+			<h4>Users participating</h4>
+
+			<ol>
+				<?php foreach($task->getTaskUser() AS $taskUser) { ?>
+					<li><?php echo $taskUser->getUser()->full_name; ?></li>
+				<?php } ?>
+			</ol>
+		</div>
+	</div>
+</div>

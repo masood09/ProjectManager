@@ -1,0 +1,21 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<p>Hi <?php echo $full_name; ?>,</p>
+
+<p>Welcome to <?php echo $CompanyName; ?>. We have created your GS Microsystems account.</p>
+
+<p>You can now login to GS Microsystems by clicking <?php echo Tag::linkTo(array('user/login' , 'class' => 'brand', 'text' => 'here')); ?> and using the email address and password below:</p>
+
+<p>
+	<strong>Email :</strong> <?php echo $email; ?><br />
+	<strong>Password :</strong> <?php echo $password; ?>
+</p>
+
+<p>You can change your password anytime by clicking on the <strong>My Account</strong> link.</p>
+
+<p>If you have any questions, please contact us at masood@gsmicrosystems.com</p>
+
+<p>
+	Thank you,<br />
+	<?php echo $CompanyName; ?>
+</p>

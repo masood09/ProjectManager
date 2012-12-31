@@ -1,0 +1,150 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="row">
+	<div class="span3">
+		<ul id="navbarSidebar" class="nav nav-list sidebarnav affix">
+			<li>
+				<a href="#developers">
+					<i class="icon-chevron-right right"></i>
+					Users
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="span9">
+		<div id="developers" class="content_block well well-large">
+			<div class="block_title">
+				<h4 class="left">Users</h4>
+
+				<a href="#newDeveloper" role="button" class="btn btn-primary right" data-toggle="modal">Add a user</a>
+
+				<div id="newDeveloper" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h3>Add a new user</h3>
+					</div>
+
+					<?php echo Tag::form(array('user/saveuser', 'class' => 'form-horizontal')); ?>
+						<div class="modal-body">
+							<div class="control-group">
+								<label class="control-label" for="newDeveloperName">Full name</label>
+								<div class="controls">
+									<input type="text" class="input-block-level" id="newDeveloperName" placeholder="Full name" name="full_name">
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="newDeveloperEmail">Email</label>
+								<div class="controls">
+									<input type="text" class="input-block-level" id="newDeveloperEmail" placeholder="Email address" name="email">
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="newDeveloperPassword">Password</label>
+								<div class="controls">
+									<input type="password" class="input-block-level" id="newDeveloperPassword" placeholder="Password" name="password1">
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="newDeveloperPassword2">Re-enter password</label>
+								<div class="controls">
+									<input type="password" class="input-block-level" id="newDeveloperPassword2" placeholder="Re-enter password" name="password2">
+								</div>
+							</div>
+
+							<input type="hidden" value="admin" name="controller">
+							<input type="hidden" value="index" name="action">
+							<input type="hidden" value="2" name="role_id">
+						</div>
+
+						<div class="modal-footer">
+							<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+							<button class="btn btn-primary">Save changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>Full Name</th>
+						<th>Email</th>
+						<th class="a-center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if (count($developers) > 0) { ?>
+						<?php foreach ($developers AS $developer) { ?>
+							<tr>
+								<td><?php echo $developer->full_name; ?></td>
+								<td><?php echo $developer->email; ?></td>
+								<td class="a-center">
+									<a href="#editDeveloper-<?php echo $developer->id; ?>" role="button" class="btn" data-toggle="modal">Edit</a>
+
+									<div id="editDeveloper-<?php echo $developer->id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<h3>Edit developer</h3>
+										</div>
+
+										<?php echo Tag::form(array('user/saveuser/' . $developer->id, 'class' => 'form-horizontal')); ?>
+											<div class="modal-body">
+												<div class="control-group">
+													<label class="control-label" for="editDeveloperName-<?php echo $developer->id; ?>">Full name</label>
+													<div class="controls">
+														<input type="text" class="input-block-level" id="editDeveloperName-<?php echo $developer->id; ?>" placeholder="Full name" name="full_name" value="<?php echo $developer->full_name; ?>">
+													</div>
+												</div>
+
+												<div class="control-group">
+													<label class="control-label" for="editDeveloperEmail-<?php echo $developer->id; ?>">Email</label>
+													<div class="controls">
+														<input type="text" class="input-block-level" id="editDeveloperEmail-<?php echo $developer->id; ?>" placeholder="Email address" name="email" value="<?php echo $developer->email; ?>">
+													</div>
+												</div>
+
+												<div class="control-group">
+													<label class="control-label" for="editDeveloperPassword-<?php echo $developer->id; ?>">Password</label>
+													<div class="controls">
+														<input type="password" class="input-block-level" id="editDeveloperPassword-<?php echo $developer->id; ?>" placeholder="Password" name="password1">
+													</div>
+												</div>
+
+												<div class="control-group">
+													<label class="control-label" for="editDeveloperPassword2-<?php echo $developer->id; ?>">Re-enter password</label>
+													<div class="controls">
+														<input type="password" class="input-block-level" id="editDeveloperPassword2-<?php echo $developer->id; ?>" placeholder="Re-enter password" name="password2">
+													</div>
+												</div>
+
+												<input type="hidden" value="admin" name="controller">
+												<input type="hidden" value="index" name="action">
+												<input type="hidden" value="2" name="role_id">
+												<input type="hidden" value="<?php echo $developer->id; ?>" name="id">
+											</div>
+
+											<div class="modal-footer">
+												<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+												<button class="btn btn-primary">Save changes</button>
+											</div>
+										</form>
+									</div>
+								</td>
+							</tr>
+						<?php } ?>
+					<?php } else { ?>
+						<tr>
+							<td colspan="3" class="empty-table">
+								No users! Why not add some?
+							</td>
+						</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

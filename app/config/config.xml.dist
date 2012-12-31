@@ -1,0 +1,24 @@
+<config>
+	<core>
+		<name><![CDATA[GS Microsystems]]></name>
+		<version><![CDATA[0.1.0]]></version>
+		<baseUrl><![CDATA[http://localhost/Project/]]></baseUrl>
+	</core>
+	<database>
+		<host><![CDATA[]]></host>
+		<username><![CDATA[]]></username>
+		<password><![CDATA[]]></password>
+		<dbname><![CDATA[]]></dbname>
+	</database>
+	<metadata>
+		<adapter><![CDATA[Apc]]></adapter>
+	</metadata>
+	<email>
+		<host><![CDATA[localhost]]></host>
+		<username><![CDATA[]]></username>
+		<password><![CDATA[]]></password>
+		<port><![CDATA[25]]></port>
+		<ssl><![CDATA[fasle]]></ssl>
+		<from><![CDATA[project@gsmicrosystems.com]]></from>
+	</email>
+</config>
