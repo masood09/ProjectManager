@@ -1,9 +1,75 @@
 <?php use Phalcon\Tag as Tag ?>
 
+<?php $project = $task->getProject(); ?>
+
 <div class="row">
 	<div class="span8">
 		<div class="content_block well">
-			<h4><?php echo $task->title; ?></h4>
+			<h4>
+				<?php echo $task->title; ?>
+
+				<a href="#editTask" role="button" class="btn btn-primary btn-small right" data-toggle="modal">Edit task</a>
+			</h4>
+
+			<div id="editTask" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>Edit task</h3>
+				</div>
+
+				<?php echo Tag::form(array('task/savepost', 'class' => 'form-horizontal')); ?>
+					<div class="modal-body">
+						<div class="control-group">
+							<label class="control-label" for="editTaskJobID">Job ID</label>
+							<div class="controls">
+								<input type="text" class="input-block-level" name="job_id" id="editTaskJobID" value="<?php echo $task->job_id; ?>">
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="editTaskTitle">Title</label>
+							<div class="controls">
+								<input type="text" class="input-block-level" name="title" id="editTaskTitle" value="<?php echo $task->title; ?>">
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="editTaskDescription">Description</label>
+							<div class="controls">
+								<textarea class="input-block-level" name="description" id="editTaskDescription" rows="6"><?php echo $task->description; ?></textarea>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="editTaskHours">Hours</label>
+							<div class="controls">
+								<input type="text" class="input-block-level" name="hours" id="editTaskHours" value="<?php echo $task->hours; ?>">
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="newTaskAssigned-<?php echo $project->id; ?>">Assigned to</label>
+							<div class="controls">
+								<select id="newTaskAssigned-<?php echo $project->id; ?>" name="assigned_to">
+									<?php foreach($project->getDevelopers() AS $developer) { ?>
+										<option value="<?php echo $developer->id; ?>" <?php echo ($task->assigned_to == $developer->id) ? 'selected="selected"' : ''; ?>><?php echo $developer->full_name; ?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+
+						<input type="hidden" value="task" name="controller">
+						<input type="hidden" value="view/<?php echo $task->id; ?>" name="action">
+						<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+						<input type="hidden" value="<?php echo $task->id; ?>" name="task_id">
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button class="btn btn-primary">Save changes</button>
+					</div>
+				</form>
+			</div>
 
 			<p>
 				<span class="label label-info">Project : <?php echo $task->getProject()->name; ?></span>&nbsp;&nbsp;&nbsp;
