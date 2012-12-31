@@ -161,7 +161,7 @@
 			<div class="block_title">
 				<h4 class="left">Holidays</h4>
 
-				<a href="#newHoliday" role="button" class="btn btn-primary right" data-toggle="modal">Add a holiday</a>
+				<a href="#newHoliday" role="button" class="btn btn-primary right" data-toggle="modal" data-keyboard="false">Add a holiday</a>
 
 				<div id="newHoliday" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
 					<div class="modal-header">
@@ -212,7 +212,7 @@
 								<td><?php echo $holiday->date; ?></td>
 								<td><?php echo $holiday->name; ?></td>
 								<td class="a-center">
-									<a href="#editHoliday-<?php echo $holiday->id; ?>" role="button" class="btn" data-toggle="modal">Edit</a>
+									<a href="#editHoliday-<?php echo $holiday->id; ?>" role="button" class="btn" data-toggle="modal" data-keyboard="false">Edit</a>
 
 									<div id="editHoliday-<?php echo $holiday->id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
 										<div class="modal-header">
@@ -262,3 +262,10 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	jQuery(".modal").click(function() {
+		alert("hello");
+		jQuery(".date_selector").hide();
+	});
+</script>
