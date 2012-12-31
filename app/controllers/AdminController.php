@@ -6,5 +6,6 @@ class AdminController extends ControllerBase
 	{
 		Phalcon\Tag::appendTitle('Administration');
 		$this->view->setVar('developers', User::getAllDevelopers());
+		$this->view->setVar('holidays', Holiday::getFutureHolidays());
 	}
 }

@@ -36,6 +36,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'task' => array('savepost', 'view', 'subscribe', 'unsubscribe', 'addcomment', 'index'),
 				'admin' => array('index'),
 				'user' => array('saveuser', 'myaccount'),
+				'holiday' => array('savepost'),
 			);
 
 			// Private developer resources

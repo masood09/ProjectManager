@@ -9,6 +9,13 @@
 					Users
 				</a>
 			</li>
+
+			<li>
+				<a href="#holidays">
+					<i class="icon-chevron-right right"></i>
+					Holidays
+				</a>
+			</li>
 		</ul>
 	</div>
 
@@ -140,6 +147,113 @@
 						<tr>
 							<td colspan="3" class="empty-table">
 								No users! Why not add some?
+							</td>
+						</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+
+
+
+
+		<div id="holidays" class="content_block well well-large">
+			<div class="block_title">
+				<h4 class="left">Holidays</h4>
+
+				<a href="#newHoliday" role="button" class="btn btn-primary right" data-toggle="modal">Add a holiday</a>
+
+				<div id="newHoliday" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h3>Add a new holiday</h3>
+					</div>
+
+					<?php echo Tag::form(array('holiday/savepost', 'class' => 'form-horizontal')); ?>
+						<div class="modal-body">
+							<div class="control-group">
+								<label class="control-label" for="newHolidayName">Name of the holiday</label>
+								<div class="controls">
+									<input type="text" class="input-block-level" id="newHolidayName" placeholder="Holiday Name" name="name">
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="newHolidayDate">Date</label>
+								<div class="controls">
+									<input type="text" class="input-block-level jdpicker" id="newHolidayDate" placeholder="Date" name="date">
+								</div>
+							</div>
+
+							<input type="hidden" value="admin" name="controller">
+							<input type="hidden" value="index" name="action">
+						</div>
+
+						<div class="modal-footer">
+							<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+							<button class="btn btn-primary">Save changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Name</th>
+						<th class="a-center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php if (count($holidays) > 0) { ?>
+						<?php foreach ($holidays AS $holiday) { ?>
+							<tr>
+								<td><?php echo $holiday->date; ?></td>
+								<td><?php echo $holiday->name; ?></td>
+								<td class="a-center">
+									<a href="#editHoliday-<?php echo $holiday->id; ?>" role="button" class="btn" data-toggle="modal">Edit</a>
+
+									<div id="editHoliday-<?php echo $holiday->id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<h3>Edit holiday</h3>
+										</div>
+
+										<?php echo Tag::form(array('holiday/savepost/' . $holiday->id, 'class' => 'form-horizontal')); ?>
+											<div class="modal-body">
+												<div class="control-group">
+													<label class="control-label" for="editHolidayName-<?php echo $holiday->id; ?>">Name of the holiday</label>
+													<div class="controls">
+														<input type="text" class="input-block-level" id="editHolidayName-<?php echo $holiday->id; ?>" placeholder="Holiday name" name="name" value="<?php echo $holiday->name; ?>">
+													</div>
+												</div>
+
+												<div class="control-group">
+													<label class="control-label" for="editHolidayDate-<?php echo $holiday->id; ?>">Date</label>
+													<div class="controls">
+														<input type="text" class="input-block-level jdpicker" id="editHolidayDate-<?php echo $holiday->id; ?>" placeholder="Date" name="date" value="<?php echo $holiday->date; ?>">
+													</div>
+												</div>
+
+												<input type="hidden" value="admin" name="controller">
+												<input type="hidden" value="index" name="action">
+												<input type="hidden" value="<?php echo $holiday->id; ?>" name="holiday_id">
+											</div>
+
+											<div class="modal-footer">
+												<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+												<button class="btn btn-primary">Save changes</button>
+											</div>
+										</form>
+									</div>
+								</td>
+							</tr>
+						<?php } ?>
+					<?php } else { ?>
+						<tr>
+							<td colspan="3" class="empty-table">
+								No holidays! Why not add some?
 							</td>
 						</tr>
 					<?php } ?>
