@@ -83,6 +83,8 @@ class Bcrypt
 			$output .= $itoa64[$c1];
 			$output .= $itoa64[$c2 & 0x3f];
 		} while(1);
+
+		return $output;
 	}
 
 	private function getSalt()
