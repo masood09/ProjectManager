@@ -34,7 +34,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'index' => array('index'),
 				'project' => array('index', 'create', 'createpost', 'saveusers', 'savepost'),
 				'task' => array('savepost', 'view', 'subscribe', 'unsubscribe', 'addcomment', 'index'),
-				'admin' => array('index'),
+				'admin' => array('index', 'configpost'),
 				'user' => array('saveuser', 'myaccount'),
 				'attendance' => array('savepost'),
 				'holiday' => array('savepost'),
