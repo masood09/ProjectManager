@@ -93,27 +93,39 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		return $this->_acl;
 	}
 
-	protected function getTodaysTotalTime($user)
+	protected function getDaysTotalTime($user_id, $date=null)
 	{
-		$results = null;
-		$results = $this->modelsManager->executeQuery('SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( Attendance.total ) ) ) AS todays_time FROM Attendance WHERE user_id = "' . $user->id . '" AND date = CURDATE()');
+		if ($date == null) {
+			$date = 'CURDATE()';
+		}
 
-		$todays_time = '00:00:00';
+		$results = null;
+		$results = $this->modelsManager->executeQuery('SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( Attendance.total ) ) ) AS todays_time FROM Attendance WHERE user_id = "' . $user_id . '" AND date = ' . $date);
+
+		$days_time = '00:00:00';
 
 		foreach ($results AS $result) {
 			if (!is_null($result->todays_time)) {
-				$todays_time = $result->todays_time;
+				$days_time = $result->todays_time;
 				break;
 			}
 		}
 
-		return $todays_time;
+		return $days_time;
 	}
 
-	protected function getMonthsTotalTime($user)
+	protected function getMonthsTotalTime($user_id, $month=null, $year=null)
 	{
+		if ($month == null) {
+			$month = 'MONTH(NOW())';
+		}
+
+		if ($year == null) {
+			$year = 'YEAR(NOW())';
+		}
+
 		$results = null;
-		$results = $this->modelsManager->executeQuery('SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( Attendance.total ) ) ) AS months_time FROM Attendance WHERE user_id = "' . $user->id . '" AND YEAR(Attendance.date) = YEAR(NOW()) AND MONTH(Attendance.date) = MONTH(NOW())');
+		$results = $this->modelsManager->executeQuery('SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( Attendance.total ) ) ) AS months_time FROM Attendance WHERE user_id = "' . $user_id . '" AND YEAR(Attendance.date) = ' . $year . ' AND MONTH(Attendance.date) = ' . $month);
 
 		$months_time = '00:00:00';
 
@@ -127,10 +139,18 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		return $months_time;
 	}
 
-	protected function getThisMonthsHolidays()
+	protected function getMonthsHolidays($month=null, $year=null)
 	{
+		if ($month == null) {
+			$month = 'MONTH(NOW())';
+		}
+
+		if ($year == null) {
+			$year = 'YEAR(NOW())';
+		}
+
 		$results = null;
-		$results = $this->modelsManager->executeQuery('SELECT Holiday.date FROM Holiday WHERE YEAR(Holiday.date) = YEAR(NOW()) AND MONTH(Holiday.date) = MONTH(NOW())');
+		$results = $this->modelsManager->executeQuery('SELECT Holiday.date FROM Holiday WHERE YEAR(Holiday.date) = ' . $year . ' AND MONTH(Holiday.date) = ' . $month);
 
 		$holidays = array();
 
@@ -141,11 +161,19 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		return $holidays;
 	}
 
-	protected function getMonthsTargetTime($user)
+	protected function getMonthsTargetTime($user_id, $month=null, $year=null)
 	{
-		$startDate = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-		$endDate = date('Y-m-t', mktime(0, 0, 0, date('m'), 1, date('Y')));
-		$holidays = $this->getThisMonthsHolidays();
+		if ($month == null) {
+			$month = date('m');
+		}
+
+		if ($year == null) {
+			$year = date('Y');
+		}
+
+		$startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
+		$endDate = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
+		$holidays = $this->getMonthsHolidays($month, $year);
 
 		$workingDays = AttendanceHelper::getWorkingDays($startDate, $endDate, $holidays);
 
@@ -154,7 +182,6 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 
 	protected function initialize()
 	{
-		$this->getMonthsTargetTime(null);
 		$role = null;
 		$session_id = $this->session->get('session_id');
 		$role = SessionHelper::getUserRole($session_id);
@@ -175,9 +202,9 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			$this->session_id = $session_id;
 			$this->currentUser = SessionHelper::getUser($session_id);
 			$this->view->setVar('currentUser', $this->currentUser);
-			$this->view->setVar('todays_time', $this->getTodaysTotalTime($this->currentUser));
-			$this->view->setVar('months_time', $this->getMonthsTotalTime($this->currentUser));
-			$this->view->setVar('months_target_time', $this->getMonthsTargetTime($this->currentUser));
+			$this->view->setVar('todays_time', $this->getDaysTotalTime($this->currentUser->id));
+			$this->view->setVar('months_time', $this->getMonthsTotalTime($this->currentUser->id));
+			$this->view->setVar('months_target_time', $this->getMonthsTargetTime($this->currentUser->id));
 
 			$attendance = Attendance::findFirst('user_id="' . $this->currentUser->id . '" AND date=' . new Phalcon\Db\RawValue('CURDATE()') . ' AND end IS NULL');
 
