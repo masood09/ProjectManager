@@ -34,6 +34,7 @@ class ReportController extends ControllerBase
 							$temp['project'] = $task->getProject()->name;
 							$temp['task_title'] = $task->title;
 							$temp['time_spent'] = $result->task_time;
+							$temp['assigned_time'] = $task->hours;
 
 							if ($date == $task->completed_on) {
 								$temp['completed'] = 'Yes';
