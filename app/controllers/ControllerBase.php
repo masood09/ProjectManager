@@ -183,6 +183,21 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		return ($workingDays * 8) . ':00:00';
 	}
 
+	protected function getUserTasksForSelect($user)
+	{
+		$return = null;
+
+		$allTasks = $user->getAllTasks();
+
+		foreach ($allTasks AS $task) {
+			if ($task->status == 0) {
+				$return[$task->id] = $task->getProject()->name . ' - ' . $task->title;
+			}
+		}
+
+		return $return;
+	}
+
 	protected function initialize()
 	{
 		$role = null;
@@ -208,6 +223,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			$this->view->setVar('todays_time', $this->getDaysTotalTime($this->currentUser->id));
 			$this->view->setVar('months_time', $this->getMonthsTotalTime($this->currentUser->id));
 			$this->view->setVar('months_target_time', $this->getMonthsTargetTime($this->currentUser->id));
+			$this->view->setVar('tasks_select', $this->getUserTasksForSelect($this->currentUser));
 
 			$attendance = Attendance::findFirst('user_id="' . $this->currentUser->id . '" AND date=' . new Phalcon\Db\RawValue('CURDATE()') . ' AND end IS NULL');
 

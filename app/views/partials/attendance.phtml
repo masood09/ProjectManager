@@ -11,6 +11,14 @@
 			<button class="btn btn-inverse btn-large sidebar_btn" type="submit">End Time</button>
 		<?php } else { ?>
 			<button class="btn btn-inverse btn-large sidebar_btn" type="submit">Start Time</button>
+			<br /><br />
+			<select class="input-block-level" name="task_id">
+				<option value="0">No Task</option>
+
+				<?php foreach($tasks_select AS $task_id => $task) { ?>
+					<option value="<?php echo $task_id; ?>"><?php echo $task; ?></option>
+				<?php } ?>
+			</select>
 		<?php } ?>
 	</form>
 

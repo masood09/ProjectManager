@@ -7,8 +7,13 @@ class AttendanceController extends ControllerBase
 		if ($this->request->isPost()) {
 			$user_id = $this->currentUser->id;
 			$attendance_id = $this->request->getPost('attendance_id');
+			$task_id = $this->request->getPost('task_id');
 			$date = new Phalcon\Db\RawValue('CURDATE()');
 			$now = new Phalcon\Db\RawValue('now()');
+
+			if (is_null($task_id)) {
+				$task_id = 0;
+			}
 
 			$controller = $this->request->getPost('controller');
 			$action = $this->request->getPost('action');
@@ -30,6 +35,7 @@ class AttendanceController extends ControllerBase
 				$attendance = new Attendance();
 				$attendance->user_id = $user_id;
 				$attendance->date = $date;
+				$attendance->task_id = $task_id;
 				$attendance->start = $now;
 			}
 

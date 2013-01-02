@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS `attendance` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `date` date NOT NULL,
+  `task_id` int(10) NOT NULL DEFAULT 0,
   `start` datetime NOT NULL,
   `end` datetime,
   `total` time,
