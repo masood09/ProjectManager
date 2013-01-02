@@ -219,22 +219,31 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			$this->view->setVar('currentUser', $this->currentUser);
 		}
 		else {
-			$this->session_id = $session_id;
-			$this->currentUser = SessionHelper::getUser($session_id);
-			$this->view->setVar('currentUser', $this->currentUser);
-			$this->view->setVar('todays_time', $this->getDaysTotalTime($this->currentUser->id));
-			$this->view->setVar('months_time', $this->getMonthsTotalTime($this->currentUser->id));
-			$this->view->setVar('months_target_time', $this->getMonthsTargetTime($this->currentUser->id));
-			$this->view->setVar('tasks_select', $this->getUserTasksForSelect($this->currentUser));
-			$this->view->setVar('extra_params', '');
+			$_currentUser = SessionHelper::getUser($session_id);
 
-			$attendance = Attendance::findFirst('user_id="' . $this->currentUser->id . '" AND date=' . new Phalcon\Db\RawValue('CURDATE()') . ' AND end IS NULL');
+			if (!is_null($_currentUser)) {
+				$this->session_id = $session_id;
+				$this->currentUser = $_currentUser;
+				$this->view->setVar('currentUser', $this->currentUser);
+				$this->view->setVar('todays_time', $this->getDaysTotalTime($this->currentUser->id));
+				$this->view->setVar('months_time', $this->getMonthsTotalTime($this->currentUser->id));
+				$this->view->setVar('months_target_time', $this->getMonthsTargetTime($this->currentUser->id));
+				$this->view->setVar('tasks_select', $this->getUserTasksForSelect($this->currentUser));
+				$this->view->setVar('extra_params', '');
 
-			if ($attendance) {
-				$this->view->setVar('attendance', $attendance);
+				$attendance = Attendance::findFirst('user_id="' . $this->currentUser->id . '" AND date=' . new Phalcon\Db\RawValue('CURDATE()') . ' AND end IS NULL');
+
+				if ($attendance) {
+					$this->view->setVar('attendance', $attendance);
+				}
+				else {
+					$this->view->setVar('attendance', null);
+				}
 			}
 			else {
-				$this->view->setVar('attendance', null);
+				$this->session_id = null;
+				$this->currentUser = null;
+				$this->view->setVar('currentUser', $this->currentUser);
 			}
 		}
 
