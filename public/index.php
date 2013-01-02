@@ -42,9 +42,9 @@ try {
     /**
      * The URL component is used to generate all kind of urls in the application
      */
-    $di->set('url', function() use ($config) {
+    $di->set('url', function() {
         $url = new \Phalcon\Mvc\Url();
-        $url->setBaseUri($config->core->baseUrl);
+        $url->setBaseUri(Config::getValue('core/baseUrl'));
         return $url;
     });
 
@@ -101,8 +101,8 @@ try {
         return $flashSession;
     });
 
-    $di->set('AppName', function() use ($config) {
-        return $config->core->name;
+    $di->set('AppName', function() {
+        return Config::getValue('core/name');
     });
 
     /**
@@ -114,12 +114,12 @@ try {
 
     $di->set('Email', function() use ($config) {
         return new Email(
-            $config->email->host,
-            $config->email->port,
-            $config->email->username,
-            $config->email->password,
-            $config->email->ssl,
-            $config->email->from
+            Config::getValue('email/host'),
+            Config::getValue('email/port'),
+            Config::getValue('email/username'),
+            Config::getValue('email/password'),
+            Config::getValue('email/ssl'),
+            Config::getValue('core/email')
         );
     });
 

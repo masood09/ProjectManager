@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../library/SwiftMailer/swift_required.php';
+require_once __DIR__ . '/../library/SwiftMailer/swift_required.php';
 
 class Email
 {
@@ -9,7 +9,6 @@ class Email
 	protected $password = '';
 	protected $ssl = null;
 	protected $from = '';
-	protected $config = null;
 
 	protected $transporter = null;
 
@@ -20,7 +19,6 @@ class Email
 		$this->password = $password;
 		$this->ssl = ($ssl == true) ? 'ssl' : null;
 		$this->from = $from;
-		$this->config = simplexml_load_file(__DIR__ . '/../config/config.xml', NULL, LIBXML_NOCDATA);
 
 		$this->transporter = $this->_constructTransporter();
 	}
@@ -55,7 +53,7 @@ class Email
 	{
 		$view = new \Phalcon\Mvc\View();
         $view->setViewsDir('../app/email/');
-        $view->setVar('CompanyName', $this->config->core->name);
+        $view->setVar('CompanyName', Config::getValue('core/name'));
         $view->setVar('full_name', $user->full_name);
         $view->setVar('email' , $user->email);
         $view->setVar('password', $password);
@@ -79,7 +77,7 @@ class Email
 		foreach($subscribers AS $subscriber) {
 			$view = new \Phalcon\Mvc\View();
 	        $view->setViewsDir('../app/email/');
-	        $view->setVar('CompanyName', $this->config->core->name);
+	        $view->setVar('CompanyName', Config::getValue('core/name'));
 	        $view->setVar('full_name', $subscriber->getUser()->full_name);
 	        $view->setVar('commenter_name', $commenter_name);
 	        $view->setVar('task', $task);
@@ -101,7 +99,7 @@ class Email
 
 		$view = new \Phalcon\Mvc\View();
         $view->setViewsDir('../app/email/');
-        $view->setVar('CompanyName', $this->config->core->name);
+        $view->setVar('CompanyName', Config::getValue('core/name'));
         $view->setVar('full_name', $task->getUser()->full_name);
         $view->setVar('task', $task);
         $view->setVar('project', $project);
@@ -122,7 +120,7 @@ class Email
 		foreach($subscribers AS $subscriber) {
 			$view = new \Phalcon\Mvc\View();
 	        $view->setViewsDir('../app/email/');
-	        $view->setVar('CompanyName', $this->config->core->companyName);
+	        $view->setVar('CompanyName', Config::getValue('core/name'));
 	        $view->setVar('full_name', $subscriber->getUser()->full_name);
 	        $view->setVar('task', $task);
 	        $view->setVar('project', $project);

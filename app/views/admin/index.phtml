@@ -4,6 +4,13 @@
 	<div class="span3">
 		<ul id="navbarSidebar" class="nav nav-list sidebarnav affix">
 			<li>
+				<a href="#general">
+					<i class="icon-chevron-right right"></i>
+					General Information
+				</a>
+			</li>
+
+			<li>
 				<a href="#developers">
 					<i class="icon-chevron-right right"></i>
 					Users
@@ -16,10 +23,52 @@
 					Holidays
 				</a>
 			</li>
+
+			<li>
+				<a href="#email">
+					<i class="icon-chevron-right right"></i>
+					Email settings
+				</a>
+			</li>
 		</ul>
 	</div>
 
 	<div class="span9">
+		<div id="general" class="content_block well well-large">
+			<div class="block_title">
+				<h4>General Information</h4>
+			</div>
+
+			<?php echo Tag::form(array('admin/configpost', 'class' => 'form-horizontal')); ?>
+				<div class="control-group">
+					<label class="control-label" for="siteName">Site name</label>
+					<div class="controls">
+						<input type="text" class="input-block-level" id="siteName" placeholder="Site name" name="config[core/name]" value="<?php echo Config::getValue('core/name'); ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="siteEmail">Site email address</label>
+					<div class="controls">
+						<input type="text" class="input-block-level" id="siteEmail" placeholder="Site email address" name="config[core/email]" value="<?php echo Config::getValue('core/email'); ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="siteBaseUrl">Base URL</label>
+					<div class="controls">
+						<input type="text" class="input-block-level" id="siteBaseUrl" placeholder="Base URL" name="config[core/baseUrl]" value="<?php echo Config::getValue('core/baseUrl'); ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<input type="hidden" value="admin" name="controller">
+					<input type="hidden" value="index" name="action">
+					<button class="btn btn-primary right" type="submit">Save</button>
+				</div>
+			</form>
+		</div>
+
 		<div id="developers" class="content_block well well-large">
 			<div class="block_title">
 				<h4 class="left">Users</h4>
@@ -260,12 +309,57 @@
 				</tbody>
 			</table>
 		</div>
+
+		<div id="email" class="content_block well well-large">
+			<div class="block_title">
+				<h4>Email settings</h4>
+			</div>
+
+			<?php echo Tag::form(array('admin/configpost', 'class' => 'form-horizontal')); ?>
+				<div class="control-group">
+					<label class="control-label" for="emailHost">Host</label>
+					<div class="controls">
+						<input type="text" class="input-block-level" id="emailHost" placeholder="Email hostname" name="config[email/host]" value="<?php echo Config::getValue('email/host'); ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="emailUsername">Username</label>
+					<div class="controls">
+						<input type="text" class="input-block-level" id="emailUsername" placeholder="Email username" name="config[email/username]" value="<?php echo Config::getValue('email/username'); ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="emailPassword">Password</label>
+					<div class="controls">
+						<input type="password" class="input-block-level" id="emailPassword" placeholder="Email password" name="config[email/password]" value="<?php echo Config::getValue('email/password'); ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="emailPort">Port</label>
+					<div class="controls">
+						<input type="text" id="emailPort" placeholder="Email server port number" name="config[email/port]" value="<?php echo Config::getValue('email/port'); ?>">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="emailSSL">SSL</label>
+					<div class="controls">
+						<select id="emailSSL" class="input-small" name="config[email/ssl]">
+							<option value="0" <?php echo (Config::getValue('email/ssl') == 0) ? 'selected="selected"' : ''; ?>>No</option>
+							<option value="1" <?php echo (Config::getValue('email/ssl') == 1) ? 'selected="selected"' : ''; ?>>Yes</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<input type="hidden" value="admin" name="controller">
+					<input type="hidden" value="index" name="action">
+					<button class="btn btn-primary right" type="submit">Save</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-	jQuery(".modal").click(function() {
-		alert("hello");
-		jQuery(".date_selector").hide();
-	});
-</script>
