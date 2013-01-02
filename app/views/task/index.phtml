@@ -26,7 +26,7 @@
 										<?php } ?>
 
 										<span class="label label-info">Assigned to : <?php echo $task->getUser()->full_name; ?></span>&nbsp;&nbsp;&nbsp;
-										<span class="label label-info">Hours : <?php echo $task->hours; ?></span>&nbsp;&nbsp;&nbsp;
+										<span class="label label-info">Hours : <?php echo $task->getHours(); ?></span>&nbsp;&nbsp;&nbsp;
 
 										<?php if ($task->status == 0) { ?>
 											<span class="label label-important">Open</span>

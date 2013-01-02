@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `task` (
   `created_by` int(10) NOT NULL,
   `created_at` datetime NOT NULL,
   `assigned_to` int(10) NOT NULL,
-  `hours` int(10),
+  `hours` time NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `completed_on` date NULL,
   PRIMARY KEY (`id`)

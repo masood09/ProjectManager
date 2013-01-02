@@ -27,4 +27,10 @@ class Task extends Phalcon\Mvc\Model
 
         return false;
     }
+
+    public function getHours() {
+        $date = explode(":", $this->hours);
+
+        return (int)$date[0];
+    }
 }

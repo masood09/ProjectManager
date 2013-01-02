@@ -54,7 +54,7 @@ class TaskController extends ControllerBase
 			$task->description = $description;
 			$task->project_id = $projectId;
 			$task->assigned_to = $assigned_to;
-			$task->hours = $hours;
+			$task->hours = $hours . ':00:00';
 			$task->status = $status;
 
 			if ($task->save() == true) {
