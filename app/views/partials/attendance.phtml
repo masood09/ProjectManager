@@ -15,8 +15,8 @@
 			<select class="input-block-level" name="task_id">
 				<option value="0">No Task</option>
 
-				<?php foreach($tasks_select AS $task_id => $task) { ?>
-					<option value="<?php echo $task_id; ?>"><?php echo $task; ?></option>
+				<?php foreach($tasks_select AS $_task_id => $_task) { ?>
+					<option value="<?php echo $_task_id; ?>"><?php echo $_task; ?></option>
 				<?php } ?>
 			</select>
 		<?php } ?>
