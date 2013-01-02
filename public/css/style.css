@@ -116,3 +116,7 @@ table tr.weekend {
 table tfoot tr td {
 	font-weight: bold;
 }
+
+form.form-inline div.jdpicker_w {
+	display: inline-block;
+}

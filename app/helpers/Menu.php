@@ -25,7 +25,13 @@ class Menu extends Phalcon\Mvc\User\Component
             	'controller' => 'attendance',
             	'action' => 'index',
             	'menuIdent' => 'controller',
-            )
+            ),
+            'report' => array(
+            	'caption' => 'Work Report',
+            	'controller' => 'report',
+            	'action' => 'index',
+            	'menuIdent' => 'controller',
+            ),
         ),
         'pull-right' => array(
         	'admin' => array(
@@ -97,6 +103,7 @@ class Menu extends Phalcon\Mvc\User\Component
 			unset($this->_headerMenu['pull-left']['project']);
 			unset($this->_headerMenu['pull-left']['task']);
 			unset($this->_headerMenu['pull-left']['attendance']);
+			unset($this->_headerMenu['pull-left']['report']);
 			unset($this->_headerMenu['pull-right']['my_account']);
 			unset($this->_headerMenu['pull-right']['logout']);
 		}

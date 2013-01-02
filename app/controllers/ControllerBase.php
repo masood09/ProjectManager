@@ -38,6 +38,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'user' => array('saveuser', 'myaccount'),
 				'attendance' => array('savepost', 'index'),
 				'holiday' => array('savepost'),
+				'report' => array('index'),
 			);
 
 			// Private developer resources
@@ -47,6 +48,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'task' => array('savepost', 'view', 'subscribe', 'unsubscribe', 'addcomment', 'index'),
 				'user' => array('logout', 'myaccount'),
 				'attendance' => array('savepost', 'index'),
+				'report' => array('index'),
 			);
 
 			foreach ($adminResources as $resource => $actions){
@@ -224,6 +226,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			$this->view->setVar('months_time', $this->getMonthsTotalTime($this->currentUser->id));
 			$this->view->setVar('months_target_time', $this->getMonthsTargetTime($this->currentUser->id));
 			$this->view->setVar('tasks_select', $this->getUserTasksForSelect($this->currentUser));
+			$this->view->setVar('extra_params', '');
 
 			$attendance = Attendance::findFirst('user_id="' . $this->currentUser->id . '" AND date=' . new Phalcon\Db\RawValue('CURDATE()') . ' AND end IS NULL');
 
