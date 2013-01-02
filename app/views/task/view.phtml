@@ -141,6 +141,8 @@
 	</div>
 
 	<div class="span3">
+		<?php $this->partial("partials/attendance") ?>
+
 		<?php if ($currentUser->id != $task->assigned_to) { ?>
 			<?php if ($task->isSubscribed($currentUser)) { ?>
 				<?php echo Tag::linkTo(array("task/unsubscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-danger btn-large", "text" => "Unsubscribe")); ?>
@@ -160,7 +162,5 @@
 				<?php } ?>
 			</ol>
 		</div>
-
-		<?php $this->partial("partials/attendance") ?>
 	</div>
 </div>
