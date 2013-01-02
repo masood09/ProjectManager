@@ -201,6 +201,13 @@ class TaskController extends ControllerBase
 
 	public function subscribeAction($task_id, $user_id)
 	{
+		if ($user_id == $this->currentUser->id) {
+			$otherUser = null;
+		}
+		else {
+			$otherUser = User::findFirst('id = "' . $user_id . '"');
+		}
+
 		$task = Task::findFirst('id="' . $task_id . '"');
 
 		if (!$task) {
@@ -221,7 +228,13 @@ class TaskController extends ControllerBase
 		$taskUser = TaskUser::findFirst('task_id="' . $task_id . '" AND user_id="' . $user_id . '"');
 
 		if ($taskUser) {
-			$this->flashSession->warning('You are already subscribed to this task.');
+			if (is_null($otherUser)) {
+				$this->flashSession->warning('You are already subscribed to this task.');
+			}
+			else {
+				$this->flashSession->warning($otherUser->full_name . ' is already subscribed to this task.');
+			}
+
 			$this->response->redirect('task/view/' . $task_id);
 			$this->view->disable();
 			return;
@@ -234,7 +247,13 @@ class TaskController extends ControllerBase
 
 		$taskUser->save();
 
-		$this->flashSession->success('You have successfully subscribed to this task.');
+		if (is_null($otherUser)) {
+			$this->flashSession->success('You have successfully subscribed to this task.');
+		}
+		else {
+			$this->flashSession->success($otherUser->full_name . ' successfully subscribed to this task.');
+		}
+
 		$this->response->redirect('task/view/' . $task_id);
 		$this->view->disable();
 		return;
@@ -242,6 +261,13 @@ class TaskController extends ControllerBase
 
 	public function unsubscribeAction($task_id, $user_id)
 	{
+		if ($user_id == $this->currentUser->id) {
+			$otherUser = null;
+		}
+		else {
+			$otherUser = User::findFirst('id = "' . $user_id . '"');
+		}
+
 		$task = Task::findFirst('id="' . $task_id . '"');
 
 		if (!$task) {
@@ -264,10 +290,21 @@ class TaskController extends ControllerBase
 		if ($taskUser) {
 			// User already subscribed.
 			$taskUser->delete();
-			$this->flashSession->success('You have successfully unsubscribed from this task.');
+
+			if (is_null($otherUser)) {
+				$this->flashSession->success('You have successfully unsubscribed from this task.');
+			}
+			else {
+				$this->flashSession->success($otherUser->full_name . ' successfully unsubscribed from this task.');
+			}
 		}
 		else {
-			$this->flashSession->warning('You are not subscibed to this task.');
+			if (is_null($otherUser)) {
+				$this->flashSession->warning('You are not subscibed to this task.');
+			}
+			else {
+				$this->flashSession->warning($otherUser->full_name . ' is not subscibed to this task.');
+			}
 		}
 
 		$this->response->redirect('task/view/' . $task_id);
