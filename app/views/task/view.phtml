@@ -4,16 +4,10 @@
 
 <?php
 	$notSubscribedUsers = null;
-	$subscribedUsers = null;
 
 	foreach($project->getDevelopers() AS $_projectUser) {
 		if (!$task->isSubscribed($_projectUser)) {
 			$notSubscribedUsers[] = $_projectUser;
-		}
-		else {
-			if ($task->assigned_to != $_projectUser->id) {
-				$subscribedUsers[] = $_projectUser;
-			}
 		}
 	}
 ?>
@@ -175,17 +169,17 @@
 			<ol>
 				<li><?php echo $task->getUser()->full_name; ?></li>
 
-				<?php if (!is_null($subscribedUsers)) { ?>
-					<?php foreach($subscribedUsers AS $subscribedUser) { ?>
-						<li>
-							<?php echo Tag::linkTo(array("task/unsubscribe/" . $task->id . "/" . $subscribedUser->id, "text" => $subscribedUser->full_name . ' (Remove)')); ?>
+				<?php foreach($task->getTaskUser() AS $taskUser) { ?>
+					<?php if ($taskUser->getUser()->id != $task->assigned_to) { ?>
+						<li><?php echo $taskUser->getUser()->full_name; ?></li>
 					<?php } ?>
 				<?php } ?>
 
 				<?php if (!is_null($notSubscribedUsers)) { ?>
 					<?php foreach($notSubscribedUsers AS $notSubscribedUser) { ?>
 						<li>
-							<?php echo Tag::linkTo(array("task/subscribe/" . $task->id . "/" . $notSubscribedUser->id, "text" => $notSubscribedUser->full_name . ' (Add)')); ?>
+							<?php echo Tag::linkTo(array("task/subscribe/" . $task->id . "/" . $notSubscribedUser->id, "text" => $notSubscribedUser->full_name)); ?>
+							<i class="icon-ok"></i>
 					<?php } ?>
 				<?php } ?>
 			</ol>
