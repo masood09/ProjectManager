@@ -328,7 +328,9 @@ jdPicker.prototype = {
   
   hideIfClickOutside: function(event) {
     if (event.target != this.input[0] && !this.insideSelector(event)) {
-      // this.hide();
+    	if (this.input.hasClass("clickToClose")) {
+	    	this.hide();
+	  	}
     };
   },
   
