@@ -19,7 +19,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php if (is_null($reports)) { ?>
+					<?php if (is_null($reports) || count($reports) == 0) { ?>
 						<tr>
 							<td colspan="3" class="a-center">
 								No reports!
