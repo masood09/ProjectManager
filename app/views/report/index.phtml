@@ -24,7 +24,8 @@
 					<tr>
 						<th>Date</th>
 						<th>Task</th>
-						<th>Time Spent</th>
+						<th class="a-center">Time Spent</th>
+						<th class="a-center">Completed</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,7 +40,8 @@
 							<tr>
 								<td><?php echo $row['date']; ?></td>
 								<td><?php echo $row['task_title']; ?></td>
-								<td><?php echo $row['time_spent']; ?></td>
+								<td class="a-center"><?php echo $row['time_spent']; ?></td>
+								<td class="a-center"><?php echo $row['completed']; ?></td>
 							</tr>
 						<?php } ?>
 					<?php } ?>

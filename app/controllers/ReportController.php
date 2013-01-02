@@ -33,6 +33,13 @@ class ReportController extends ControllerBase
 							$temp['task_title'] = $task->title;
 							$temp['time_spent'] = $result->task_time;
 
+							if ($date == $task->completed_on) {
+								$temp['completed'] = 'Yes';
+							}
+							else {
+								$temp['completed'] = 'No';
+							}
+
 							$reports[] = $temp;
 						}
 					}
