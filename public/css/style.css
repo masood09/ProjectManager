@@ -93,7 +93,8 @@ div.sidebar_block {
 	margin-bottom: 20px;
 }
 
-div.sidebar_block button.sidebar_btn {
+div.sidebar_block button.sidebar_btn,
+div.span3 a.sidebar_btn {
 	width: 180px;
 }
 
