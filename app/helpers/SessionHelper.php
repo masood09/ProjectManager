@@ -66,7 +66,7 @@ class SessionHelper
 
     static function destroySession($session_id)
     {
-        $session = Session::findFirst('session_id = "' . $session_id . '" AND created_at <= ' . new Phalcon\Db\RawValue('now()') . ' AND expiring_at >= ' . new Phalcon\Db\RawValue('now()'));
+        $session = Session::findFirst('session_id = "' . $session_id . '"');
 
         if ($session) {
             $sessions = $session->getUser()->getSession();
@@ -79,7 +79,7 @@ class SessionHelper
 
 	static function isLoggedIn($session_id)
     {
-        $session = Session::findFirst('session_id = "' . $session_id . '" AND created_at <= ' . new Phalcon\Db\RawValue('now()') . ' AND expiring_at >= ' . new Phalcon\Db\RawValue('now()'));
+        $session = Session::findFirst('session_id = "' . $session_id . '"');
 
         if ($session) {
             return true;
@@ -90,7 +90,7 @@ class SessionHelper
 
     static function getUser($session_id)
     {
-        $session = Session::findFirst('session_id = "' . $session_id . '" AND created_at <= ' . new Phalcon\Db\RawValue('now()') . ' AND expiring_at >= ' . new Phalcon\Db\RawValue('now()'));
+        $session = Session::findFirst('session_id = "' . $session_id . '"');
 
         if ($session) {
             $user = $session->getUser();
