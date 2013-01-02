@@ -17,7 +17,7 @@ class ProjectController extends ControllerBase
 
 	public function indexAction()
 	{
-		Phalcon\Tag::appendTitle('Your Projects');
+		Phalcon\Tag::setTitle('Your Projects');
 
 		if (!is_null($this->currentUser)) {
 			$this->view->setVar('allProjects', $this->currentUser->getAllProjects());

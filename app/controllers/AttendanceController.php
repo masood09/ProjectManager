@@ -87,5 +87,7 @@ class AttendanceController extends ControllerBase
 		$this->view->setVar('records', $records);
 		$this->view->setVar('report_months_target_time', $this->getMonthsTargetTime($user_id, $month, $year));
 		$this->view->setVar('report_months_total_time', $this->getMonthsTotalTime($user_id, $month, $year));
+
+		Phalcon\Tag::setTitle('Attendance');
 	}
 }

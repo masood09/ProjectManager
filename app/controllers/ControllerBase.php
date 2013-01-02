@@ -238,8 +238,6 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			}
 		}
 
-		Phalcon\Tag::prependTitle('Project Manager | ');
-
 		$controller = $this->dispatcher->getControllerName();
 		$action = $this->dispatcher->getActionName();
 

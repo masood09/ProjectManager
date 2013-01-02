@@ -63,5 +63,7 @@ class ReportController extends ControllerBase
 			$this->view->setVar('post_from', $from);
 			$this->view->setVar('post_to', $to);
 		}
+
+		Phalcon\Tag::setTitle('Work Report');
 	}
 }

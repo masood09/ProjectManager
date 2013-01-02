@@ -40,7 +40,7 @@ class UserController extends ControllerBase
 			}
 		}
 
-		Phalcon\Tag::appendTitle('Log in to Project');
+		Phalcon\Tag::setTitle('Log in to Project');
 		$this->session->remove('session_id');
 	}
 
