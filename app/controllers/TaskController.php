@@ -304,6 +304,8 @@ class TaskController extends ControllerBase
 			$task_status = $this->request->getPost('task_complete');
 
 			if ($task_status) {
+				$completed_date = new Phalcon\Db\RawValue('CURDATE()');
+				$task->completed_on = $completed_date;
 				$task_status = 1;
 				$this->Email->sendTaskClosedEmail($task);
 			}

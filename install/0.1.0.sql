@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `task` (
   `assigned_to` int(10) NOT NULL,
   `hours` int(10),
   `status` tinyint(1) NOT NULL DEFAULT '0',
+  `completed_on` date NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
