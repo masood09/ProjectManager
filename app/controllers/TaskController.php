@@ -154,7 +154,47 @@ class TaskController extends ControllerBase
 			return;
 		}
 
+		$att_users = Attendance::find('task_id = ' . $id);
+		$users = array();
+
+		foreach($att_users AS $att_user) {
+			$users[$att_user->user_id] = $att_user->user_id;
+		}
+
+		$task_user_time = array();
+		$task_total_time = '00:00:00';
+
+		$results = $this->modelsManager->executeQuery('SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( Attendance.total ) ) ) AS task_time FROM Attendance WHERE task_id = ' . $id);
+
+		foreach ($results AS $result) {
+			if (!is_null($result->task_time)) {
+				$task_total_time = $result->task_time;
+				break;
+			}
+		}
+
+		foreach ($users AS $user_id) {
+			$results = $this->modelsManager->executeQuery('SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( Attendance.total ) ) ) AS user_time FROM Attendance WHERE user_id = "' . $user_id . '" AND task_id = ' . $id);
+
+			$user_time = '00:00:00';
+
+			foreach ($results AS $result) {
+				if (!is_null($result->user_time)) {
+					$user_time = $result->user_time;
+					break;
+				}
+			}
+
+			$_user = User::findFirst('id = ' . $user_id);
+
+			if ($_user) {
+				$task_user_time[$_user->full_name] = $user_time;
+			}
+		}
+
 		$this->view->setVar('task', $task);
+		$this->view->setVar('task_user_time', $task_user_time);
+		$this->view->setVar('task_total_time', $task_total_time);
 		Phalcon\Tag::appendTitle(($task->job_id) ? $task->job_id . ' - ' . $task->title : $task->title);
 	}
 

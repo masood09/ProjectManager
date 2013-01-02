@@ -162,5 +162,14 @@
 				<?php } ?>
 			</ol>
 		</div>
+
+		<div class="sidebar_block well">
+			<h4>Time Spent</h4>
+			<?php foreach($task_user_time AS $_user_name => $_user_time) { ?>
+				<p><?php echo $_user_name ?> : <?php echo $_user_time; ?></p>
+			<?php } ?>
+
+			<p><strong>Total Time : <?php echo $task_total_time; ?></strong></p>
+		</div>
 	</div>
 </div>
