@@ -98,6 +98,9 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 		if ($date == null) {
 			$date = 'CURDATE()';
 		}
+		else {
+			$date = '"' . $date . '"';
+		}
 
 		$results = null;
 		$results = $this->modelsManager->executeQuery('SELECT SEC_TO_TIME( SUM( TIME_TO_SEC( Attendance.total ) ) ) AS todays_time FROM Attendance WHERE user_id = "' . $user_id . '" AND date = ' . $date);
