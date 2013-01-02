@@ -23,6 +23,7 @@
 				<thead>
 					<tr>
 						<th>Date</th>
+						<th class="a-center">Job ID</th>
 						<th>Task</th>
 						<th class="a-center">Time Spent</th>
 						<th class="a-center">Completed</th>
@@ -39,6 +40,7 @@
 						<?php foreach($reports AS $row) { ?>
 							<tr>
 								<td><?php echo $row['date']; ?></td>
+								<td class="a-center"><?php echo $row['job_id']; ?></td>
 								<td><?php echo $row['task_title']; ?></td>
 								<td class="a-center"><?php echo $row['time_spent']; ?></td>
 								<td class="a-center"><?php echo $row['completed']; ?></td>

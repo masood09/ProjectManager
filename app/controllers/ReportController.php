@@ -30,6 +30,7 @@ class ReportController extends ControllerBase
 						if ($task) {
 							$temp = array();
 							$temp['date'] = $date;
+							$temp['job_id'] = $task->job_id;
 							$temp['task_title'] = $task->title;
 							$temp['time_spent'] = $result->task_time;
 
