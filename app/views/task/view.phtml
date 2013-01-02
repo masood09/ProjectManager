@@ -191,18 +191,6 @@
 			</ol>
 		</div>
 
-		<?php if (!is_null($subscribedUsers)) { ?>
-			<div class="sidebar_block well">
-				<h4>Remove users</h4>
-
-				<ol>
-					<?php foreach($subscribedUsers AS $subscribedUser) { ?>
-						<li><?php echo Tag::linkTo(array("task/unsubscribe/" . $task->id . "/" . $subscribedUser->id, "text" => $subscribedUser->full_name)); ?></p></li>
-					<?php } ?>
-				</ol>
-			</div>
-		<?php } ?>
-
 		<div class="sidebar_block well">
 			<h4>Time Spent</h4>
 			<?php foreach($task_user_time AS $_user_name => $_user_time) { ?>
