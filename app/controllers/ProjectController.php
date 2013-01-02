@@ -27,11 +27,6 @@ class ProjectController extends ControllerBase
 		$this->view->setVar('developers', User::getAllDevelopers(true));
 	}
 
-	public function createAction()
-	{
-		Phalcon\Tag::appendTitle('Create a new project');
-	}
-
 	public function savepostAction()
 	{
 		if ($this->_canCreateProject()) {
