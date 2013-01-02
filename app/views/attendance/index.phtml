@@ -21,12 +21,12 @@
 								$_tr_class = 'not_logged';
 							}
 
-							if (in_array($row['day'], array('Sunday', 'Saturday'))) {
-								$_tr_class = 'weekend';
-							}
-
 							if ($row['holiday'] == true) {
 								$_tr_class = 'holiday';
+							}
+
+							if (in_array($row['day'], array('Sunday', 'Saturday'))) {
+								$_tr_class = 'weekend';
 							}
 						?>
 						<tr class="<?php echo $_tr_class; ?>">
