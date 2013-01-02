@@ -231,6 +231,13 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				$this->view->setVar('tasks_select', $this->getUserTasksForSelect($this->currentUser));
 				$this->view->setVar('extra_params', '');
 
+				if ($this->currentUser->getRole()->code == 'admin') {
+					$this->view->setVar('allUsers', User::getAllDevelopers(true));
+				}
+				else {
+					$this->view->setVar('allUsers', null);
+				}
+
 				$attendance = Attendance::findFirst('user_id="' . $this->currentUser->id . '" AND date=' . new Phalcon\Db\RawValue('CURDATE()') . ' AND end IS NULL');
 
 				if ($attendance) {

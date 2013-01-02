@@ -8,6 +8,15 @@
 				&nbsp;&nbsp;&nbsp;
 				<input type="text" class="input-small jdpicker clickToClose" placeholder="To" name="to" value="<?php echo $post_to; ?>">
 				&nbsp;&nbsp;&nbsp;
+
+				<?php if (!is_null($allUsers)) { ?>
+					<select name="user_id">
+						<?php foreach($allUsers AS $_user) { ?>
+							<option value="<?php echo $_user->id; ?>" <?php echo ($post_user_id == $_user->id) ? 'selected="selected"' : ''; ?>><?php echo $_user->full_name; ?></option>
+						<?php } ?>
+					</select>
+					&nbsp;&nbsp;&nbsp;
+				<?php } ?>
 				<button type="submit" class="btn">Generate report</button>
 			</form>
 			<table class="table table-bordered table-striped">

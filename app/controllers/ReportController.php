@@ -45,7 +45,12 @@ class ReportController extends ControllerBase
 
 	public function indexAction()
 	{
-		$user_id = $this->currentUser->id;
+		$user_id = $this->request->getPost('user_id');
+
+		if (is_null($user_id)) {
+			$user_id = $this->currentUser->id;
+		}
+
 		$from = $this->request->getPost('from');
 		$to = $this->request->getPost('to');
 
@@ -55,6 +60,7 @@ class ReportController extends ControllerBase
 			$this->view->setVar('reports', $reports);
 			$this->view->setVar('post_from', $from);
 			$this->view->setVar('post_to', $to);
+			$this->view->setVar('post_user_id', $user_id);
 		}
 		else {
 			$reports = $this->_getWorkReport($user_id, $from, $to);
@@ -62,6 +68,7 @@ class ReportController extends ControllerBase
 			$this->view->setVar('reports', $reports);
 			$this->view->setVar('post_from', $from);
 			$this->view->setVar('post_to', $to);
+			$this->view->setVar('post_user_id', $user_id);
 		}
 
 		Phalcon\Tag::setTitle('Work Report');
