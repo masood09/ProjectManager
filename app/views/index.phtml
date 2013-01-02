@@ -105,7 +105,7 @@
 						</div>
 
 						<input type="hidden" name="controller" value="<?php echo $this->view->getControllerName(); ?>">
-						<input type="hidden" name="action" value="<?php echo $this->view->getActionName(); ?>">
+						<input type="hidden" name="action" value="<?php echo $this->view->getActionName() . $extra_params; ?>">
 						<input type="hidden" value="<?php echo $currentUser->id; ?>" name="id">
 					</div>
 

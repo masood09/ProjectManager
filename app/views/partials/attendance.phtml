@@ -4,7 +4,7 @@
 	<?php echo Tag::form(array('attendance/savepost')); ?>
 		<input type="hidden" name="user_id" value="<?php echo $currentUser->id; ?>">
 		<input type="hidden" name="controller" value="<?php echo $this->view->getControllerName(); ?>">
-		<input type="hidden" name="action" value="<?php echo $this->view->getActionName(); ?>">
+		<input type="hidden" name="action" value="<?php echo $this->view->getActionName() . $extra_params; ?>">
 
 		<?php if (!is_null($attendance)) { ?>
 			<input type="hidden" name="attendance_id" value="<?php echo $attendance->id; ?>">

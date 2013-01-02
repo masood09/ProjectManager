@@ -195,6 +195,7 @@ class TaskController extends ControllerBase
 		$this->view->setVar('task', $task);
 		$this->view->setVar('task_user_time', $task_user_time);
 		$this->view->setVar('task_total_time', $task_total_time);
+		$this->view->setVar('extra_params', '/' . $id . '/');
 		Phalcon\Tag::appendTitle(($task->job_id) ? $task->job_id . ' - ' . $task->title : $task->title);
 	}
 
