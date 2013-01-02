@@ -1,7 +1,7 @@
 <?php use Phalcon\Tag as Tag ?>
 
 <div class="row">
-	<div class="span9">
+	<div class="span12">
 		<div class="content_block well">
 			<?php echo Tag::form(array('report/index', 'class' => 'form-inline')); ?>
 				<input type="text" class="input-small jdpicker clickToClose" placeholder="From" name="from" value="<?php echo $post_from; ?>">
@@ -24,6 +24,7 @@
 					<tr>
 						<th>Date</th>
 						<th class="a-center">Job ID</th>
+						<th>Project</th>
 						<th>Task</th>
 						<th class="a-center">Time Spent</th>
 						<th class="a-center">Completed</th>
@@ -32,7 +33,7 @@
 				<tbody>
 					<?php if (is_null($reports) || count($reports) == 0) { ?>
 						<tr>
-							<td colspan="5" class="a-center">
+							<td colspan="6" class="a-center">
 								No reports!
 							</td>
 						</tr>
@@ -41,6 +42,7 @@
 							<tr>
 								<td><?php echo $row['date']; ?></td>
 								<td class="a-center"><?php echo $row['job_id']; ?></td>
+								<td><?php echo $row['project']; ?></td>
 								<td><?php echo $row['task_title']; ?></td>
 								<td class="a-center"><?php echo $row['time_spent']; ?></td>
 								<td class="a-center"><?php echo $row['completed']; ?></td>
@@ -50,9 +52,5 @@
 				</tbody>
 			</table>
 		</div>
-	</div>
-
-	<div class="span3">
-		<?php $this->partial("partials/attendance") ?>
 	</div>
 </div>
