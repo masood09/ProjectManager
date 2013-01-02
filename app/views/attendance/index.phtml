@@ -1,0 +1,55 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="row">
+	<div class="span9">
+		<div class="content_block well">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Day</th>
+						<th>Target Time</th>
+						<th>Time logged</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($records AS $row) { ?>
+						<?php
+							$_tr_class = '';
+
+							if ($row['logged_time'] == '00:00:00') {
+								$_tr_class = 'not_logged';
+							}
+
+							if (in_array($row['day'], array('Sunday', 'Saturday'))) {
+								$_tr_class = 'weekend';
+							}
+
+							if ($row['holiday'] == true) {
+								$_tr_class = 'holiday';
+							}
+						?>
+						<tr class="<?php echo $_tr_class; ?>">
+							<td><?php echo $row['date']; ?></td>
+							<td><?php echo $row['day']; ?></td>
+							<td><?php echo $row['target_time']; ?></td>
+							<td><?php echo $row['logged_time']; ?></td>
+						</tr>
+					<?php } ?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>Total</td>
+						<td>&nbsp;</td>
+						<td><?php echo $report_months_target_time; ?></td>
+						<td><?php echo $report_months_total_time; ?></td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+
+	<div class="span3">
+		<?php $this->partial("partials/attendance") ?>
+	</div>
+</div>

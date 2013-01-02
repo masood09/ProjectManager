@@ -20,6 +20,12 @@ class Menu extends Phalcon\Mvc\User\Component
             	'action' => 'index',
             	'menuIdent' => 'controller',
             ),
+            'attendance' => array(
+            	'caption' => 'Attendance',
+            	'controller' => 'attendance',
+            	'action' => 'index',
+            	'menuIdent' => 'controller',
+            )
         ),
         'pull-right' => array(
         	'admin' => array(

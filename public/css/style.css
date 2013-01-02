@@ -100,3 +100,19 @@ div.sidebar_block button.sidebar_btn {
 div.modal form {
 	margin-bottom: 0;
 }
+
+table tr.not_logged {
+	background-color: #f9f9f9;
+}
+
+table tr.holiday {
+	background-color: #FE9A2E;
+}
+
+table tr.weekend {
+	background-color: #E1F5A9;
+}
+
+table tfoot tr td {
+	font-weight: bold;
+}

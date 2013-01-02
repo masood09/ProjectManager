@@ -36,7 +36,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'task' => array('savepost', 'view', 'subscribe', 'unsubscribe', 'addcomment', 'index'),
 				'admin' => array('index', 'configpost'),
 				'user' => array('saveuser', 'myaccount'),
-				'attendance' => array('savepost'),
+				'attendance' => array('savepost', 'index'),
 				'holiday' => array('savepost'),
 			);
 
@@ -46,7 +46,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'project' => array('index', 'create', 'createpost', 'saveusers', 'savepost'),
 				'task' => array('savepost', 'view', 'subscribe', 'unsubscribe', 'addcomment', 'index'),
 				'user' => array('logout', 'myaccount'),
-				'attendance' => array('savepost'),
+				'attendance' => array('savepost', 'index'),
 			);
 
 			foreach ($adminResources as $resource => $actions){

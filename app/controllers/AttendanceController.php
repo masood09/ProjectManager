@@ -48,4 +48,38 @@ class AttendanceController extends ControllerBase
 		$this->view->disable();
 		return;
 	}
+
+	public function indexAction()
+	{
+		$records = array();
+
+		$month = date('m');
+		$year = date('Y');
+		$user_id = $this->currentUser->id;
+
+		$startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
+		$endDate = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
+		$holidays = $this->getMonthsHolidays($month, $year);
+
+		$i = 1;
+		$no_days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+		while ($i <= $no_days) {
+			$temp = array();
+			$date = date('Y-m-d', mktime(0, 0, 0, $month, $i, $year));
+
+			$temp['date'] = $date;
+			$temp['day'] = date('l', mktime(0, 0, 0, $month, $i, $year));
+			(in_array($date, $holidays)) ? $temp['holiday'] = true : $temp['holiday'] = false;
+			(in_array($date, $holidays) || in_array($temp['day'], array('Sunday', 'Saturday'))) ? $temp['target_time'] = '00:00:00' : $temp['target_time'] = '08:00:00';
+			$temp['logged_time'] = $this->getDaysTotalTime($user_id, $date);
+
+			$records[] = $temp;
+			$i++;
+		}
+
+		$this->view->setVar('records', $records);
+		$this->view->setVar('report_months_target_time', $this->getMonthsTargetTime($user_id, $month, $year));
+		$this->view->setVar('report_months_total_time', $this->getMonthsTotalTime($user_id, $month, $year));
+	}
 }
