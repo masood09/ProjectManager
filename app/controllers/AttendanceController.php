@@ -59,9 +59,22 @@ class AttendanceController extends ControllerBase
 	{
 		$records = array();
 
-		$month = date('m');
-		$year = date('Y');
-		$user_id = $this->currentUser->id;
+		$user_id = $this->request->getPost('user_id');
+
+		if (is_null($user_id)) {
+			$user_id = $this->currentUser->id;
+		}
+
+		$month = $this->request->getPost('month');
+		$year = $this->request->getPost('year');
+
+		if (is_null($month) || $month == '') {
+			$month = date('m');
+		}
+
+		if (is_null($year) || $year == '') {
+			$year = date('Y');
+		}
 
 		$startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
 		$endDate = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
@@ -87,6 +100,9 @@ class AttendanceController extends ControllerBase
 		$this->view->setVar('records', $records);
 		$this->view->setVar('report_months_target_time', $this->getMonthsTargetTime($user_id, $month, $year));
 		$this->view->setVar('report_months_total_time', $this->getMonthsTotalTime($user_id, $month, $year));
+		$this->view->setVar('post_month', $month);
+		$this->view->setVar('post_year', $year);
+		$this->view->setVar('post_user_id', $user_id);
 
 		Phalcon\Tag::setTitle('Attendance');
 	}
