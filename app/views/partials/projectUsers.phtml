@@ -1,0 +1,11 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="sidebar_block well">
+	<h4>Users</h4>
+
+	<ol>
+		<?php foreach($project->getDevelopers() AS $_developer) { ?>
+			<li><?php echo $_developer->full_name; ?></li>
+		<?php } ?>
+	</ol>
+</div>
