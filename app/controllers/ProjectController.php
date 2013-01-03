@@ -29,7 +29,7 @@ class ProjectController extends ControllerBase
 
 	public function savepostAction()
 	{
-		if ($this->_canCreateProject()) {
+		if (!$this->_canCreateProject()) {
 			$this->response->redirect('project/index');
 			$this->view->disable();
 			return;
