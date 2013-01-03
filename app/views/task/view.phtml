@@ -155,11 +155,10 @@
 
 		<?php if ($currentUser->id != $task->assigned_to) { ?>
 			<?php if ($task->isSubscribed($currentUser)) { ?>
-				<?php echo Tag::linkTo(array("task/unsubscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-danger btn-large sidebar_btn", "text" => "Unsubscribe")); ?>
+				<?php echo Tag::linkTo(array("task/unsubscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-danger btn-large input-block-level", "text" => "Unsubscribe")); ?>
 			<?php } else { ?>
-				<?php echo Tag::linkTo(array("task/subscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-primary btn-large sidebar_btn", "text" => "Subscribe")); ?>
+				<?php echo Tag::linkTo(array("task/subscribe/" . $task->id . "/" . $currentUser->id, "class" => "btn btn-primary btn-large input-block-level", "text" => "Subscribe")); ?>
 			<?php } ?>
-			<br />
 			<br />
 		<?php } ?>
 
