@@ -30,7 +30,7 @@
 									$_tasksToolTipHtml = '';
 									$_openTasks = $project->getOpenTasks(5);
 
-									if (count($_openTasks) > 0) {
+									if (!is_null($_openTasks)) {
 										foreach($_openTasks AS $_task) {
 											$_tasksToolTipHtml .= '<p>' . $_task->title . '</p>';
 										}
