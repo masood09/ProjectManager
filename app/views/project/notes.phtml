@@ -1,0 +1,120 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="row">
+	<div class="span9">
+		<?php $this->partial("partials/projectTop") ?>
+
+		<div class="content_block well">
+			<h4>
+				Notes
+				<a class="btn btn-primary btn-small right" data-toggle="modal" role="button" href="#newNote">Add a new note</a>
+			</h4>
+
+			<br />
+
+			<div id="newNote" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>Add new note</h3>
+				</div>
+
+				<?php echo Tag::form(array('project/notespost', 'class' => 'form-horizontal')); ?>
+					<div class="modal-body">
+						<div class="control-group">
+							<label class="control-label" for="newNoteTitle">Title</label>
+							<div class="controls">
+								<input type="text" class="input-block-level" name="title" id="newNoteTitle">
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="newNote">Note</label>
+							<div class="controls">
+								<textarea class="input-block-level" name="content" id="newNote" rows="6"></textarea>
+							</div>
+						</div>
+
+						<input type="hidden" name="controller" value="<?php echo $this->view->getControllerName(); ?>">
+						<input type="hidden" name="action" value="<?php echo $this->view->getActionName() . $extra_params; ?>">
+						<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button class="btn btn-primary">Save changes</button>
+					</div>
+				</form>
+			</div>
+
+			<?php $notes = $project->getNotes(); ?>
+
+			<?php if (is_null($notes)) { ?>
+				<table class="table table-bordered table-striped">
+					<tbody>
+						<tr>
+							<td class="empty-table">
+								No notes! Why not add some?
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			<?php } else { ?>
+				<?php foreach ($notes AS $note) { ?>
+					<div class="well">
+						<h5>
+							<?php echo $note->title; ?>
+							<a class="btn btn-primary btn-small right" data-toggle="modal" role="button" href="#editNote-<?php echo $note->id; ?>">
+								<i class="icon-pencil icon-white"></i>
+							</a>
+
+							<div id="editNote-<?php echo $note->id; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									<h3>Edit note</h3>
+								</div>
+
+								<?php echo Tag::form(array('project/notespost', 'class' => 'form-horizontal')); ?>
+									<div class="modal-body">
+										<div class="control-group">
+											<label class="control-label" for="editNoteTitle-<?php echo $note->id; ?>">Title</label>
+											<div class="controls">
+												<input type="text" class="input-block-level" name="title" id="editNoteTitle-<?php echo $note->id; ?>" value="<?php echo $note->title; ?>">
+											</div>
+										</div>
+
+										<div class="control-group">
+											<label class="control-label" for="editNote-<?php echo $note->id; ?>">Note</label>
+											<div class="controls">
+												<textarea class="input-block-level" name="content" id="editNote-<?php echo $note->id; ?>" rows="6"><?php echo $note->content; ?></textarea>
+											</div>
+										</div>
+
+										<input type="hidden" name="controller" value="<?php echo $this->view->getControllerName(); ?>">
+										<input type="hidden" name="action" value="<?php echo $this->view->getActionName() . $extra_params; ?>">
+										<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+										<input type="hidden" value="<?php echo $note->id; ?>" name="note_id">
+									</div>
+
+									<div class="modal-footer">
+										<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+										<button class="btn btn-primary">Save changes</button>
+									</div>
+								</form>
+							</div>
+						</h5>
+
+						<hr />
+
+						<?php echo Markdown($note->content); ?>
+					</div>
+
+					<br />
+				<?php } ?>
+			<?php } ?>
+		</div>
+	</div>
+
+	<div class="span3">
+		<?php $this->partial("partials/attendance") ?>
+	</div>
+</div>

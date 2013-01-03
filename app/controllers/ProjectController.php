@@ -237,4 +237,96 @@ class ProjectController extends ControllerBase
 
 		Phalcon\Tag::setTitle($project->name . ' | Tasks');
 	}
+
+	public function notesAction($id=null)
+	{
+		if (is_null($id)) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		$project = Project::findFirst('id="' . $id . '"');
+
+		if (!$project) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		if (!$project->isInProject($this->currentUser)) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		$this->view->setVar('project', $project);
+		$this->view->setVar('developers', User::getAllDevelopers(true));
+		$this->view->setVar('extra_params', '/' . $id . '/');
+
+		Phalcon\Tag::setTitle($project->name . ' | Notes');
+	}
+
+	public function notespostAction()
+	{
+		if ($this->request->isPost()) {
+			$controller = $this->request->getPost('controller', 'string');
+			$action = $this->request->getPost('action', 'string');
+			$projectId = $this->request->getPost('project_id');
+
+			$project = Project::findFirst('id="' . $projectId . '"');
+
+			if ($project) {
+				if (!$project->isInProject($this->currentUser)) {
+					$this->response->redirect('project/index');
+					$this->view->disable();
+					return;
+				}
+
+				$title = $this->request->getPost('title');
+				$content = $this->request->getPost('content');
+				$note_id = $this->request->getPost('note_id');
+
+				if ($note_id) {
+					$note = Note::findFirst('id="' . $note_id . '"');
+
+					if (!$note) {
+						$this->flashSession->error('Note does not exist.');
+						$this->response->redirect($controller . '/' . $action);
+						$this->view->disable();
+						return;
+					}
+				}
+				else {
+					$note = new Note();
+					$note->user_id = $this->currentUser->id;
+					$note->project_id = $project->id;
+					$note->created_at = new Phalcon\Db\RawValue('now()');
+				}
+
+				$note->title = $title;
+				$note->content = $content;
+
+				if ($note->save() == true) {
+					$this->flashSession->success('Note successfully saved.');
+
+					$this->response->redirect($controller . '/' . $action);
+					$this->view->disable();
+					return;
+				}
+
+				foreach ($note->getMessages() as $message) {
+					$this->flashSession->error((string) $message);
+	            }
+
+	            $this->response->redirect($controller . '/' . $action);
+				$this->view->disable();
+				return;
+			}
+		}
+
+		$this->response->redirect('project/index');
+		$this->view->disable();
+		return;
+	}
 }

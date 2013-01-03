@@ -20,6 +20,7 @@ class Project extends Phalcon\Mvc\Model
     {
         $this->hasMany('id', 'ProjectUser', 'project_id');
         $this->hasMany('id', 'Task', 'project_id');
+        $this->hasMany('id', 'Note', 'project_id');
     }
 
     public function isOwner($user, $inclAdmin=true)
@@ -131,6 +132,29 @@ class Project extends Phalcon\Mvc\Model
 
         if (count($tasks) > 0) {
             return $tasks;
+        }
+
+        return null;
+    }
+
+    public function getNotes($limit=null)
+    {
+        if (!is_null($limit)) {
+            $notes = Note::find(array(
+                'conditions' => 'project_id=' . $this->id,
+                'order' => 'created_at DESC',
+                'limit' => $limit,
+            ));
+        }
+        else {
+            $notes = Note::find(array(
+                'conditions' => 'project_id=' . $this->id,
+                'order' => 'created_at DESC',
+            ));
+        }
+
+        if (count($notes) > 0) {
+            return $notes;
         }
 
         return null;
