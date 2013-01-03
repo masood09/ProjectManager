@@ -8,10 +8,10 @@
 
 		<?php if (!is_null($attendance)) { ?>
 			<input type="hidden" name="attendance_id" value="<?php echo $attendance->id; ?>">
-			<button class="btn btn-inverse btn-large sidebar_btn" type="submit">End Time</button>
+			<button class="btn btn-inverse btn-large input-block-level" type="submit">End Time</button>
 		<?php } else { ?>
-			<button class="btn btn-inverse btn-large sidebar_btn" type="submit">Start Time</button>
-			<br /><br />
+			<button class="btn btn-inverse btn-large input-block-level" type="submit">Start Time</button>
+			<br>
 			<select class="input-block-level" name="task_id">
 				<option value="0">No Task</option>
 
