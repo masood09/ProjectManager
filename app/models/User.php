@@ -78,4 +78,13 @@ class User extends Phalcon\Mvc\Model
 
         return $tasks;
     }
+
+    public function isAdmin()
+    {
+        if ($this->role_id == 1) {
+            return true;
+        }
+
+        return false;
+    }
 }
