@@ -60,8 +60,8 @@
 							</div>
 						</div>
 
-						<input type="hidden" value="project" name="controller">
-						<input type="hidden" value="view/<?php echo $project->id; ?>/" name="action">
+						<input type="hidden" name="controller" value="<?php echo $this->view->getControllerName(); ?>">
+						<input type="hidden" name="action" value="<?php echo $this->view->getActionName() . $extra_params; ?>">
 						<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
 					</div>
 
