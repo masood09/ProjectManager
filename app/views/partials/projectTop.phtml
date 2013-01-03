@@ -1,0 +1,107 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="content_block well">
+	<h3><?php echo $project->name; ?></h3>
+
+	<div class="project_description well well-small">
+		<?php echo Markdown($project->description); ?>
+	</div>
+</div>
+
+<div class="navbar">
+	<div class="navbar-inner">
+		<ul class="nav">
+			<li <?php echo ($this->view->getActionName() == 'view') ? 'class="active"' : ''; ?>>
+				<?php echo Tag::linkTo(array('project/view/' . $project->id . '/', 'text' => 'Tasks')); ?>
+			</li>
+			<li <?php echo ($this->view->getActionName() == 'notes') ? 'class="active"' : ''; ?>>
+				<?php echo Tag::linkTo(array('project/notes/' . $project->id . '/', 'text' => 'Notes')); ?>
+			</li>
+			<li <?php echo ($this->view->getActionName() == 'files') ? 'class="active"' : ''; ?>>
+				<?php echo Tag::linkTo(array('project/files/' . $project->id . '/', 'text' => 'Files')); ?>
+			</li>
+		</ul>
+
+		<?php if ($currentUser->isAdmin()) { ?>
+			<ul class="nav pull-right">
+				<li>
+					<a href="#manageUsers" role="button" data-toggle="modal">Manage users</a>
+				</li>
+				<li>
+					<a href="#editProject" role="button" data-toggle="modal">Edit project</a>
+				</li>
+			</ul>
+
+			<div id="manageUsers" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>Manage users</h3>
+				</div>
+
+				<?php echo Tag::form(array('project/saveusers', 'class' => 'form-horizontal')); ?>
+					<div class="modal-body">
+						<?php if (count($developers) > 1) { ?>
+							<div class="control-group">
+								<label class="control-label" for="manageUsersDevelopers-<?php echo $project->id; ?>">Developers</label>
+								<div class="controls">
+									<select multiple="multiple" id="manageUsersDevelopers-<?php echo $project->id; ?>" name="developers[]">
+										<?php foreach($developers AS $developer) { ?>
+											<?php if (!$project->isOwner($developer, false)) { ?>
+												<option value="<?php echo $developer->id; ?>" <?php echo ($project->isInProject($developer)) ? 'selected="selected"' : ''; ?>>
+													<?php echo $developer->full_name; ?>
+												</option>
+											<?php } ?>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+						<?php } ?>
+
+						<input type="hidden" value="project" name="controller">
+						<input type="hidden" value="view/<?php echo $project->id; ?>/" name="action">
+						<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button class="btn btn-primary">Save changes</button>
+					</div>
+				</form>
+			</div>
+
+			<div id="editProject" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>Edit project</h3>
+				</div>
+
+				<?php echo Tag::form(array('project/savepost', 'class' => 'form-horizontal')); ?>
+					<div class="modal-body">
+						<div class="control-group">
+							<label class="control-label" for="editProjectName">Name</label>
+							<div class="controls">
+								<input type="text" class="input-block-level" placeholder="Project Name" name="name" id="editProjectName" value="<?php echo $project->name; ?>">
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="editProjectDescription">Description</label>
+							<div class="controls">
+								<textarea rows="6" class="input-block-level" name="description" placeholder="Project Description" id="editProjectDescription"><?php echo $project->description; ?></textarea>
+							</div>
+						</div>
+
+						<input type="hidden" value="project" name="controller">
+						<input type="hidden" value="view/<?php echo $project->id; ?>/" name="action">
+						<input type="hidden" value="<?php echo $project->id; ?>" name="project_id">
+					</div>
+
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+						<button class="btn btn-primary">Save changes</button>
+					</div>
+				</form>
+			</div>
+		<?php } ?>
+	</div>
+</div>

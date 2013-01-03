@@ -208,4 +208,32 @@ class ProjectController extends ControllerBase
 		$this->view->disable();
 		return;
 	}
+
+	public function viewAction($id=null)
+	{
+		if (is_null($id)) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		$project = Project::findFirst('id="' . $id . '"');
+
+		if (!$project) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		if (!$project->isInProject($this->currentUser)) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		$this->view->setVar('project', $project);
+		$this->view->setVar('developers', User::getAllDevelopers(true));
+
+		Phalcon\Tag::setTitle($project->name);
+	}
 }
