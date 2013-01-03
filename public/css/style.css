@@ -116,3 +116,24 @@ table tfoot tr td {
 form.form-inline div.jdpicker_w {
 	display: inline-block;
 }
+
+div.projectCard a {
+	color: #333;
+	text-decoration: none;
+	height: 100%;
+	display: block;
+}
+
+div.projectCard div.content_block {
+	height: 235px;
+}
+
+div.projectCard a div.description {
+	height: 140px;
+	overflow: hidden;
+	margin-bottom: 15px;
+}
+
+div.projectCard a p.summary {
+	font-size: 12px;
+}
