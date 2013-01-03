@@ -235,6 +235,6 @@ class ProjectController extends ControllerBase
 		$this->view->setVar('developers', User::getAllDevelopers(true));
 		$this->view->setVar('extra_params', '/' . $id . '/');
 
-		Phalcon\Tag::setTitle($project->name);
+		Phalcon\Tag::setTitle($project->name . ' | Tasks');
 	}
 }
