@@ -35,9 +35,19 @@
 											$_tasksToolTipHtml .= '<p>' . $_task->title . '</p>';
 										}
 									}
+
+									$_notesToolTipHtml = '';
+									$_projectNotes = $project->getNotes(5);
+
+									if (!is_null($_projectNotes)) {
+										foreach ($_projectNotes AS $_projectNote) {
+											$_notesToolTipHtml .= '<p>' . $_projectNote->title . '</p>';
+										}
+									}
 								?>
 								<span rel="tooltip" data-placement="right" data-html="true" data-original-title="<?php echo $_usersToolTipHtml; ?>"><?php echo count($project->getDevelopers()); ?> users</span>,&nbsp;
-								<span rel="tooltip" data-placement="right" data-html="true" data-original-title="<?php echo $_tasksToolTipHtml; ?>"><?php echo count($project->getOpenTasks()); ?> open tasks</span>
+								<span rel="tooltip" data-placement="right" data-html="true" data-original-title="<?php echo $_tasksToolTipHtml; ?>"><?php echo count($project->getOpenTasks()); ?> open tasks</span>&nbsp;
+								<span rel="tooltip" data-placement="right" data-html="true" data-original-title="<?php echo $_notesToolTipHtml; ?>"><?php echo count($project->getNotes()); ?> notes</span>
 							</p>
 						</a>
 					</div>
