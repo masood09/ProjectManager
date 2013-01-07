@@ -23,6 +23,10 @@
         <!--[if lt IE 9]>
 			<script src="js/html5.js"></script>
 		<![endif]-->
+
+		<?php echo Tag::javascriptInclude('js/jquery-1.8.3.min.js'); ?>
+		<?php echo Tag::javascriptInclude('js/bootstrap.min.js'); ?>
+    	<?php echo Tag::javascriptInclude('js/jquery.jdpicker.js'); ?>
     </head>
 
     <body>
@@ -115,10 +119,6 @@
 				</form>
 			</div>
 		<?php } ?>
-
-    	<?php echo Tag::javascriptInclude('js/jquery-1.8.3.min.js'); ?>
-    	<?php echo Tag::javascriptInclude('js/bootstrap.min.js'); ?>
-    	<?php echo Tag::javascriptInclude('js/jquery.jdpicker.js'); ?>
 
     	<script type="text/javascript">
     		$(document).ready(function() {
