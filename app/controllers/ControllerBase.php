@@ -32,7 +32,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			// Private area resources
 			$adminResources = array(
 				'index' => array('index'),
-				'project' => array('index', 'createpost', 'saveusers', 'savepost', 'view', 'notes', 'notespost'),
+				'project' => array('index', 'createpost', 'saveusers', 'savepost', 'view', 'notes', 'notespost', 'files'),
 				'task' => array('savepost', 'view', 'subscribe', 'unsubscribe', 'addcomment', 'index'),
 				'admin' => array('index', 'configpost'),
 				'user' => array('saveuser', 'myaccount'),
@@ -45,7 +45,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 			// Private developer resources
 			$developerResources = array(
 				'index' => array('index'),
-				'project' => array('index', 'view', 'notes', 'notespost'),
+				'project' => array('index', 'view', 'notes', 'notespost', 'files'),
 				'task' => array('savepost', 'view', 'subscribe', 'unsubscribe', 'addcomment', 'index'),
 				'user' => array('logout', 'myaccount'),
 				'attendance' => array('savepost', 'index'),
