@@ -34,3 +34,4 @@ $RECYCLE.BIN/
 ###Project###
 
 /app/config/config.xml
+/public/uploads/
