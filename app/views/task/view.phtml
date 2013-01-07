@@ -122,6 +122,42 @@
 							<div class="comment">
 								<?php echo Markdown($comment->comment); ?>
 							</div>
+
+							<?php $uploads = $comment->getUploads(); ?>
+
+							<?php if (count($uploads) > 0) { ?>
+								<table role="presentation" class="table fileUploads table-bordered">
+									<tbody data-toggle="modal-gallery" data-target="#modal-gallery">
+										<?php foreach($uploads AS $upload) { ?>
+											<?php $fileUrl = $this->url->get('uploads/' . $project->id . '/' . $upload->filename); ?>
+											<tr class="fileUpload">
+												<td class="preview">
+													<?php if (in_array($upload->type, array('image/jpeg', 'image/png', 'image/gif'))) { ?>
+														<a href="<?php echo $fileUrl; ?>" title="<?php echo $upload->filename; ?>" data-gallery="gallery" download="<?php echo $upload->filename; ?>">
+															<img src="<?php echo $fileUrl; ?>" width="128" alt="<?php echo $upload->filename; ?>">
+														</a>
+													<?php } else { ?>
+														<div class="<?php echo $upload->type; ?>"></div>
+													<?php } ?>
+												</td>
+												<td class="content">
+													<p>
+														<a href="<?php echo $fileUrl; ?>" title="<?php echo $upload->filename; ?>" data-gallery="gallery" download="<?php echo $fileUrl; ?>">
+															<?php echo $upload->filename; ?>
+														</a>
+													</p>
+													<p>
+														<?php echo $upload->size; ?>
+													</p>
+													<p>
+														Uploaded by <?php echo $upload->getUser()->full_name; ?> at <?php echo $upload->uploaded_at; ?>
+													</p>
+												</td>
+											</tr>
+										<?php } ?>
+									</tbody>
+								</table>
+							<?php } ?>
 						</td>
 					</tr>
 				<?php } ?>
@@ -132,11 +168,13 @@
 
 		<div class="content_block well">
 			<h5>Add new comment</h5>
-			<?php echo Tag::form(array("task/addcomment", 'class' => 'form-horizontal')); ?>
+			<?php echo Tag::form(array("task/addcomment", 'class' => 'form-horizontal', 'id' => 'fileupload', 'enctype' => 'multipart/form-data')); ?>
 				<textarea class="input-block-level" rows="6" name="comment"></textarea>
 				<input type="hidden" name="task_id" value="<?php echo $task->id; ?>">
+				<input type="hidden" name="uuid" value="<?php echo $uuid; ?>">
 
-				<br /><br />
+				<br><br>
+
 				<?php if ($currentUser->id == $task->assigned_to) { ?>
 					<label class="checkbox">
 						<input type="checkbox" name="task_complete" <?php echo ($task->status == 1) ? 'checked="checked"' : ''; ?>>
@@ -145,7 +183,19 @@
 					<br />
 				<?php } ?>
 
-				<input type="submit" class="btn btn-primary" value="Add comment">
+				<div class="row fileupload-buttonbar">
+		            <div class="span7">
+		                <!-- The fileinput-button span is used to style the file input field as button -->
+		                <span class="btn btn-success fileinput-button">
+		                    <i class="icon-plus icon-white"></i>
+		                    <span>Add files...</span>
+		                    <input type="file" name="files[]" multiple>
+		                </span>
+		            </div>
+		        </div>
+		        <table role="presentation" class="table fileUploads"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+
+		        <input type="submit" class="btn btn-primary" value="Add comment">
 			</form>
 		</div>
 	</div>
@@ -193,4 +243,121 @@
 			<p><strong>Total Time : <?php echo $task_total_time; ?></strong></p>
 		</div>
 	</div>
+</div>
+
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade fileUpload">
+		<td class="preview">
+			<span class="fade"></span>
+		</td>
+
+		<td class="content">
+			<p>
+				{%=file.name%}
+			</p>
+
+			<p>
+				{%=o.formatFileSize(file.size)%}
+			</p>
+
+			{% if (!file.error) { %}
+				<div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+
+				<p>
+					<span class="start">
+						<button class="btn btn-primary">
+	                    	<i class="icon-upload icon-white"></i>
+	                    	<span>Start</span>
+	                	</button>
+                	</span>&nbsp;&nbsp;
+			{% } else { %}
+				<p>
+			{% } %}
+
+				<span class="cancel">
+					<button class="btn btn-warning">
+		                <i class="icon-ban-circle icon-white"></i>
+		                <span>Cancel</span>
+		            </button>
+		        </span>
+	        </p>
+		</td>
+	</tr>
+{% } %}
+</script>
+
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+	{% if (!file.error) { %}
+		<tr class="template-download fade fileUpload">
+			<td class="preview">
+				{% if (file.thumbnail_url) { %}
+					<a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}">
+						<img src="{%=file.thumbnail_url%}" width="128" alt="{%=file.name%}">
+					</a>
+				{% } else { %}
+					<div class="{%=file.type%}"></div>
+				{% } %}
+			</td>
+			<td class="content">
+				<p>
+					<a href="{%=file.url%}" title="{%=file.name%}" data-gallery="{%=file.thumbnail_url&&'gallery'%}" download="{%=file.name%}">{%=file.name%}</a>
+				</p>
+				<p>
+					{%=o.formatFileSize(file.size)%}
+				</p>
+				<p>
+					Uploaded by {%=file.uploaded_by%} at {%=file.uploaded_at%}
+				</p>
+
+				{% if (file.delete_url) { %}
+					<p>
+						<span class="delete">
+							<button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
+				                <i class="icon-trash icon-white"></i>
+				                <span>Delete</span>
+				            </button>
+			            </span>
+			        </p>
+				{% } %}
+			</td>
+		</tr>
+	{% } %}
+{% } %}
+</script>
+
+<script type="text/javascript">
+	$('#fileupload').fileupload({
+		url: "<?php echo $this->url->get('files/post/' . $project->id . '/' . $task->id . '/'); ?>",
+		prependFiles : true,
+		previewMaxWidth: 128,
+		autoUpload : true
+    });
+</script>
+
+<div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd" tabindex="-1">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3 class="modal-title"></h3>
+    </div>
+    <div class="modal-body"><div class="modal-image"></div></div>
+    <div class="modal-footer">
+        <a class="btn modal-download" target="_blank">
+            <i class="icon-download"></i>
+            <span>Download</span>
+        </a>
+        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
+            <i class="icon-play icon-white"></i>
+            <span>Slideshow</span>
+        </a>
+        <a class="btn btn-info modal-prev">
+            <i class="icon-arrow-left icon-white"></i>
+            <span>Previous</span>
+        </a>
+        <a class="btn btn-primary modal-next">
+            <span>Next</span>
+            <i class="icon-arrow-right icon-white"></i>
+        </a>
+    </div>
 </div>

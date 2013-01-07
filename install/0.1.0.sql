@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `task_id` int(10) unsigned NOT NULL,
   `comment` TEXT NOT NULL,
   `created_at` datetime NOT NULL,
+  `uuid` VARCHAR(255) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -128,5 +129,6 @@ CREATE TABLE IF NOT EXISTS `upload` (
   `task_id` int(10) unsigned NULL,
   `comment_id` int(10) unsigned NULL,
   `uploaded_at` datetime NOT NULL,
+  `uuid` VARCHAR(255) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

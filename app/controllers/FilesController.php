@@ -90,7 +90,7 @@ class FilesController extends ControllerBase
 		return $fileName;
 	}
 
-	public function postAction($projectId=null)
+	public function postAction($projectId=null, $taskId = null)
 	{
 		if (!$this->request->isPost()) {
 			$this->response->redirect('project/index');
@@ -118,6 +118,16 @@ class FilesController extends ControllerBase
 			return;
 		}
 
+		if (!is_null($taskId)) {
+			$task = Task::findFirst('id="' . $taskId . '"');
+
+			if (!$task) {
+				$this->response->redirect('project/index');
+				$this->view->disable();
+				return;
+			}
+		}
+
 		if ($this->request->hasFiles() == true) {
 			foreach ($this->request->getUploadedFiles() as $file) {
 				$projectDir = $this->UploadDir . $projectId . '/';
@@ -143,7 +153,13 @@ class FilesController extends ControllerBase
 				$upload->size = $size;
 				$upload->user_id = $this->currentUser->id;
 				$upload->project_id = $projectId;
+
+				if ($task) {
+					$upload->task_id = $task->id;
+				}
+
 				$upload->uploaded_at = new Phalcon\Db\RawValue('now()');
+				$upload->uuid = $this->request->getPost('uuid');
 
 				if ($upload->save() == true) {
 					$temp = array();

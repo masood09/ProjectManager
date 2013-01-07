@@ -196,6 +196,7 @@ class TaskController extends ControllerBase
 		$this->view->setVar('task_user_time', $task_user_time);
 		$this->view->setVar('task_total_time', $task_total_time);
 		$this->view->setVar('extra_params', '/' . $id . '/');
+		$this->view->setVar('uuid', hash("sha256", date('Y-m-d H:m:i') . $id . $this->currentUser->id));
 		Phalcon\Tag::setTitle(($task->job_id) ? $task->job_id . ' - ' . $task->title : $task->title);
 	}
 
@@ -319,6 +320,7 @@ class TaskController extends ControllerBase
 			$user_id = $this->currentUser->id;
 			$message = $this->request->getPost('comment');
 			$created_at = new Phalcon\Db\RawValue('now()');
+			$uuid = $this->request->getPost('uuid');
 
 			$task = Task::findFirst('id="' . $task_id . '"');
 
@@ -355,6 +357,7 @@ class TaskController extends ControllerBase
 			$comment->task_id = $task_id;
 			$comment->comment = $message;
 			$comment->created_at = $created_at;
+			$comment->uuid = $uuid;
 
 			if ($comment->save() == true) {
 				$this->Email->sendCommentEmail($comment);
@@ -373,6 +376,13 @@ class TaskController extends ControllerBase
 					$taskUser->created_at = new Phalcon\Db\RawValue('now()');
 
 					$taskUser->save();
+				}
+
+				$uploads = Upload::find('user_id = "' . $user_id . '" AND task_id = "' . $task_id . '" AND uuid = "' . $uuid . '"');
+
+				foreach($uploads AS $upload) {
+					$upload->comment_id = $comment->id;
+					$upload->save();
 				}
 
 				$this->response->redirect('task/view/' . $task_id);
