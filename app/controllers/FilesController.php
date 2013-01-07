@@ -26,7 +26,10 @@ class FilesController extends ControllerBase
 
 		$return = array();
 
-		$uploads = Upload::find('project_id = "' . $projectId . '"');
+		$uploads = Upload::find(array(
+			'conditions' => 'project_id = "' . $projectId . '"',
+			'order' => 'uploaded_at DESC',
+		));
 
 		if (count($uploads) > 0) {
 			foreach($uploads AS $upload) {
