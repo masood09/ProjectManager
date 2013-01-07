@@ -112,7 +112,7 @@ try {
         return new Menu();
     });
 
-    $di->set('Email', function() use ($config) {
+    $di->set('Email', function() {
         return new Email(
             Config::getValue('email/host'),
             Config::getValue('email/port'),
