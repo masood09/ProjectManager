@@ -173,7 +173,7 @@ class FilesController extends ControllerBase
 					}
 
 					$temp['uploaded_by'] = $upload->getUser()->full_name;
-					$temp['uploaded_at'] = date('Y-m-d H:m:i');
+					$temp['uploaded_at'] = date('Y-m-d H:i:s');
 
 					$temp['delete_url'] = $this->url->get('files/delete/' . $upload->id . '/');
 					$temp['delete_type'] = 'POST';

@@ -196,7 +196,7 @@ class TaskController extends ControllerBase
 		$this->view->setVar('task_user_time', $task_user_time);
 		$this->view->setVar('task_total_time', $task_total_time);
 		$this->view->setVar('extra_params', '/' . $id . '/');
-		$this->view->setVar('uuid', hash("sha256", date('Y-m-d H:m:i') . $id . $this->currentUser->id));
+		$this->view->setVar('uuid', hash("sha256", date('Y-m-d H:i:s') . $id . $this->currentUser->id));
 		Phalcon\Tag::setTitle(($task->job_id) ? $task->job_id . ' - ' . $task->title : $task->title);
 	}
 
