@@ -156,6 +156,9 @@ class FilesController extends ControllerBase
 						$temp['thumbnail_url'] = $this->url->get($fileUrl);
 					}
 
+					$temp['uploaded_by'] = $upload->getUser()->full_name;
+					$temp['uploaded_at'] = date('Y-m-d H:m:i');
+
 					$temp['delete_url'] = $this->url->get('files/delete/');
 					$temp['delete_type'] = 'POST';
 
