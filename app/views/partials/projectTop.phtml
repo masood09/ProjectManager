@@ -17,6 +17,9 @@
 			<li <?php echo ($this->view->getActionName() == 'notes') ? 'class="active"' : ''; ?>>
 				<?php echo Tag::linkTo(array('project/notes/' . $project->id . '/', 'text' => 'Notes')); ?>
 			</li>
+			<li <?php echo ($this->view->getActionName() == 'files') ? 'class="active"' : ''; ?>>
+				<?php echo Tag::linkTo(array('project/files/' . $project->id . '/', 'text' => 'Files')); ?>
+			</li>
 		</ul>
 
 		<?php if ($currentUser->isAdmin()) { ?>

@@ -116,3 +116,17 @@ CREATE TABLE IF NOT EXISTS `note` (
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `upload` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `filename` varchar(255) NOT NULL,
+  `filepath` varchar(255) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `size` int(50) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
+  `task_id` int(10) unsigned NULL,
+  `comment_id` int(10) unsigned NULL,
+  `uploaded_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

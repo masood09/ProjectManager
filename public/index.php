@@ -123,6 +123,10 @@ try {
         );
     });
 
+    $di->set('UploadDir', function() {
+        return __DIR__ . '/uploads/';
+    });
+
     include_once "../app/library/Markdown/Markdown.php";
 
     $application = new \Phalcon\Mvc\Application();

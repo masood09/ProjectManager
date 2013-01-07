@@ -137,3 +137,15 @@ div.projectCard a div.description {
 div.projectCard a p.summary {
 	font-size: 12px;
 }
+
+table.fileUploads tr.fileUpload td.preview {
+	vertical-align: center;
+}
+
+table.fileUploads tr.fileUpload td.preview img {
+	border: 5px solid #ccc;
+}
+
+table.fileUploads tr.fileUpload td.preview canvas {
+	border: 5px solid #ccc;
+}
