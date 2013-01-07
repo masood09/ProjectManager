@@ -125,10 +125,12 @@
 
 							{% if (file.delete_url) { %}
 								<p>
-									<button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
-						                <i class="icon-trash icon-white"></i>
-						                <span>Delete</span>
-						            </button>
+									<span class="delete">
+										<button class="btn btn-danger" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}">
+							                <i class="icon-trash icon-white"></i>
+							                <span>Delete</span>
+							            </button>
+						            </span>
 						        </p>
 							{% } %}
 						</td>

@@ -51,7 +51,7 @@ class FilesController extends ControllerBase
 				$temp['uploaded_at'] = $upload->uploaded_at;
 
 				if ($upload->user_id == $this->currentUser->id || $this->currentUser->id == 1) {
-					$temp['delete_url'] = $this->url->get('files/delete/');
+					$temp['delete_url'] = $this->url->get('files/delete/' . $upload->id . '/');
 					$temp['delete_type'] = 'POST';
 				}
 
@@ -159,7 +159,7 @@ class FilesController extends ControllerBase
 					$temp['uploaded_by'] = $upload->getUser()->full_name;
 					$temp['uploaded_at'] = date('Y-m-d H:m:i');
 
-					$temp['delete_url'] = $this->url->get('files/delete/');
+					$temp['delete_url'] = $this->url->get('files/delete/' . $upload->id . '/');
 					$temp['delete_type'] = 'POST';
 
 					$return['files'][] = $temp;
@@ -171,5 +171,49 @@ class FilesController extends ControllerBase
 			$this->view->disable();
 			return;
 		}
+	}
+
+	public function deleteAction($id=null)
+	{
+		if (!$this->request->isPost()) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		if (is_null($id) || $id == '') {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		$upload = Upload::findFirst('id = "' . $id . '"');
+
+		if (!$upload) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		$project = $upload->getProject();
+
+		if (!$project->isInProject($this->currentUser)) {
+			$this->response->redirect('project/index');
+			$this->view->disable();
+			return;
+		}
+
+		if ($upload->user_id == $this->currentUser->id || $this->currentUser->id == 1) {
+			unlink($upload->filepath);
+			$upload->delete();
+
+			echo json_encode(array('success' => true));
+			$this->view->disable();
+			return;
+		}
+
+		$this->response->redirect('project/index');
+		$this->view->disable();
+		return;
 	}
 }

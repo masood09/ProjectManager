@@ -39,7 +39,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'attendance' => array('savepost', 'index'),
 				'holiday' => array('savepost'),
 				'report' => array('index'),
-				'files' => array('get', 'post'),
+				'files' => array('get', 'post', 'delete'),
 			);
 
 			// Private developer resources
@@ -50,7 +50,7 @@ class ControllerBase extends \Phalcon\Mvc\Controller
 				'user' => array('logout', 'myaccount'),
 				'attendance' => array('savepost', 'index'),
 				'report' => array('index'),
-				'files' => array('get', 'post'),
+				'files' => array('get', 'post', 'delete'),
 			);
 
 			foreach ($adminResources as $resource => $actions){
