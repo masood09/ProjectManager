@@ -5,6 +5,7 @@ class UserController extends ControllerBase
     public function loginAction()
     {
 
+        Phalcon\Tag::setTitle('Log in');
     }
 
     public function logoutAction()
