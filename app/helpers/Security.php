@@ -177,5 +177,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 return false;
             }
         }
+
+        $this->view->setVar('currentUser', $user);
     }
 }
