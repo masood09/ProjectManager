@@ -119,6 +119,7 @@ class Security extends Phalcon\Mvc\User\Plugin
      */
     public function beforeDispatch(Phalcon\Events\Event $event, Phalcon\Mvc\Dispatcher $dispatcher)
     {
+        $user = null;
         $user_id = $this->session->get('user_id');
 
         if (!$user_id) {
