@@ -53,6 +53,39 @@ h6 {
 	color: #fff;
 }
 
+.page {
+	width: 980px;
+	margin: auto;
+	background-color: #FFF;
+	border-radius: 6px;
+	padding: 20px 0;
+	box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+	margin-top: -70px;
+	min-height: 200px;
+}
+
+@media (min-width: 1200px) {
+	.page {
+		width: 1210px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+	.page {
+		width: 764px;
+	}
+}
+
+@media (max-width: 767px) {
+	.page {
+		width: 100%;
+	}
+
+	.page-container {
+	    padding: 0 20px;
+	}
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;
