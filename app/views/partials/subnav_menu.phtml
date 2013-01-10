@@ -6,4 +6,41 @@
 	<br>
 	<br>
 	<br>
+<?php } else if ($controller == 'dashboard') { ?>
+	<ul>
+		<li>
+			<div class="span2 knob">
+				<h4>Open Tasks</h4>
+				<div id="taskPercent" class="chart" data-percent="<?php echo $taskPercent; ?>">
+					<span id="openTasksCount"><?php echo $openTasksCount; ?></span>
+					/
+					<span id="allTasksCount"><?php echo $allTasksCount; ?></span>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="span2 knob">
+				<h4>Productivity</h4>
+					<div id="userTodaysProductivity" class="chart" data-percent="<?php echo $userTodaysProductivity; ?>">
+						<span id="userTodaysProductivityText"><?php echo $userTodaysProductivity; ?></span>%
+					</div>
+			</div>
+		</li>
+		<li>
+			<div class="span2 knob">
+				<h4>Todays Time</h4>
+				<div id="userTodaysTimePercent" class="chart" data-percent="<?php echo $userTodaysTimePercent; ?>">
+					<span id="userTodaysTime"><?php echo $userTodaysTime; ?></span>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="span2 knob">
+				<h4>Month's Time</h4>
+				<div id="userMonthsTimePercent" class="chart" data-percent="<?php echo $userMonthsTimePercent; ?>">
+					<span id="userMonthsTime"><?php echo $userMonthsTime; ?></span>
+				</div>
+			</div>
+		</li>
+	</ul>
 <?php } ?>
