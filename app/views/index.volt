@@ -25,7 +25,7 @@
         {% block head_css %}{% endblock %}
 	</head>
 
-	<body id="{{ body_id }}" class="{{ body_class }}">
+	<body {% if body_id %} id="{{ body_id }}" {% endif %} {% if body_class %} class="{{ body_class }}" {% endif %}>
         <header class="navbar navbar-inverse navbar-fixed-top">
             {{ partial("partials/header") }}
         </header>
