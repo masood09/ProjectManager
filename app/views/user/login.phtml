@@ -1,0 +1,33 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="span6 offset2">
+	<?php echo Tag::form(array('user/login', 'class' => 'form-horizontal')); ?>
+		<div class="control-group">
+			<div class="controls">
+				<h4>Login</h4>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="inputEmail" class="control-label">Email</label>
+
+			<div class="controls">
+				<input id="inputEmail" type="email" placeholder="Email" required>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="inputPassword" class="control-label">Password</label>
+
+			<div class="controls">
+				<input id="inputPassword" type="password" placeholder="Password" required>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<div class="controls">
+				<input type="submit" value="Login" class="btn">
+			</div>
+		</div>
+	</form>
+</div>
