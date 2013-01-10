@@ -17,7 +17,7 @@ class UserController extends ControllerBase
                     $this->session->set('user_id', $user->id);
                     $this->flashSession->success('Welcome ' . $user->full_name . '!');
 
-                    $this->response->redirect('dashboard/index/');
+                    $this->response->redirect('dashboard/index');
                     $this->view->disable();
                     return;
                 }
@@ -33,7 +33,7 @@ class UserController extends ControllerBase
     {
         $this->session->remove('user_id');
         $this->flashSession->success('You have been successfully logged out.');
-        $this->response->redirect('user/login/');
+        $this->response->redirect('user/login');
         $this->view->disable();
         return;
     }
