@@ -1,3 +1,50 @@
+body {
+	background-color: #f6f6f6;
+}
+
+p {
+	font-size: 0.9em;
+}
+
+p.sub {
+	color: #999;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a:focus {
+	outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-transform: uppercase;
+	font-weight: 300;
+}
+
+@media (max-width: 979px) {
+	.navbar-fixed-top {
+		margin-bottom: 0;
+	}
+
+	.navbar-fixed-top .navbar-inner {
+		padding: 5px 20px;
+	}
+}
+
+@media (max-width: 767px) {
+	body {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;
