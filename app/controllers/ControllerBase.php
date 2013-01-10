@@ -2,8 +2,11 @@
 
 class ControllerBase extends Phalcon\Mvc\Controller
 {
+	protected $currentUser = null;
+
     protected function initialize()
     {
+    	$this->currentUser = User::findFirst('id = "' . $this->session->get('user_id') . '"');
     	$this->view->setVar('AppName', Config::getValue('core/name'));
     	$this->view->setVar('controller', $this->dispatcher->getControllerName());
     	$this->view->setVar('action', $this->dispatcher->getActionName());
