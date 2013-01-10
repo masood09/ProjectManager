@@ -1,0 +1,38 @@
+<?php use Phalcon\Tag as Tag ?>
+<div class="navbar-inner">
+	<div class="container">
+		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</a>
+
+		<?php if ($currentUser) { ?>
+			<a href="<?php echo $this->url->get('dashboard/index/'); ?>" class="brand">Project Manager</a>
+		<?php } else { ?>
+			<a href="<?php echo $this->url->get('user/login/'); ?>" class="brand">Project Manager</a>
+		<?php } ?>
+
+		<div class="nav-collapse collapse">
+			<?php if ($currentUser) { ?>
+			<ul class="nav pull-left">
+				<li <?php echo ($controller == 'dashboard') ? 'class="active"' : ''; ?>>
+					<a href="<?php echo $this->url->get('dashboard/index/'); ?>">
+						<i class="icon-home icon-white"></i>
+					</a>
+				</li>
+			</ul>
+			<?php } ?>
+
+			<ul class="nav pull-right">
+				<?php if (!$currentUser) { ?>
+					<li class="active">
+						<a href="<?php echo $this->url->get('user/login/'); ?>">
+							Log in
+						</a>
+					</li>
+				<?php } ?>
+			</ul>
+		</div> <!-- .nav-collapse -->
+	</div> <!-- .container -->
+</div> <!-- .navbar-inner -->
