@@ -26,6 +26,9 @@
 	</head>
 
 	<body id="{{ body_id }}" class="{{ body_class }}">
+        <header class="navbar navbar-inverse navbar-fixed-top">
+            {{ partial("partials/header") }}
+        </header>
 
         {{ javascript_include('js/jquery-1.8.3.min.js') }}
         {{ javascript_include('js/bootstrap.min.js') }}
