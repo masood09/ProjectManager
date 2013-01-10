@@ -7,6 +7,8 @@
 		<meta name="author" content="Masood Ahmed">
 
 		<title>Project Manager - {{ get_title() }}</title>
+        {{ stylesheet_link('css/bootstrap.css') }}
+        {{ stylesheet_link('css/font-awesome.css') }}
 
 		<style>
             body {
