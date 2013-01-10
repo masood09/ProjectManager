@@ -60,6 +60,10 @@ try {
         $view = new \Phalcon\Mvc\View();
         $view->setViewsDir(__DIR__ . '/../app/views/');
 
+        $view->registerEngines(array(
+            ".volt" => 'Phalcon\Mvc\View\Engine\Volt'
+        ));
+
         return $view;
     });
 
