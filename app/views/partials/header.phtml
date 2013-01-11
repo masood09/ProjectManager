@@ -8,9 +8,9 @@
 		</a>
 
 		<?php if ($currentUser) { ?>
-			<a href="<?php echo $this->url->get('dashboard/index'); ?>" class="brand">Project Manager</a>
+			<a href="<?php echo $this->url->get('dashboard/index'); ?>" class="brand"><?php echo $AppName; ?></a>
 		<?php } else { ?>
-			<a href="<?php echo $this->url->get('user/login'); ?>" class="brand">Project Manager</a>
+			<a href="<?php echo $this->url->get('user/login'); ?>" class="brand"><?php echo $AppName; ?></a>
 		<?php } ?>
 
 		<div class="nav-collapse collapse">
