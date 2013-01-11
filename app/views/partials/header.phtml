@@ -9,6 +9,8 @@
 
 		<?php if ($currentUser) { ?>
 			<a href="<?php echo $this->url->get('dashboard/index'); ?>" class="brand"><?php echo $AppName; ?></a>
+		<?php } else if ($controller == 'install') { ?>
+			<a href="<?php echo $this->url->get('install/index'); ?>" class="brand"><?php echo $AppName; ?></a>
 		<?php } else { ?>
 			<a href="<?php echo $this->url->get('user/login'); ?>" class="brand"><?php echo $AppName; ?></a>
 		<?php } ?>
