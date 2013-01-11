@@ -1,6 +1,6 @@
 <?php
 
-class InstallController extends Phalcon\Mvc\Controller
+class InstallController extends ControllerBase
 {
     public function indexAction()
     {
