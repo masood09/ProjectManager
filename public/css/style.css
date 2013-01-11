@@ -55,13 +55,17 @@ h6 {
 
 .page-sub-nav ul {
 	text-align: center;
-	margin-bottom: 80px;
+	margin-left : 0;
 }
 
 .page-sub-nav ul li {
 	list-style-type: none;
 	display: inline-block;
 	margin-top: 10px;
+}
+
+.page-sub-nav ul li [class*="span"] {
+	margin-left: 0;
 }
 
 .page-sub-nav ul li a {
@@ -87,10 +91,8 @@ h6 {
 	width: 980px;
 	margin: auto;
 	background-color: #FFF;
-	border-radius: 6px;
 	padding: 20px 0;
 	box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-	margin-top: -70px;
 	min-height: 200px;
 }
 
