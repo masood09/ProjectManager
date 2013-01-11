@@ -1,18 +1,14 @@
 <?php
 
-$configFile = __DIR__ . '/../app/config/config.xml';
+$actionPath = str_replace('_url=', '', $_SERVER['QUERY_STRING']);
+$actionPath = str_replace('&', '?', $actionPath);
+
+
+$baseUrl = 'http://' . $_SERVER['HTTP_HOST'] . str_replace($actionPath, '', $_SERVER['REQUEST_URI']) . '/';
 
 error_reporting(E_ALL);
 
-if (!file_exists($configFile)) {
-    require_once(__DIR__ . '/../install/install.php');
-    die;
-}
-
 try {
-    // Read the configuration
-    $config = simplexml_load_file($configFile, NULL, LIBXML_NOCDATA);
-
     $loader = new \Phalcon\Loader();
 
     /**
@@ -20,9 +16,8 @@ try {
      */
     $loader->registerDirs(
         array(
-            __DIR__ . '/../app/controllers/',
+            __DIR__ . '/controllers/',
             __DIR__ . '/../app/library/',
-            __DIR__ . '/../app/models/',
             __DIR__ . '/../app/helpers/',
         )
     )->register();
@@ -38,7 +33,7 @@ try {
     $di->set('dispatcher', function() use ($di) {
         $eventsManager = $di->getShared('eventsManager');
 
-        $security = new Security($di);
+        $security = new InstallSecurity($di);
 
         /**
          * We listen for events in the dispatcher using the Security plugin
@@ -54,44 +49,18 @@ try {
     /**
      * The URL component is used to generate all kind of urls in the application
      */
-    $di->set('url', function() {
+    $di->set('url', function() use ($baseUrl) {
         $url = new \Phalcon\Mvc\Url();
-        $url->setBaseUri(Config::getValue('core/baseUrl'));
+        $url->setBaseUri($baseUrl);
 
         return $url;
     });
 
     $di->set('view', function() {
         $view = new \Phalcon\Mvc\View();
-        $view->setViewsDir(__DIR__ . '/../app/views/');
+        $view->setViewsDir(__DIR__ . '/views/');
 
         return $view;
-    });
-
-    /**
-     * Database connection is created based in the parameters defined in the configuration file
-     */
-    $di->set('db', function() use ($config) {
-        return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
-            "host" => $config->database->host,
-            "username" => $config->database->username,
-            "password" => $config->database->password,
-            "dbname" => $config->database->dbname
-        ));
-    });
-
-    /**
-     * If the configuration specify the use of metadata adapter use it or use memory otherwise
-     */
-    $di->set('modelsMetadata', function() use ($config) {
-        if(isset($config->metadata)){
-            $metaDataConfig = $config->metadata;
-            $metadataAdapter = 'Phalcon\Mvc\Model\Metadata\\'.$metaDataConfig->adapter;
-
-            return new $metadataAdapter();
-        } else {
-            return new Phalcon\Mvc\Model\Metadata\Memory();
-        }
     });
 
     /**
