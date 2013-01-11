@@ -11,7 +11,7 @@ $(document).ready(function() {
 			scaleColor: false,
 			lineCap: 'butt',
 			lineWidth: 15,
-			animate: 200
+			animate: 2000
 		});
 
 		var ajax_call = function() {
