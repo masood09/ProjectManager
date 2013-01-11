@@ -32,5 +32,7 @@ class InstallSecurity extends Phalcon\Mvc\User\Plugin
                 )
             );
         }
+
+        $this->view->setVar('currentUser', null);
     }
 }
