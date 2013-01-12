@@ -22,4 +22,32 @@ class Project extends Phalcon\Mvc\Model
         $this->hasMany('id', 'Task', 'project_id');
         $this->hasMany('id', 'Note', 'project_id');
     }
+
+    public function isInProject($user)
+    {
+        $adminUsers = User::find('role_id="' . 1 . '"');
+
+        foreach($adminUsers AS $adminUser) {
+            // Let's check whether the user is already present in the project.
+            $projectUser = null;
+            $projectUser = ProjectUser::findFirst('project_id="' . $this->id . '" AND user_id="' . $adminUser->id . '"');
+
+            if (!$projectUser) {
+                $projectUser = new ProjectUser();
+                $projectUser->user_id = $adminUser->id;
+                $projectUser->project_id = $this->id;
+                $projectUser->created_at = new Phalcon\Db\RawValue('now()');
+
+                $projectUser->save();
+            }
+        }
+
+        $projectUser = ProjectUser::findFirst('user_id="' . $user->id . '" AND project_id="' . $this->id . '"');
+
+        if ($projectUser) {
+            return true;
+        }
+
+        return false;
+    }
 }
