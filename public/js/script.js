@@ -31,6 +31,12 @@ $(document).ready(function() {
 
 		setInterval(ajax_call, 1000 * 60 * 1);
 	}
+	else if (body_id == 'project_tasks') {
+		$('#task_title').editable();
+		$('#task_job_id').editable();
+		$('#task_hours').editable();
+		$('#task_assigned_to').editable();
+	}
 
 	$(".date").easydate({ 'live': false });
 	$(".date").show();

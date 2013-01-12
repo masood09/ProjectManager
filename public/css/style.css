@@ -190,6 +190,11 @@ h6 {
 	height: 8px;
 }
 
+.messages h4 {
+	text-transform: none;
+	font-weight: 400;
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;

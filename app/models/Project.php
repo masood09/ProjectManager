@@ -60,4 +60,25 @@ class Project extends Phalcon\Mvc\Model
 
         return $tasks;
     }
+
+    public function getProjectUsers()
+    {
+        $users = array();
+        $userIds = array();
+
+        $ProjectUsers = ProjectUser::find('project_id = "' . $this->id . '"');
+
+        foreach($ProjectUsers AS $ProjectUser) {
+            $userIds[] = $ProjectUser->user_id;
+        }
+
+        if (count($userIds) > 0) {
+            $users = User::find(array(
+                'conditions' => 'id IN ("' . implode('", "', $userIds) . '")',
+                'order' => 'full_name ASC'
+            ));
+        }
+
+        return $users;
+    }
 }

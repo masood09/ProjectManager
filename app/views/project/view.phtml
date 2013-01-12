@@ -33,5 +33,31 @@
 </div>
 
 <div class="span8">
-	
+	<div class="messages">
+		<h4 class="header">
+			<a href="#" id="task_title" data-name="title" data-type="text" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Enter Task Title" class="editable editable-click"><?php echo $currentTask->title; ?></a>
+		</h4>
+		<p class="header_bottom">
+			<span>
+				Job ID : <a href="#" id="task_job_id" data-name="job_id" data-type="text" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Enter Job ID" class="editable editable-click"><?php echo $currentTask->job_id; ?></a>
+			</span>
+			&nbsp;
+			<span>
+				Assigned to : <a href="#" id="task_assigned_to" data-name="assigned_to" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->assigned_to; ?>" data-source="<?php echo $this->url->get('project/getusersajax/' . $currentProject->id ); ?>" data-original-title="Assigned To" class="editable editable-click"><?php echo $currentTask->getUser()->full_name; ?></a>
+			</span>
+			&nbsp;
+			<span>
+				Hours : <a href="#" id="task_hours" data-name="hours" data-type="number" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Hours" class="editable editable-click"><?php echo $currentTask->getHours(); ?></a>
+			</span>
+			&nbsp;
+			<span>
+				Hours Spent : <a href="#" id="task_hours_spent" class="editable editable-click"><?php echo $currentTask->getTotalTimeSpent(); ?></a>
+			</span>
+
+				<a href="#task_people" class="pull-right">
+					<i class="icon-group"></i>
+					People
+			</a>
+		</p>
+	</div>
 </div>

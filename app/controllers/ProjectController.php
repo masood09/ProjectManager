@@ -44,7 +44,51 @@ class ProjectController extends ControllerBase
 		$this->view->setVar('currentProject', $project);
 		$this->view->setVar('allProjectTasks', $allProjectTasks);
 		$this->view->setVar('currentTask', $currentTask);
+		$this->view->setVar('body_id', 'project_tasks');
 
 		Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
+	}
+
+	public function getusersajaxAction($id=null)
+	{
+		$return = array();
+
+		if (is_null($id)) {
+			echo json_encode($return);
+			$this->view->disable();
+			return;
+		}
+
+		$project = Project::findFirst('id = "' . $id . '"');
+
+		if (!$project) {
+			echo json_encode($return);
+			$this->view->disable();
+			return;
+		}
+
+		if (!$project->isInProject($this->currentUser)) {
+			echo json_encode($return);
+			$this->view->disable();
+			return;
+		}
+
+		$projectUsers = $project->getProjectUsers();
+
+		foreach($projectUsers AS $projectUser) {
+			$temp = array();
+			$temp['value'] = $projectUser->id;
+			$temp['text'] = $projectUser->full_name;
+
+			$return[] = $temp;
+		}
+
+		echo json_encode($return);
+		$this->view->disable();
+	}
+
+	public function updateajax()
+	{
+		
 	}
 }
