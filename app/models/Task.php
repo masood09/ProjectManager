@@ -45,11 +45,11 @@ class Task extends Phalcon\Mvc\Model
 
         $oldTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
-        $tasksTime = date('H:i', $tasksTimeStamp);
+        $tasksTime = date('j:H:i', $tasksTimeStamp);
         date_default_timezone_set($oldTimeZone);
 
         $explode = explode(':', $tasksTime);
-        $_tasksTime = ($explode[0] * 60) + $explode[1];
+        $_tasksTime = (((($explode[0] - 1) * 24) + $explode[1]) * 60) + $explode[2];
         $explode = explode(':', $this->hours);
         $_targetTime = ($explode[0] * 60) + $explode[1];
 
