@@ -31,4 +31,7 @@ $(document).ready(function() {
 
 		setInterval(ajax_call, 1000 * 60 * 1);
 	}
+
+	$(".date").easydate({ 'live': false });
+	$(".date").show();
 });

@@ -50,4 +50,14 @@ class Project extends Phalcon\Mvc\Model
 
         return false;
     }
+
+    public function getAllTasks()
+    {
+        $tasks = Task::find(array(
+            'conditions' => 'project_id=' . $this->id,
+            'order' => 'status ASC, created_at DESC',
+        ));
+
+        return $tasks;
+    }
 }

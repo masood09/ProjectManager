@@ -129,6 +129,67 @@ h6 {
 	margin-right: 10px;
 }
 
+.date {
+	display: none;
+}
+
+.message-sidebar {
+	border-right: 1px solid #eee;
+	margin: -20px;
+	margin-right: 0;
+}
+
+@media (min-width: 768px) {
+	.message-sidebar {
+		overflow: auto;
+		height: 700px;
+	}
+}
+
+.message-sidebar a.message-preview {
+	display: block;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #eee;
+	padding: 10px 20px;
+	text-decoration: none;
+}
+
+.message-sidebar a.new {
+	background-color: #fff;
+}
+
+.message-sidebar a.active,
+.message-sidebar a:hover {
+	background-color: #008dcd;
+	color: #fff;
+}
+
+.message-sidebar a.message-preview p,
+.message-sidebar a.message-preview abbr,
+.message-sidebar a.message-preview h5 {
+	color: #999;
+}
+
+.message-sidebar a.active p,
+.message-sidebar a.active abbr,
+.message-sidebar a.active h5,
+.message-sidebar a:hover p,
+.message-sidebar a:hover abbr,
+.message-sidebar a:hover h5 {
+	color: #eee;
+}
+
+.message-sidebar a.message-preview h4 {
+	text-transform: none;
+	font-weight: 400;
+}
+
+.message-sidebar .progress {
+	margin-bottom: 10px;
+	border-radius: 4px;
+	height: 8px;
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;

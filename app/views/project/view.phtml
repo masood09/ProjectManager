@@ -1,0 +1,37 @@
+<?php use Phalcon\Tag as Tag ?>
+
+
+<div class="span12 header">
+	<a href="#" class="btn pull-right">
+		<i class="icon-plus"></i>
+		New Task
+	</a>
+	<h4>Tasks</h4>
+</div>
+<div class="span4">
+	<div class="message-sidebar">
+		<?php foreach($allProjectTasks AS $projectTask) { ?>
+			<a href="<?php echo $this->url->get('project/view/' . $currentProject->id . '/' . $projectTask->id); ?>" class="message-preview <?php echo ($projectTask->status == 0) ? 'new' : ''; ?> <?php echo ($projectTask->id == $currentTask->id) ? 'active' : ''; ?>">
+				<abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($projectTask->created_at)); ?></abbr>
+				<h5>
+					<?php echo $projectTask->getUser()->full_name; ?>
+					&nbsp;&nbsp;&nbsp;
+					<span>
+						<i class="icon-comments"></i>
+						<?php echo count($projectTask->getComment()); ?>
+					</span>
+				</h5>
+				<h6><?php echo $projectTask->title; ?></h6>
+				<?php if ($projectTask->status == 0 && $projectTask->hours > 0) { ?>
+					<div class="progress">
+						<div style="width: <?php echo $projectTask->getTimePercent(); ?>%;" class="bar bar-success"></div>
+					</div>
+				<?php } ?>
+			</a>
+		<?php } ?>
+	</div>
+</div>
+
+<div class="span8">
+	
+</div>

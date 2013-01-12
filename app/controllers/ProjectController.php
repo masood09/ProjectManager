@@ -24,6 +24,27 @@ class ProjectController extends ControllerBase
 			return;
 		}
 
+		$allProjectTasks = $project->getAllTasks();
+
+		if (count($allProjectTasks) > 0) {
+			if (is_null($task_id)) {
+				$currentTask = $allProjectTasks[0];
+			}
+			else {
+				$currentTask = Task::findFirst('id = "' . $task_id . '"');
+
+				if (!$currentTask) {
+					$this->response->redirect('project/view/' . $project->id);
+					$this->view->disable();
+					return;
+				}
+			}
+		}
+
 		$this->view->setVar('currentProject', $project);
+		$this->view->setVar('allProjectTasks', $allProjectTasks);
+		$this->view->setVar('currentTask', $currentTask);
+
+		Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
 	}
 }
