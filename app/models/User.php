@@ -131,13 +131,16 @@ class User extends Phalcon\Mvc\Model
                 $end = strtotime($attendance->end);
             }
 
-            $monthsTimeStamp += $end - $start;
+            $monthsTimeStamp += ($end - $start);
         }
 
         $oldTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
-        $monthsTime = date('H:i', $monthsTimeStamp);
+        $monthsTime = date('j:H:i', $monthsTimeStamp);
         date_default_timezone_set($oldTimeZone);
+
+        $explode = explode(':', $monthsTime);
+        $monthsTime = ((($explode[0] - 1) * 24) + ($explode[1])) . ':' . $explode[2];
 
         return $monthsTime;
     }
@@ -151,7 +154,7 @@ class User extends Phalcon\Mvc\Model
 
         $explode = explode(':', $monthsTime);
 
-        $_monthsTime = ($explode[0] * 60) + $explode[1];
+        $_monthsTime = ((($explode[0] -1) + $explode[1]) * 60) + $explode[1];
 
         $_targetTime = ($daysTargetTime * $workingDays * 60);
 
