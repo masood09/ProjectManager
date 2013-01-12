@@ -156,7 +156,7 @@ class Security extends Phalcon\Mvc\User\Plugin
 
         if ($allowed != Phalcon\Acl::ALLOW) {
             if ($role == 'Guest') {
-                $this->flash->error('Please login before you proceed.');
+                $this->flashSession->error('Please login before you proceed.');
 
                 $dispatcher->forward(
                     array(
@@ -168,7 +168,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 return false;
             }
             else {
-                $this->flash->error('You do not have permission to access this area.');
+                $this->flashSession->error('You do not have permission to access this area.');
                 $dispatcher->forward(
                     array(
                         'controller' => 'index',
