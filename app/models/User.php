@@ -157,4 +157,26 @@ class User extends Phalcon\Mvc\Model
 
         return ceil(($_monthsTime / $_targetTime) * 100);
     }
+
+    public function getAllProjects()
+    {
+        $projects = array();
+        $projectUsers = array();
+        $projectIds = array();
+
+        $projectUsers = ProjectUser::find('user_id="' . $this->id . '"');
+
+        foreach($projectUsers AS $projectUser) {
+            $projectIds[] = $projectUser->project_id;
+        }
+
+        if (count($projectIds) > 0) {
+            $projects = Project::find(array(
+                'conditions' => 'id IN ("' . implode('", "', $projectIds) . '")',
+                'order' => 'name ASC'
+            ));
+        }
+
+        return $projects;
+    }
 }

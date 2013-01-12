@@ -13,5 +13,6 @@ class ControllerBase extends Phalcon\Mvc\Controller
     	$this->view->setVar('url_params', '');
     	$this->view->setVar("body_id", null);
     	$this->view->setVar("body_class", null);
+        $this->view->setVar("allProjects", $this->currentUser->getAllProjects());
     }
 }

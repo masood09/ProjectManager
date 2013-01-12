@@ -118,6 +118,17 @@ h6 {
 	}
 }
 
+.page .header {
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}
+
+.filters input[type="checkbox"] {
+	float: left;
+	margin-right: 10px;
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;

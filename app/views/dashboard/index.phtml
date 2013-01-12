@@ -2,6 +2,13 @@
 
 <div class="span3">
 	<h4 class="header">Filter by Project</h4>
+
+	<div class="filters">
+		<?php foreach ($allProjects AS $project) { ?>
+			<input type="checkbox" id="filter_project_<?php echo $project->id; ?>" class="filter_project_checkbox" name="filter_project[<?php echo $project->id; ?>]">
+			<label for="filter_project_<?php echo $project->id; ?>"><?php echo $project->name; ?></label>
+		<?php } ?>
+	</div>
 </div>
 
 <div class="span9">
