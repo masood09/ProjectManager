@@ -38,6 +38,10 @@ class TaskController extends ControllerBase
 				$task->hours = $value . ':00:00';
 			}
 
+			if ($data_name == 'status') {
+				$task->status = $value;
+			}
+
 			$task->save();
 		}
 

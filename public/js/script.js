@@ -36,6 +36,7 @@ $(document).ready(function() {
 		$('#task_job_id').editable();
 		$('#task_hours').editable();
 		$('#task_assigned_to').editable();
+		$('#task_status').editable();
 	}
 
 	$(".date").easydate({ 'live': false });
