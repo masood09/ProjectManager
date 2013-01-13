@@ -118,6 +118,19 @@ try {
         return $flashSession;
     });
 
+    /**
+     * Application version.
+     */
+    $di->set('AppVersion', function() {
+        $version = array(
+            'major' => 1,
+            'minor' => 0,
+            'patch' => 0,
+        );
+
+        return $version;
+    });
+
     include_once __DIR__ . '/../app/library/Markdown/Markdown.php';
 
     $application = new \Phalcon\Mvc\Application();
