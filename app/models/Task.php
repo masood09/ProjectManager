@@ -98,4 +98,14 @@ class Task extends Phalcon\Mvc\Model
 
         return $tasksTime;
     }
+
+    public function getComments()
+    {
+        $comments = Comment::find(array(
+            'conditions' => 'task_id = "' . $this->id . '"',
+            'order' => 'created_at ASC',
+        ));
+
+        return $comments;
+    }
 }
