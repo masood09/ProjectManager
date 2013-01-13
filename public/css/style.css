@@ -195,6 +195,28 @@ h6 {
 	font-weight: 400;
 }
 
+.messages .message {
+	padding-bottom: 20px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 20px;
+}
+
+.message-body {
+	padding-left: 80px;
+}
+
+.message-body h5 {
+	font-weight: 300;
+}
+
+.media-body p {
+	margin-bottom: 0;
+}
+
+.media-body .comment-link {
+	font-size: 0.8em;
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;

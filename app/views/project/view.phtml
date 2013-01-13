@@ -65,5 +65,19 @@
 				People
 			</a>
 		</p>
+
+		<?php foreach ($currentTask->getComment() AS $comment) { ?>
+			<div class="message">
+				<img src="http://placehold.it/60x60" class="img-rounded pull-left">
+
+				<div class="message-body">
+					<abbr class="date pull-right">Tue, 08 Jan 2013 16:06:48 +0530</abbr>
+					<h5><?php echo $comment->getUser()->full_name; ?></h5>
+
+					<?php echo Markdown($comment->comment); ?>
+				</div>
+			</div>
+		<?php } ?>
+
 	</div>
 </div>
