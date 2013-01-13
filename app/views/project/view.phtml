@@ -34,6 +34,16 @@
 
 <div class="span8">
 	<div class="messages">
+		<span class="pull-right">
+			&nbsp;
+			<span>
+				Spent : <a href="#" id="task_hours_spent" class="editable editable-click"><?php echo $currentTask->getTotalTimeSpent(); ?></a>
+			</span>
+			&nbsp;
+			<span>
+				Status : <a href="#" id="task_status" data-name="status" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->status; ?>" data-source="[{value: 0, text: 'Open'}, {value: 1, text: 'Closed'}]" data-placement="left" data-original-title="Status" class="editable editable-click"><?php echo ($currentTask->status == 0) ? 'Open' : 'Closed'; ?></a>
+			</span>
+		</span>
 		<h4 class="header">
 			<a href="#" id="task_title" data-name="title" data-type="text" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Enter Task Title" class="editable editable-click"><?php echo $currentTask->title; ?></a>
 		</h4>
@@ -48,14 +58,6 @@
 			&nbsp;
 			<span>
 				Hours : <a href="#" id="task_hours" data-name="hours" data-type="number" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Hours" class="editable editable-click"><?php echo $currentTask->getHours(); ?></a>
-			</span>
-			&nbsp;
-			<span>
-				Hours Spent : <a href="#" id="task_hours_spent" class="editable editable-click"><?php echo $currentTask->getTotalTimeSpent(); ?></a>
-			</span>
-			&nbsp;
-			<span>
-				Status : <a href="#" id="task_status" data-name="status" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->status; ?>" data-source="[{value: 0, text: 'Open'}, {value: 1, text: 'Closed'}]" data-original-title="Status" class="editable editable-click"><?php echo ($currentTask->status == 0) ? 'Open' : 'Closed'; ?></a>
 			</span>
 
 			<a href="#task_people" class="pull-right">
