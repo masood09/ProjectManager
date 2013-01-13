@@ -146,6 +146,12 @@ h6 {
 	}
 }
 
+@media (max-width: 767px) {
+	.message-sidebar {
+		margin-bottom: 40px;
+	}
+}
+
 .message-sidebar a.message-preview {
 	display: block;
 	background-color: #f6f6f6;
