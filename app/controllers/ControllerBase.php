@@ -11,6 +11,7 @@ class ControllerBase extends Phalcon\Mvc\Controller
             Config::setValue('core/version', '0.1.0');
         }
 
+        UpdateHelper::updateVersion(Config::getValue('core/version'), $this->AppVersion);
     }
 
     protected function initialize()
