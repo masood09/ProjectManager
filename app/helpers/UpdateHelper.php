@@ -36,10 +36,105 @@ class UpdateHelper
 	{
 		switch ($version) {
 			case '1.0.0':
+				$projectUsers = ProjectUser::find();
+
+				foreach ($projectUsers AS $projectUser) {
+					if ($projectUser->user_id != $projectUser->getProject()->created_by) {
+						$notification = new Notification();
+
+						$notification->user_id = $projectUser->user_id;
+						$notification->message = '<strong>' . $projectUser->getProject()->getUser()->full_name . '</strong> has added you to the project <strong>' . $projectUser->getProject()->name . '</strong>';
+						$notification->project_id = $projectUser->project_id;
+						$notification->read = 1;
+						$notification->created_by = $projectUser->getProject()->created_by;
+						$notification->created_at = $projectUser->created_at;
+
+						$notification->save();
+					}
+				}
+
+				$tasks = Task::find();
+
+				foreach ($tasks AS $task) {
+					if ($task->assigned_to != $task->created_by) {
+						$notification = new Notification();
+
+						$notification->user_id = $task->assigned_to;
+						$notification->message = '<strong>' . $task->getProject()->getUser()->full_name . '</strong> has assigned the task <strong>' . $task->title . '</strong> of the project <strong>' . $task->getProject()->name . '</strong> to you';
+						$notification->project_id = $task->project_id;
+						$notification->task_id = $task->id;
+						$notification->read = 1;
+						$notification->created_by = $task->getProject()->created_by;
+						$notification->created_at = $task->created_at;
+
+						$notification->save();
+					}
+				}
+
+				$comments = Comment::find();
+
+				foreach ($comments AS $comment) {
+					foreach ($comment->getTask()->getTaskUser() AS $taskUser) {
+						if ($taskUser->user_id != $comment->user_id) {
+							$notification = new Notification();
+
+							$notification->user_id = $taskUser->user_id;
+							$notification->message = '<strong>' . $comment->getUser()->full_name . '</strong> commented on your task <strong>' . $comment->getTask()->title . '</strong> : "' . substr(strip_tags(Markdown($comment->comment)), 0, 100) . '..."';
+							$notification->project_id = $comment->getTask()->project_id;
+							$notification->task_id = $comment->task_id;
+							$notification->comment_id = $comment->id;
+							$notification->read = 1;
+							$notification->created_by = $comment->user_id;
+							$notification->created_at = $comment->created_at;
+
+							$notification->save();
+						}
+					}
+				}
+
+				$notes = Note::find();
+
+				foreach ($notes AS $note) {
+					foreach ($note->getProject()->getProjectUser() AS $projectUser) {
+						if ($note->user_id != $projectUser->user_id) {
+							$notification = new Notification();
+
+							$notification->user_id = $projectUser->user_id;
+							$notification->message = '<strong>' . $note->getUser()->full_name . '</strong> added a new note to the project <strong>' . $note->getProject()->name . '</strong> : "' . substr(strip_tags(Markdown($note->content)), 0, 100) . '..."';
+							$notification->project_id = $note->project_id;
+							$notification->note_id = $note->id;
+							$notification->read = 1;
+							$notification->created_by = $note->user_id;
+							$notification->created_at = $note->created_at;
+
+							$notification->save();
+						}
+					}
+				}
+
+				$uploads = Upload::find('task_id IS NULL AND comment_id IS NULL');
+
+				foreach ($uploads AS $upload) {
+					foreach ($upload->getProject()->getProjectUser() AS $projectUser) {
+						if ($upload->user_id != $projectUser) {
+							$notification = new Notification();
+
+							$notification->user_id = $projectUser->user_id;
+							$notification->message = '<strong>' . $upload->getUser()->full_name . '</strong> uploaded a new file to the project <strong>' . $upload->getProject()->name . '</strong> : "' . $upload->filename . '"';
+							$notification->project_id = $upload->project_id;
+							$notification->upload_id = $upload->id;
+							$notification->read = 1;
+							$notification->created_by = $upload->user_id;
+							$notification->created_at = $upload->uploaded_at;
+
+							$notification->save();
+						}
+					}
+				}
+
 				Config::setValue('core/version', $version);
 				break;
 			default:
-				# code...
 				break;
 		}
 	}
