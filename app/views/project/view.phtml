@@ -73,8 +73,8 @@
 		</p>
 
 		<?php foreach ($currentTask->getComments() AS $comment) { ?>
-			<div class="message">
-				<img src="http://placehold.it/60x60" class="img-rounded pull-left">
+			<div class="message" id="comment-<?php echo $comment->id; ?>">
+				<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
 
 				<div class="message-body">
 					<abbr class="date pull-right">Tue, 08 Jan 2013 16:06:48 +0530</abbr>
