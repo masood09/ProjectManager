@@ -100,13 +100,13 @@ class UpdateHelper
             $updateVersion = $currentVersionArray[0] . '.' . $currentVersionArray[1] . '.' . $currentVersionArray[2];
             $sqlFileName = $sqlDir . $updateVersion . '.sql';
 
-            echo $sqlFileName . '<br>';
+            UpdateHelper::updateAppPre($updateVersion);
 
             if (file_exists($sqlFileName)) {
-		        UpdateHelper::updateAppPre($updateVersion);
 	    	   	UpdateHelper::updateData($sqlFileName, $authDetails);
-	        	UpdateHelper::updateAppPost($updateVersion);
             }
+
+            UpdateHelper::updateAppPost($updateVersion);
         }
 	}
 }
