@@ -21,6 +21,7 @@ class Project extends Phalcon\Mvc\Model
         $this->hasMany('id', 'ProjectUser', 'project_id');
         $this->hasMany('id', 'Task', 'project_id');
         $this->hasMany('id', 'Note', 'project_id');
+        $this->belongsTo('created_by', 'User', 'id');
     }
 
     public function isInProject($user)
