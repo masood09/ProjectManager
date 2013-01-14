@@ -1,9 +1,5 @@
 DROP TABLE role;
 
-ALTER TABLE `task` DROP `description`;
-
-ALTER TABLE `attendance` DROP `total`;
-
 CREATE TABLE IF NOT EXISTS `notification` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`user_id` int(10) unsigned NOT NULL,
