@@ -7,7 +7,6 @@ ALTER TABLE `attendance` DROP `total`;
 CREATE TABLE IF NOT EXISTS `notification` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`user_id` int(10) unsigned NOT NULL,
-	`title` varchar(255) NOT NULL,
 	`message` TEXT NOT NULL,
 	`project_id` int(10) unsigned NULL,
 	`task_id` int(10) unsigned NULL,
