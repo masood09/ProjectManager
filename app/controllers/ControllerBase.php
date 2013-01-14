@@ -6,15 +6,11 @@ class ControllerBase extends Phalcon\Mvc\Controller
 
     protected function _checkSystem()
     {
-        if (!Config::keyExists('core/data_version')) {
-            // If core/data_version does not exist, we set the value to 0.1.0
-            Config::setValue('core/data_version', '0.1.0');
+        if (!Config::keyExists('core/version')) {
+            // If core/version does not exist, we set the value to 0.1.0
+            Config::setValue('core/version', '0.1.0');
         }
 
-        if (!Config::keyExists('core/app_version')) {
-            // If core/data_version does not exist, we set the value to 0.1.0
-            Config::setValue('core/app_version', '0.1.0');
-        }
     }
 
     protected function initialize()
