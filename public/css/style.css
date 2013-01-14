@@ -156,6 +156,7 @@ h6 {
 	}
 }
 
+.activity a.activity-preview,
 .message-sidebar a.message-preview {
 	display: block;
 	background-color: #f6f6f6;
@@ -164,10 +165,20 @@ h6 {
 	text-decoration: none;
 }
 
+.activity a.new,
 .message-sidebar a.new {
 	background-color: #fff;
 }
 
+.activity a.activity-preview {
+	padding: 10px 10px 15px 10px;
+}
+
+.activity a.activity-preview {
+	color: #333;
+}
+
+.activity a.activity-preview:hover,
 .message-sidebar a.active,
 .message-sidebar a:hover {
 	background-color: #008dcd;
@@ -180,6 +191,7 @@ h6 {
 	color: #999;
 }
 
+.activity a.activity-preview:hover,
 .message-sidebar a.active p,
 .message-sidebar a.active abbr,
 .message-sidebar a.active h5,

@@ -26,6 +26,14 @@ class DashboardController extends ControllerBase
 
     	$this->view->setVar('body_id', 'dashboard');
 
+
+        $activities = Notification::find(array(
+            'conditions' => 'user_id = "' . $this->currentUser->id . '"',
+            'order' => 'created_at DESC',
+        ));
+
+        $this->view->setVar('activities', $activities);
+
     	Phalcon\Tag::setTitle('Dashboard');
     }
 }
