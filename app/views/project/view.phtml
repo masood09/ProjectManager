@@ -8,6 +8,12 @@
 	</a>
 	<h4>Tasks</h4>
 </div>
+
+<?php if (!$currentTask) { ?>
+<div class="span12 align-center">
+	<h5>No tasks for this Project! Why not add some?</h5>
+</div>
+<?php } else { ?>
 <div class="span4">
 	<div class="message-sidebar">
 		<?php foreach($allProjectTasks AS $projectTask) { ?>
@@ -81,3 +87,4 @@
 
 	</div>
 </div>
+<?php } ?>

@@ -28,6 +28,10 @@ h6 {
 	font-weight: 300;
 }
 
+.align-center {
+	text-align: center;
+}
+
 @media (max-width: 979px) {
 	.navbar-fixed-top {
 		margin-bottom: 0;
