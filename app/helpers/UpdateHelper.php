@@ -79,7 +79,7 @@ class UpdateHelper
 							$notification = new Notification();
 
 							$notification->user_id = $taskUser->user_id;
-							$notification->message = '<strong>' . $comment->getUser()->full_name . '</strong> commented on your task <strong>' . $comment->getTask()->title . '</strong> : "' . substr(strip_tags(Markdown($comment->comment)), 0, 100) . '..."';
+							$notification->message = '<strong>' . $comment->getUser()->full_name . '</strong> commented on your task <strong>' . $comment->getTask()->title . '</strong> : "' . substr(strip_tags(Markdown($comment->comment)), 0, 200) . '..."';
 							$notification->project_id = $comment->getTask()->project_id;
 							$notification->task_id = $comment->task_id;
 							$notification->comment_id = $comment->id;
@@ -100,7 +100,7 @@ class UpdateHelper
 							$notification = new Notification();
 
 							$notification->user_id = $projectUser->user_id;
-							$notification->message = '<strong>' . $note->getUser()->full_name . '</strong> added a new note to the project <strong>' . $note->getProject()->name . '</strong> : "' . substr(strip_tags(Markdown($note->content)), 0, 100) . '..."';
+							$notification->message = '<strong>' . $note->getUser()->full_name . '</strong> added a new note to the project <strong>' . $note->getProject()->name . '</strong> : "' . substr(strip_tags(Markdown($note->content)), 0, 200) . '..."';
 							$notification->project_id = $note->project_id;
 							$notification->note_id = $note->id;
 							$notification->read = 1;
