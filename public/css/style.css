@@ -239,6 +239,14 @@ h6 {
 	font-size: 0.8em;
 }
 
+.activity .media > img {
+	margin-right: 0;
+}
+
+.activity .media-body .span6 {
+	margin-left: 20px;
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;
