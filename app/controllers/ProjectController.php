@@ -41,6 +41,9 @@ class ProjectController extends ControllerBase
 			}
 		}
 
+		NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
+		NotificationHelper::markTaskRead($this->currentUser->id, $project->id, $currentTask->id);
+
 		$this->view->setVar('currentProject', $project);
 		$this->view->setVar('allProjectTasks', $allProjectTasks);
 		$this->view->setVar('currentTask', $currentTask);
