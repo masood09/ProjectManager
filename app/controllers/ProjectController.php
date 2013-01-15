@@ -86,9 +86,4 @@ class ProjectController extends ControllerBase
 		echo json_encode($return);
 		$this->view->disable();
 	}
-
-	public function updateajax()
-	{
-		
-	}
 }
