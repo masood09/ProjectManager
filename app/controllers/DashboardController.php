@@ -29,7 +29,7 @@ class DashboardController extends ControllerBase
 
         $activities = Notification::find(array(
             'conditions' => 'user_id = "' . $this->currentUser->id . '"',
-            'order' => 'read ASC, created_at DESC',
+            'order' => 'created_at DESC',
         ));
 
         $this->view->setVar('activities', $activities);
