@@ -27,4 +27,13 @@ class AjaxController extends ControllerBase
 
         $this->view->disable();
     }
+
+    public function projecttasksAction()
+    {
+        $return['notificationsHtml'] = $this->_generateNotificationsHtml();
+
+        echo json_encode($return);
+
+        $this->view->disable();
+    }
 }

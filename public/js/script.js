@@ -40,6 +40,16 @@ $(document).ready(function() {
 		$('#task_hours').editable();
 		$('#task_assigned_to').editable();
 		$('#task_status').editable();
+
+		var ajax_call_project_tasks = function() {
+			$.getJSON('/ProjectManager/ajax/projecttasks', function(data) {
+				$('#header-notification').html(data.notificationsHtml);
+
+				$(".date").easydate({ 'live': false });
+			});
+		};
+
+		setInterval(ajax_call_project_tasks, 5 * 1000);
 	}
 
 	$(".date").easydate({ 'live': false });
