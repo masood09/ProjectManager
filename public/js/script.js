@@ -32,7 +32,7 @@ $(document).ready(function() {
 			});
 		};
 
-		setInterval(ajax_call, 1000 * 60 * 1);
+		setInterval(ajax_call, 5 * 1000);
 	}
 	else if (body_id == 'project_tasks') {
 		$('#task_title').editable();
