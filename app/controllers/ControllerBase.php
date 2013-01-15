@@ -28,6 +28,13 @@ class ControllerBase extends Phalcon\Mvc\Controller
 
         if ($this->currentUser) {
             $this->view->setVar("allProjects", $this->currentUser->getAllProjects());
+
+            $notifications = Notification::find(array(
+                'conditions' => 'user_id = "' . $this->currentUser->id . '" AND read = 0',
+                'order' => 'created_at DESC',
+            ));
+
+            $this->view->setVar('notifications', $notifications);
         }
     }
 }

@@ -247,6 +247,22 @@ h6 {
 	margin-left: 20px;
 }
 
+.dropdown-menu .span6,
+.dropdown-menu .span3 {
+	margin-left: 0;
+}
+
+.dropdown-menu .span4 {
+	margin-left: 20px;
+}
+
+@media (min-width: 980px) {
+	.dropdown-menu {
+		max-height: 500px;
+		overflow: scroll;
+	}
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;

@@ -55,6 +55,9 @@
 							</a>
 						</li>
 					<?php } else { ?>
+						<li id="header-notification" class="dropdown">
+							<?php $this->partial('partials/header_notification'); ?>
+						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<?php echo $currentUser->full_name; ?>

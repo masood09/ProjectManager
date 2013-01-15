@@ -21,11 +21,14 @@ $(document).ready(function() {
 				$('#userTodaysProductivityText').html(data.userTodaysProductivity);
 				$('#userTodaysTime').html(data.userTodaysTime);
 				$('#userMonthsTime').html(data.userMonthsTime);
+				$('#header-notification').html(data.notificationsHtml);
 
 				$('#taskPercent').data('easyPieChart').update(data.taskPercent);
 				$('#userTodaysProductivity').data('easyPieChart').update(data.userTodaysProductivity);
 				$('#userTodaysTimePercent').data('easyPieChart').update(data.userTodaysTimePercent);
 				$('#userMonthsTimePercent').data('easyPieChart').update(data.userMonthsTimePercent);
+
+				$(".date").easydate({ 'live': false });
 			});
 		};
 
