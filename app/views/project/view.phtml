@@ -77,7 +77,7 @@
 				<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
 
 				<div class="message-body">
-					<abbr class="date pull-right">Tue, 08 Jan 2013 16:06:48 +0530</abbr>
+					<abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
 					<h5><?php echo $comment->getUser()->full_name; ?></h5>
 
 					<?php echo Markdown($comment->comment); ?>
