@@ -131,8 +131,6 @@ try {
         return $version;
     });
 
-    include_once __DIR__ . '/../app/library/Markdown/Markdown.php';
-
     $application = new \Phalcon\Mvc\Application();
     $application->setDI($di);
     echo $application->handle()->getContent();

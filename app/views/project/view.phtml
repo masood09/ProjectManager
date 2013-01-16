@@ -80,7 +80,7 @@
 					<abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
 					<h5><?php echo $comment->getUser()->full_name; ?></h5>
 
-					<?php echo Markdown($comment->comment); ?>
+					<?php echo $comment->comment; ?>
 				</div>
 			</div>
 		<?php } ?>
