@@ -143,16 +143,8 @@ div.navbar-inner a.brand {
 }
 
 .message-sidebar {
-	border-right: 1px solid #eee;
 	margin: -20px;
 	margin-right: 0;
-}
-
-@media (min-width: 768px) {
-	.message-sidebar {
-		overflow: auto;
-		height: 700px;
-	}
 }
 
 @media (max-width: 767px) {
