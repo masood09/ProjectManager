@@ -54,7 +54,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 'dashboard' => array('index'),
                 'index' => array('index'),
                 'project' => array('view', 'getusersajax'),
-                'task' => array('updateajax'),
+                'task' => array('updateajax', 'updatecommentajax'),
                 'user' => array('logout'),
             );
 

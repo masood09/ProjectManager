@@ -48,4 +48,39 @@ class TaskController extends ControllerBase
 		$this->view->disable();
         return;
 	}
+
+	public function updatecommentajaxAction()
+	{
+		if ($this->request->isPost()) {
+			$comment_id = $this->request->getPost('pk');
+
+			$comment = Comment::findFirst('id = "' . $comment_id . '"');
+
+			if (!$comment) {
+				$this->view->disable();
+		        return;
+			}
+
+			if (!$comment->getTask()->getProject()->isInProject($this->currentUser)) {
+				$this->view->disable();
+		        return;
+			}
+
+			if ($comment->user_id != $this->currentUser->id) {
+				$this->view->disable();
+				return;
+			}
+
+			$data_name = $this->request->getPost('name');
+			$value = $this->request->getPost('value');
+
+			if ($data_name == 'comment') {
+				$comment->comment = $value;
+				$comment->save();
+			}
+
+			$this->view->disable();
+        	return;
+		}
+	}
 }
