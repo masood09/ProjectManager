@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	$.fn.editable.defaults.mode = 'inline';
 	body_id = $('body').attr('id');
 
 	if (body_id == 'dashboard') {
