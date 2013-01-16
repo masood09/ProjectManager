@@ -41,11 +41,6 @@
 <div class="span8">
 	<div class="messages">
 		<span class="pull-right">
-			&nbsp;
-			<span>
-				Spent : <a href="#" id="task_hours_spent" class="editable editable-click"><?php echo $currentTask->getTotalTimeSpent(); ?></a>
-			</span>
-			&nbsp;
 			<span>
 				Status : <a href="#" id="task_status" data-name="status" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->status; ?>" data-source="[{value: 0, text: 'Open'}, {value: 1, text: 'Closed'}]" data-placement="left" data-original-title="Status" class="editable editable-click"><?php echo ($currentTask->status == 0) ? 'Open' : 'Closed'; ?></a>
 			</span>
