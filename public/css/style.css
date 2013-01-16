@@ -1,5 +1,6 @@
 body {
 	background-color: #f6f6f6;
+	font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 p {
@@ -47,6 +48,10 @@ h6 {
 		padding-left: 0;
 		padding-right: 0;
 	}
+}
+
+div.navbar-inner a.brand {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .page-sub-nav {
