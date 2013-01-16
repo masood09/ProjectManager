@@ -88,5 +88,10 @@ class TaskController extends ControllerBase
 			$this->view->disable();
         	return;
 		}
+
+		$this->view->disable();
+		return;
+	}
+
 	}
 }
