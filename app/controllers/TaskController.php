@@ -145,6 +145,17 @@ class TaskController extends ControllerBase
 		        return;
 			}
 
+			$taskUser = TaskUser::findFirst('user_id="' . $this->currentUser()->id . '" AND task_id="' . $task->id . '"');
+
+			if (!$taskUser) {
+				$taskUser = new TaskUser();
+				$taskUser->user_id = $this->currentUser->id;
+				$taskUser->task_id = $task->id;
+				$taskUser->created_at = new Phalcon\Db\RawValue('now()');
+
+				$taskUser->save();
+			}
+
 			NotificationHelper::newCommentNotification(
 				$task->getProject(),
 				$task,
