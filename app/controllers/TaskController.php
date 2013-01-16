@@ -77,6 +77,12 @@ class TaskController extends ControllerBase
 			if ($data_name == 'comment') {
 				$comment->comment = $value;
 				$comment->save();
+
+				NotificationHelper::updateCommentNotification(
+					$comment->getTask()->getProject(),
+					$comment->getTask(),
+					$comment
+				);
 			}
 
 			$this->view->disable();

@@ -21,4 +21,26 @@ class NotificationHelper
 			$notification->save();
 		}
 	}
+
+	static function updateCommentNotification($project, $task, $comment)
+	{
+		$commentUser = $comment->getUser();
+
+		foreach ($task->getTaskUser() AS $taskUser) {
+			if ($comment->user_id != $taskUser->user_id) {
+				$notification = new Notification();
+
+				$notification->user_id = $taskUser->user_id;
+				$notification->message = '<strong>' . $commentUser->full_name . '</strong> updated comment on your task <strong>' . $task->title . '</strong> : "' . substr(strip_tags($comment->comment), 0, 200) . '..."';
+				$notification->project_id = $task->project_id;
+				$notification->task_id = $comment->task_id;
+				$notification->comment_id = $comment->id;
+				$notification->read = 0;
+				$notification->created_by = $comment->user_id;
+				$notification->created_at = new Phalcon\Db\RawValue('now()');
+
+				$notification->save();
+			}
+		}
+	}
 }
