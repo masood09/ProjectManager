@@ -40,7 +40,14 @@ $(document).ready(function() {
 		$('#task_hours').editable();
 		$('#task_assigned_to').editable();
 		$('#task_status').editable();
+		$('.comment_content').editable();
 		$('#comment-textarea').wysihtml5();
+
+		$('.comment-edit').click(function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			$("#" + $(this).attr("data-id")).editable('toggle');
+		});
 
 		var ajax_call_project_tasks = function() {
 			$.getJSON('/ProjectManager/ajax/projecttasks', function(data) {

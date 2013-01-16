@@ -70,10 +70,18 @@
 				<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
 
 				<div class="message-body">
-					<abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
+					<div class="pull-right">
+						<a href="#" class="comment-edit" data-id="comment-content-<?php echo $comment->id; ?>">
+							<i class="icon-pencil"></i>
+						</a>
+						&nbsp;&nbsp;
+						<abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
+					</div>
 					<h5><?php echo $comment->getUser()->full_name; ?></h5>
 
-					<?php echo $comment->comment; ?>
+					<div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-pk="<?php echo $comment->id; ?>" data-type="wysihtml5" data-toggle="manual" data-original-title="Enter notes" class="editable" tabindex="-1">
+						<?php echo $comment->comment; ?>
+					</div>
 				</div>
 			</div>
 		<?php } ?>
