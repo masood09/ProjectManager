@@ -30,6 +30,7 @@ $(document).ready(function() {
 				$('#userMonthsTimePercent').data('easyPieChart').update(data.userMonthsTimePercent);
 
 				$(".date").easydate({ 'live': false });
+				$(".date").show();
 			});
 		};
 
@@ -55,6 +56,7 @@ $(document).ready(function() {
 				$('#header-notification').html(data.notificationsHtml);
 
 				$(".date").easydate({ 'live': false });
+				$(".date").show();
 			});
 		};
 
