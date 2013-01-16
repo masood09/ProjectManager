@@ -154,7 +154,7 @@ class User extends Phalcon\Mvc\Model
 
         $explode = explode(':', $monthsTime);
 
-        $_monthsTime = ((($explode[0] -1) + $explode[1]) * 60) + $explode[1];
+        $_monthsTime = ($explode[0] * 60) + $explode[1];
 
         $_targetTime = ($daysTargetTime * $workingDays * 60);
 
