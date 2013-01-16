@@ -16,6 +16,16 @@ class User extends Phalcon\Mvc\Model
         }
     }
 
+    public function getTasksAssigned()
+    {
+        $tasks = Task::find(array(
+            'conditions' => 'assigned_to = "' . $this->id . '" AND status = 0',
+            'order' => 'created_at DESC'
+        ));
+
+        return $tasks;
+    }
+
     public function getOpenTasksCount()
     {
         $openTasks = Task::find('assigned_to = "' . $this->id . '" AND status = "0"');

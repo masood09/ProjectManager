@@ -24,6 +24,8 @@ class DashboardController extends ControllerBase
         $this->view->setVar('userMonthsTime', $userMonthsTime);
         $this->view->setVar('userMonthsTimePercent', $userMonthsTimePercent);
 
+        $this->view->setVar("tasksAssigned", $this->currentUser->getTasksAssigned());
+
         $this->view->setVar('body_id', 'dashboard');
 
 
