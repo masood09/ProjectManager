@@ -17,6 +17,13 @@ class Task extends Phalcon\Mvc\Model
         $this->belongsTo('project_id', 'Project', 'id');
     }
 
+    public function getCreatedBy()
+    {
+        $user = User::findFirst('id = "' . $this->created_by . '"');
+
+        return $user;
+    }
+
     public function getTimePercent()
     {
         if ($this->hours == 0) {

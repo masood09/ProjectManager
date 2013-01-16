@@ -88,7 +88,7 @@ class UpdateHelper
 						$notification = new Notification();
 
 						$notification->user_id = $task->assigned_to;
-						$notification->message = '<strong>' . $task->getProject()->getUser()->full_name . '</strong> has assigned the task <strong>' . $task->title . '</strong> of the project <strong>' . $task->getProject()->name . '</strong> to you';
+						$notification->message = '<strong>' . $task->getCreatedBy()->full_name . '</strong> has assigned the task <strong>' . $task->title . '</strong> of the project <strong>' . $task->getProject()->name . '</strong> to you';
 						$notification->project_id = $task->project_id;
 						$notification->task_id = $task->id;
 						$notification->read = 1;
