@@ -80,7 +80,7 @@
 
 						<abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
 					</div>
-					<h5><?php echo $comment->getUser()->full_name; ?></h5>
+					<h5 class="text-success"><?php echo $comment->getUser()->full_name; ?></h5>
 
 					<div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-name="comment" data-type="wysihtml5" data-pk="<?php echo $comment->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('task/updatecommentajax'); ?>" data-original-title="Edit Comment" class="editable" tabindex="-1">
 						<?php echo $comment->comment; ?>
@@ -93,6 +93,7 @@
 			<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
 			<div class="message-body">
 				<h5>Post a Comment</h5>
+				<h5 class="text-error">Post a Comment</h5>
 				<textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
 
 				<p>

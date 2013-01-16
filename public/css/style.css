@@ -218,6 +218,8 @@ div.navbar-inner a.brand {
 	padding-bottom: 20px;
 	border-bottom: 1px solid #eee;
 	margin-bottom: 20px;
+	min-height: 60px;
+}
 }
 
 .message-body {
@@ -225,7 +227,8 @@ div.navbar-inner a.brand {
 }
 
 .message-body h5 {
-	font-weight: 300;
+	font-weight: 400;
+	font-size: 16px;
 }
 
 .media-body p {
