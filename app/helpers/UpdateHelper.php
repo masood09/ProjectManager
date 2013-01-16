@@ -6,12 +6,40 @@ class UpdateHelper
 	{
 		switch ($version) {
 			case '1.0.0':
+				$comments = Comment::find();
+
+				foreach ($comments AS $comment) {
+					$message = preg_replace('{\r\n?}', "\n", $comment->comment);
+					$message = str_replace("\n", "<br>", htmlspecialchars($message));
+					$comment->comment = $message;
+					$comment->save();
+				}
+
+				$notes = Note::find();
+
+				foreach ($notes AS $note) {
+					$message = preg_replace('{\r\n?}', "\n", $note->content);
+					$message = str_replace("\n", "<br>", htmlspecialchars($message));
+					$note->content = $message;
+					$note->save();
+				}
+
+				$projects = Project::find();
+
+				foreach ($projects AS $project) {
+					$description = preg_replace('{\r\n?}', "\n", $project->description);
+					$description = str_replace("\n", "<br>", htmlspecialchars($description));
+					$project->description = $description;
+					$project->save();
+				}
+
 				$tasks = Task::find();
 
 				foreach ($tasks AS $task) {
 					$task_id = $task->id;
 					$user_id = $task->created_by;
-					$message = $task->description;
+					$message = preg_replace('{\r\n?}', "\n", $task->description);
+					$message = str_replace("\n", "<br>", htmlspecialchars($message));
 					$created_at = $task->created_at;
 
 					if (!is_null($message) || trim($message != '')) {
