@@ -51,6 +51,42 @@ $(document).ready(function() {
 			$("#" + $(this).attr("data-id")).editable('toggle');
 		});
 
+		$('#post-comment').click(function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+
+			$(this).attr('disabled', 'disabled');
+
+			$.ajax({
+				type: "POST",
+				url: $(this).attr("data-url"),
+				dataType: "json",
+				data: {
+					task_id: $('#comment-form-task-id').val(),
+					comment: $('#comment-textarea').val()
+				}
+			}).done(function(data) {
+				if (data.success) {
+					$('#comment-form').each (function() {
+						this.reset();
+					});
+
+					$('#comment_block').append(data.comment_html);
+					$(".date").easydate({ 'live': false });
+					$(".date").show();
+					$(data.comment_html_id).editable();
+
+					$('.comment-edit').click(function(e) {
+						e.stopPropagation();
+						e.preventDefault();
+						$("#" + $(this).attr("data-id")).editable('toggle');
+					});
+				}
+			});
+
+			$(this).removeAttr('disabled');
+		});
+
 		var ajax_call_project_tasks = function() {
 			$.getJSON('/ProjectManager/ajax/projecttasks', function(data) {
 				$('#header-notification').html(data.notificationsHtml);

@@ -93,5 +93,79 @@ class TaskController extends ControllerBase
 		return;
 	}
 
+	public function postcommentAction()
+	{
+		if ($this->request->isPost()) {
+			$return = array();
+
+			$task_id = $this->request->getPost('task_id');
+			$task = Task::findFirst('id = "' . $task_id . '"');
+
+			if (!$task) {
+				$this->view->disable();
+
+				$return['success'] = false;
+				echo json_encode($return);
+
+		        return;
+			}
+
+			if (!$task->getProject()->isInProject($this->currentUser)) {
+				$this->view->disable();
+
+				$return['success'] = false;
+				echo json_encode($return);
+
+		        return;
+			}
+
+			$message = $this->request->getPost('comment');
+
+			if (!$message || $message == '') {
+				$this->view->disable();
+
+				$return['success'] = false;
+				echo json_encode($return);
+
+		        return;
+			}
+
+			$comment = new Comment();
+			$comment->user_id = $this->currentUser->id;
+			$comment->task_id = $task->id;
+			$comment->comment = $message;
+			$comment->created_at = new Phalcon\Db\RawValue('now()');
+
+			if ($comment->save() != true) {
+				$this->view->disable();
+
+				$return['success'] = false;
+				echo json_encode($return);
+
+		        return;
+			}
+
+			NotificationHelper::newCommentNotification(
+				$task->getProject(),
+				$task,
+				$comment
+			);
+
+			$this->view->setVar('comment', Comment::findFirst('id = "' . $comment->id . '"'));
+			$this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
+        	$this->view->render('ajax', 'comment');
+	        $this->view->finish();
+
+			$return['success'] = true;
+			$return['comment_html'] = $this->view->getContent();
+			$return['comment_html_id'] = '#comment-content-' . $comment->id;
+
+			echo json_encode($return);
+			$this->view->disable();
+			return;
+		}
+
+		$this->view->disable();
+		return;
 	}
 }

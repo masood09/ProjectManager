@@ -65,6 +65,7 @@
 			</p>
 		</div>
 
+		<div id="comment_block">
 		<?php foreach ($currentTask->getComments() AS $comment) { ?>
 			<div class="message" id="comment-<?php echo $comment->id; ?>">
 				<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
@@ -88,16 +89,17 @@
 				</div>
 			</div>
 		<?php } ?>
+		</div>
 
 		<div class="message">
 			<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
 			<div class="message-body">
-				<h5>Post a Comment</h5>
 				<h5 class="text-error">Post a Comment</h5>
+				<input type="hidden" name="task_id" id="comment-form-task-id" value="<?php echo $currentTask->id; ?>">
 				<textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
 
 				<p>
-					<a href="#" class="btn">Post Comment</a>
+					<button id="post-comment" class="btn" data-url="<?php echo $this->url->get('task/postcomment'); ?>">Post Comment</button>
 				</p>
 			</div>
 		</div>
