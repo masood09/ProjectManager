@@ -40,6 +40,7 @@ $(document).ready(function() {
 		$('#task_hours').editable();
 		$('#task_assigned_to').editable();
 		$('#task_status').editable();
+		$('#comment-textarea').wysihtml5();
 
 		var ajax_call_project_tasks = function() {
 			$.getJSON('/ProjectManager/ajax/projecttasks', function(data) {
