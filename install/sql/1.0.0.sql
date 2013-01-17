@@ -1,6 +1,7 @@
 DROP TABLE role;
 
 ALTER TABLE `attendance` DROP `total`;
+ALTER TABLE `task` DROP `description`;
 
 ALTER TABLE `task` ADD `closed_by` INT(10) UNSIGNED NULL DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS `notification` (
