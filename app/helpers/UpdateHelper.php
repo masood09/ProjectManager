@@ -98,7 +98,7 @@ class UpdateHelper
 						$notification->save();
 					}
 
-					$task->hours_spent = $task->getTotalTimeSpent() . ':00';
+					$task->hours_spent = $task->calculateTotalTimeSpent();
 
 					$task->comments = count($task->getComments());
 
