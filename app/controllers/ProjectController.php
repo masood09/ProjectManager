@@ -50,7 +50,12 @@ class ProjectController extends ControllerBase
 		$this->view->setVar('body_id', 'project_tasks');
 		$this->view->setVar('url_params', $project->id . '/' . $currentTask->id);
 
-		Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
+		if ($currentTask) {
+			Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
+		}
+		else {
+			Phalcon\Tag::setTitle($project->name);
+		}
 	}
 
 	public function getusersajaxAction($id=null)
