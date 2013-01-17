@@ -172,6 +172,10 @@ class TaskController extends ControllerBase
 				$taskUser->save();
 			}
 
+			// Let's increase the task comment count by 1.
+			$task->comments += 1;
+			$task->save();
+
 			NotificationHelper::newCommentNotification(
 				$task->getProject(),
 				$task,
