@@ -2,6 +2,7 @@ DROP TABLE role;
 
 ALTER TABLE `attendance` DROP `total`;
 
+ALTER TABLE `task` ADD `closed_by` INT(10) UNSIGNED NULL DEFAULT NULL;
 CREATE TABLE IF NOT EXISTS `notification` (
 	`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`user_id` int(10) unsigned NOT NULL,

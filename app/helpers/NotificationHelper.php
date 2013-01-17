@@ -22,6 +22,44 @@ class NotificationHelper
 		}
 	}
 
+	static function taskClosedNotification($project, $task, $user)
+	{
+		foreach ($task->getTaskUser() AS $taskUser) {
+			if ($taskUser->user_id != $user->id) {
+				$notification = new Notification();
+
+				$notification->user_id = $taskUser->user_id;
+				$notification->message = '<strong>' . $user->full_name . '</strong> closed the task <strong>' . $task->title . '</strong> in project <strong> ' . $project->name . '</strong>';
+				$notification->project_id = $task->project_id;
+				$notification->task_id = $task->id;
+				$notification->read = 0;
+				$notification->created_by = $user->id;
+				$notification->created_at = new Phalcon\Db\RawValue('now()');
+
+				$notification->save();
+			}
+		}
+	}
+
+	static function taskReOpenedNotification($project, $task, $user)
+	{
+		foreach ($task->getTaskUser() AS $taskUser) {
+			if ($taskUser->user_id != $user->id) {
+				$notification = new Notification();
+
+				$notification->user_id = $taskUser->user_id;
+				$notification->message = '<strong>' . $user->full_name . '</strong> re-opened the task <strong>' . $task->title . '</strong> in project <strong> ' . $project->name . '</strong>';
+				$notification->project_id = $task->project_id;
+				$notification->task_id = $task->id;
+				$notification->read = 0;
+				$notification->created_by = $user->id;
+				$notification->created_at = new Phalcon\Db\RawValue('now()');
+
+				$notification->save();
+			}
+		}
+	}
+
 	static function updateCommentNotification($project, $task, $comment)
 	{
 		$commentUser = $comment->getUser();

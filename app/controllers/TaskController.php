@@ -39,7 +39,23 @@ class TaskController extends ControllerBase
 			}
 
 			if ($data_name == 'status') {
+				if ($value == 1 && $task->status == 0) {
+					NotificationHelper::taskClosedNotification($task->getProject(), $task, $this->currentUser);
+				}
+				else if ($value == 0 && $task->status == 1) {
+					NotificationHelper::taskReOpenedNotification($task->getProject(), $task, $this->currentUser);
+				}
+
 				$task->status = $value;
+
+				if ($task->status == 1) {
+					$task->completed_on = new Phalcon\Db\RawValue('CURDATE()');
+					$task->closed_by = $this->currentUser->id;
+				}
+				else {
+					$task->completed_on = null;
+					$task->closed_by = null;
+				}
 			}
 
 			$task->save();
