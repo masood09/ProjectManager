@@ -1,33 +1,33 @@
 <?php use Phalcon\Tag as Tag ?>
 
 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-	<span class="badge badge-important"><?php echo count($notifications); ?></span>
+    <span class="badge badge-important"><?php echo count($notifications); ?></span>
 </a>
 
 <ul class="dropdown-menu">
-	<li>
-		<?php if (count($notifications) == 0) { ?>
-			<div class="align-center span3">
-				<h5>No new notifications!</h5>
-			</div>
-		<?php } else { ?>
-			<div class="activity span6">
-				<?php foreach ($notifications AS $notification) { ?>
-					<a href="<?php echo $this->url->get($notification->getUrl()); ?>" class="activity-preview new">
-						<div class="media">
-							<img class="media-object pull-left" src="<?php echo $this->url->get('profile/default.jpg'); ?>">
+    <li>
+        <?php if (count($notifications) == 0) { ?>
+            <div class="align-center span3">
+                <h5>No new notifications!</h5>
+            </div>
+        <?php } else { ?>
+            <div class="activity span6">
+                <?php foreach ($notifications AS $notification) { ?>
+                    <a href="<?php echo $this->url->get($notification->getUrl()); ?>" class="activity-preview new">
+                        <div class="media">
+                            <img class="media-object pull-left" src="<?php echo $this->url->get('profile/default.jpg'); ?>">
 
-							<abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($notification->created_at)); ?></abbr>
+                            <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($notification->created_at)); ?></abbr>
 
-							<div class="media-body">
-								<p class="media-heading span4">
-									<?php echo $notification->message; ?>
-								</p>
-							</div>
-						</div>
-					</a>
-				<?php } ?>
-			</div>
-		<?php } ?>
-	</li>
+                            <div class="media-body">
+                                <p class="media-heading span4">
+                                    <?php echo $notification->message; ?>
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                <?php } ?>
+            </div>
+        <?php } ?>
+    </li>
 </ul>
