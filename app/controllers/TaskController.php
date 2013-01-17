@@ -161,7 +161,7 @@ class TaskController extends ControllerBase
 		        return;
 			}
 
-			$taskUser = TaskUser::findFirst('user_id="' . $this->currentUser()->id . '" AND task_id="' . $task->id . '"');
+			$taskUser = TaskUser::findFirst('user_id="' . $this->currentUser->id . '" AND task_id="' . $task->id . '"');
 
 			if (!$taskUser) {
 				$taskUser = new TaskUser();
