@@ -274,6 +274,10 @@ div.navbar-inner a.brand {
 	}
 }
 
+.modal form {
+	margin-bottom: 0;
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;

@@ -48,6 +48,7 @@ class ProjectController extends ControllerBase
 		$this->view->setVar('allProjectTasks', $allProjectTasks);
 		$this->view->setVar('currentTask', $currentTask);
 		$this->view->setVar('body_id', 'project_tasks');
+		$this->view->setVar('url_params', $project->id . '/' . $currentTask->id);
 
 		Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
 	}
@@ -88,5 +89,69 @@ class ProjectController extends ControllerBase
 
 		echo json_encode($return);
 		$this->view->disable();
+	}
+
+	public function createprojectAction()
+	{
+		if ($this->request->isPost()) {
+			if (!$this->currentUser->isAdmin()) {
+				$this->response->redirect('dashboard/index/');
+				$this->view->disable();
+				return;
+			}
+
+			$name = $this->request->getPost('name');
+			$controller = $this->request->getPost('controller');
+			$action = $this->request->getPost('action');
+
+			if (!$controller || !$action) {
+				$controller = 'dashboard';
+				$action = 'index';
+			}
+
+			if (!$name) {
+				$this->flashSession->error('Project name should be specified');
+				$this->response->redirect($controller . '/' . $action);
+				$this->view->disable();
+				return;
+			}
+
+			$project = new Project();
+			$project->name = htmlspecialchars($name);
+			$project->created_by = $this->currentUser->id;
+			$project->created_at = new Phalcon\Db\RawValue('now()');
+			$project->status = 1;
+
+			if (!$project->save()) {
+				foreach ($project->getMessages() as $message) {
+					$this->flashSession->error((string) $message);
+					$this->response->redirect($controller . '/' . $action);
+					$this->view->disable();
+					return;
+        		}
+			}
+
+			// Let's add all admin users to this project.
+			$admins = User::find('role_id = "1"');
+
+			foreach ($admins AS $admin) {
+				$projectUser = new ProjectUser();
+				$projectUser->user_id = $admin->id;
+				$projectUser->project_id = $project->id;
+				$projectUser->created_at = new Phalcon\Db\RawValue('now()');
+
+				$projectUser->save();
+			}
+
+			NotificationHelper::newProjectNotification($project, $this->currentUser);
+
+			$this->response->redirect('project/view/' . $project->id);
+			$this->view->disable();
+	        return;
+		}
+
+		$this->response->redirect('dashboard/index/');
+		$this->view->disable();
+		return;
 	}
 }

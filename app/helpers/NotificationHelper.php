@@ -103,4 +103,22 @@ class NotificationHelper
 			}
 		}
 	}
+
+	static function newProjectNotification($project, $user)
+	{
+		$projectUsers = ProjectUser::find('project_id = "' . $project->id . '" AND user_id != "' . $user->id . '"');
+
+		foreach ($projectUsers AS $projectUser) {
+			$notification = new Notification();
+
+			$notification->user_id = $projectUser->user_id;
+			$notification->message = '<strong>' . $user->full_name . '</strong> has created a new project <strong>' . $project->name . '</strong>';
+			$notification->project_id = $project->id;
+			$notification->read = 0;
+			$notification->created_by = $user->id;
+			$notification->created_at = new Phalcon\Db\RawValue('now()');
+
+			$notification->save();
+		}
+	}
 }

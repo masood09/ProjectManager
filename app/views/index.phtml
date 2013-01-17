@@ -81,5 +81,11 @@
                 </div>
             </div>
         </footer>
+
+        <?php if ($currentUser) { ?>
+            <?php if ($currentUser->isAdmin()) { ?>
+                <?php $this->partial('partials/new_project'); ?>
+            <?php } ?>
+        <?php } ?>
     </body>
 </html>
