@@ -97,6 +97,19 @@ class UpdateHelper
 
 						$notification->save();
 					}
+
+					$task->hours_spent = $task->getTotalTimeSpent() . ':00';
+
+					$task->comments = count($task->getComments());
+
+					if ($task->status == 1) {
+						$task->closed_by = $task->assigned_to;
+					}
+					else {
+						$task->completed_on = null;
+					}
+
+					$task->save();
 				}
 
 				$comments = Comment::find();
