@@ -46,6 +46,10 @@ h6 {
     font-weight: 300;
 }
 
+legend {
+    font-size: 16px;
+}
+
 .align-center {
     text-align: center;
 }
@@ -293,6 +297,15 @@ div.navbar-inner a.brand {
 
 .modal form {
     margin-bottom: 0;
+}
+
+.gpl_license {
+    margin-top: 10px;
+    padding: 30px;
+    background-color: #ddd;
+    max-height: 300px;
+    overflow: hidden;
+    overflow-y: auto;
 }
 
 footer {

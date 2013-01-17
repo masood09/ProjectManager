@@ -38,7 +38,7 @@ class InstallSecurity extends Phalcon\Mvc\User\Plugin
             );
         }
 
-        if (!in_array($action, array('index', 'step1', 'step2'))) {
+        if (!in_array($action, array('index', 'start', 'configuration', 'finish'))) {
             $dispatcher->forward(
                 array(
                     'controller' => 'install',

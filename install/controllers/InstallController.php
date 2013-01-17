@@ -18,15 +18,22 @@ class InstallController extends ControllerBase
 {
     public function indexAction()
     {
-
+        $this->response->redirect('install/start');
+        $this->view->disable();
+        return;
     }
 
-    public function step1Action()
+    public function startAction()
     {
 
     }
 
-    public function step2Action()
+    public function configurationAction()
+    {
+
+    }
+
+    public function finishAction()
     {
 
     }
