@@ -36,6 +36,10 @@ class TaskController extends ControllerBase
 				if ($assignedUser) {
 					if ($task->getProject()->isInProject($assignedUser)) {
 						$task->assigned_to = $value;
+
+						if ($value != $this->currentUser->id) {
+							NotificationHelper::taskAssignedNotification($task->getProject(), $task, $this->currentUser);
+						}
 					}
 				}
 			}
