@@ -1,23 +1,23 @@
 <?php use Phalcon\Tag as Tag ?>
 
 <div class="message" id="comment-<?php echo $comment->id; ?>">
-	<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
+    <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
 
-	<div class="message-body">
-		<div class="pull-right">
-			<?php if ($comment->user_id == $currentUser->id) { ?>
-				<a href="#" class="comment-edit" data-id="comment-content-<?php echo $comment->id; ?>">
-					<i class="icon-pencil"></i>
-				</a>
-				&nbsp;&nbsp;
-			<?php } ?>
+    <div class="message-body">
+        <div class="pull-right">
+            <?php if ($comment->user_id == $currentUser->id) { ?>
+                <a href="#" class="comment-edit" data-id="comment-content-<?php echo $comment->id; ?>">
+                    <i class="icon-pencil"></i>
+                </a>
+                &nbsp;&nbsp;
+            <?php } ?>
 
-			<abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
-		</div>
-		<h5 class="text-success"><?php echo $comment->getUser()->full_name; ?></h5>
+            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
+        </div>
+        <h5 class="text-success"><?php echo $comment->getUser()->full_name; ?></h5>
 
-		<div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-name="comment" data-type="wysihtml5" data-pk="<?php echo $comment->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('task/updatecommentajax'); ?>" data-original-title="Edit Comment" class="editable" tabindex="-1">
-			<?php echo $comment->comment; ?>
-		</div>
-	</div>
+        <div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-name="comment" data-type="wysihtml5" data-pk="<?php echo $comment->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('task/updatecommentajax'); ?>" data-original-title="Edit Comment" class="editable" tabindex="-1">
+            <?php echo $comment->comment; ?>
+        </div>
+    </div>
 </div>

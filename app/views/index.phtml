@@ -1,20 +1,20 @@
 <?php use Phalcon\Tag as Tag ?>
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="Project Manager">
-		<meta name="author" content="Masood Ahmed">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Project Manager">
+        <meta name="author" content="Masood Ahmed">
 
-		<?php echo Tag::getTitle(); ?>
+        <?php echo Tag::getTitle(); ?>
 
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic">
 
         <?php echo Tag::stylesheetLink('css/bootstrap.css'); ?>
         <?php echo Tag::stylesheetLink('css/font-awesome.css'); ?>
 
-		<style>
+        <style>
             body {
                 padding-top: 40px;
             }
@@ -36,9 +36,9 @@
         <?php echo Tag::javascriptInclude('js/wysihtml5-editable.js'); ?>
 
         <?php echo Tag::javascriptInclude('js/script.js'); ?>
-	</head>
+    </head>
 
-	<body <?php echo ($body_id) ? 'id="' . $body_id . '"' : ''; ?> <?php echo ($body_class) ? 'class="' . $body_class . '"' : ''; ?>>
+    <body <?php echo ($body_id) ? 'id="' . $body_id . '"' : ''; ?> <?php echo ($body_class) ? 'class="' . $body_class . '"' : ''; ?>>
         <header class="navbar navbar-fixed-top">
             <?php $this->partial('partials/header'); ?>
         </header>

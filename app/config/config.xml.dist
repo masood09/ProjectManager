@@ -1,11 +1,11 @@
 <config>
-	<database>
-		<host><![CDATA[]]></host>
-		<username><![CDATA[]]></username>
-		<password><![CDATA[]]></password>
-		<dbname><![CDATA[]]></dbname>
-	</database>
-	<metadata>
-		<adapter><![CDATA[Apc]]></adapter>
-	</metadata>
+    <database>
+        <host><![CDATA[]]></host>
+        <username><![CDATA[]]></username>
+        <password><![CDATA[]]></password>
+        <dbname><![CDATA[]]></dbname>
+    </database>
+    <metadata>
+        <adapter><![CDATA[Apc]]></adapter>
+    </metadata>
 </config>

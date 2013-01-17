@@ -2,110 +2,110 @@
 
 
 <div class="span12 header">
-	<a href="#newTask" data-toggle="modal" class="btn pull-right">
-		<i class="icon-plus"></i>
-		New Task
-	</a>
-	<h4>Tasks</h4>
+    <a href="#newTask" data-toggle="modal" class="btn pull-right">
+        <i class="icon-plus"></i>
+        New Task
+    </a>
+    <h4>Tasks</h4>
 </div>
 
 <?php $this->partial('partials/new_task'); ?>
 
 <?php if (!$currentTask) { ?>
 <div class="span12 align-center">
-	<h5>No tasks for this Project! Why not add some?</h5>
+    <h5>No tasks for this Project! Why not add some?</h5>
 </div>
 <?php } else { ?>
 <div class="span4">
-	<div class="message-sidebar">
-		<?php foreach($allProjectTasks AS $projectTask) { ?>
-			<a href="<?php echo $this->url->get('project/view/' . $currentProject->id . '/' . $projectTask->id); ?>" class="message-preview <?php echo ($projectTask->status == 0) ? 'new' : ''; ?> <?php echo ($projectTask->id == $currentTask->id) ? 'active' : ''; ?>">
-				<abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($projectTask->created_at)); ?></abbr>
-				<h5>
-					<?php echo $projectTask->getUser()->full_name; ?>
-					&nbsp;&nbsp;&nbsp;
-					<span>
-						<i class="icon-comments"></i>
-						<?php echo count($projectTask->getComment()); ?>
-					</span>
-				</h5>
-				<h6><?php echo $projectTask->title; ?></h6>
-				<?php if ($projectTask->status == 0 && $projectTask->hours > 0) { ?>
-					<div class="progress">
-						<div style="width: <?php echo $projectTask->getTimePercent(); ?>%;" class="bar bar-success"></div>
-					</div>
-				<?php } ?>
-			</a>
-		<?php } ?>
-	</div>
+    <div class="message-sidebar">
+        <?php foreach($allProjectTasks AS $projectTask) { ?>
+            <a href="<?php echo $this->url->get('project/view/' . $currentProject->id . '/' . $projectTask->id); ?>" class="message-preview <?php echo ($projectTask->status == 0) ? 'new' : ''; ?> <?php echo ($projectTask->id == $currentTask->id) ? 'active' : ''; ?>">
+                <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($projectTask->created_at)); ?></abbr>
+                <h5>
+                    <?php echo $projectTask->getUser()->full_name; ?>
+                    &nbsp;&nbsp;&nbsp;
+                    <span>
+                        <i class="icon-comments"></i>
+                        <?php echo count($projectTask->getComment()); ?>
+                    </span>
+                </h5>
+                <h6><?php echo $projectTask->title; ?></h6>
+                <?php if ($projectTask->status == 0 && $projectTask->hours > 0) { ?>
+                    <div class="progress">
+                        <div style="width: <?php echo $projectTask->getTimePercent(); ?>%;" class="bar bar-success"></div>
+                    </div>
+                <?php } ?>
+            </a>
+        <?php } ?>
+    </div>
 </div>
 
 <div class="span8">
-	<div class="messages">
-		<span class="pull-right">
-			<span>
-				Status : <a href="#" id="task_status" data-name="status" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->status; ?>" data-source="[{value: 0, text: 'Open'}, {value: 1, text: 'Closed'}]" data-placement="left" data-original-title="Status" class="editable editable-click"><?php echo ($currentTask->status == 0) ? 'Open' : 'Closed'; ?></a>
-			</span>
-		</span>
-		<h4 class="header">
-			<a href="#" id="task_title" data-name="title" data-type="text" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Enter Task Title" class="editable editable-click"><?php echo $currentTask->title; ?></a>
-		</h4>
+    <div class="messages">
+        <span class="pull-right">
+            <span>
+                Status : <a href="#" id="task_status" data-name="status" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->status; ?>" data-source="[{value: 0, text: 'Open'}, {value: 1, text: 'Closed'}]" data-placement="left" data-original-title="Status" class="editable editable-click"><?php echo ($currentTask->status == 0) ? 'Open' : 'Closed'; ?></a>
+            </span>
+        </span>
+        <h4 class="header">
+            <a href="#" id="task_title" data-name="title" data-type="text" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Enter Task Title" class="editable editable-click"><?php echo $currentTask->title; ?></a>
+        </h4>
 
-		<div class="header_bottom_block">
-			<p>
-				<span>
-					Job ID : <a href="#" id="task_job_id" data-name="job_id" data-type="text" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Enter Job ID" class="editable editable-click"><?php echo $currentTask->job_id; ?></a>
-				</span>
-				&nbsp;
-				<span>
-					Assigned to : <a href="#" id="task_assigned_to" data-name="assigned_to" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->assigned_to; ?>" data-source="<?php echo $this->url->get('project/getusersajax/' . $currentProject->id ); ?>" data-original-title="Assigned To" class="editable editable-click"><?php echo $currentTask->getUser()->full_name; ?></a>
-				</span>
-				&nbsp;
-				<span>
-					Hours : <a href="#" id="task_hours" data-name="hours" data-type="number" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Hours" class="editable editable-click"><?php echo $currentTask->getHours(); ?></a>
-				</span>
-			</p>
-		</div>
+        <div class="header_bottom_block">
+            <p>
+                <span>
+                    Job ID : <a href="#" id="task_job_id" data-name="job_id" data-type="text" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Enter Job ID" class="editable editable-click"><?php echo $currentTask->job_id; ?></a>
+                </span>
+                &nbsp;
+                <span>
+                    Assigned to : <a href="#" id="task_assigned_to" data-name="assigned_to" data-type="select" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-value="<?php echo $currentTask->assigned_to; ?>" data-source="<?php echo $this->url->get('project/getusersajax/' . $currentProject->id ); ?>" data-original-title="Assigned To" class="editable editable-click"><?php echo $currentTask->getUser()->full_name; ?></a>
+                </span>
+                &nbsp;
+                <span>
+                    Hours : <a href="#" id="task_hours" data-name="hours" data-type="number" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Hours" class="editable editable-click"><?php echo $currentTask->getHours(); ?></a>
+                </span>
+            </p>
+        </div>
 
-		<div id="comment_block">
-		<?php foreach ($currentTask->getComments() AS $comment) { ?>
-			<div class="message" id="comment-<?php echo $comment->id; ?>">
-				<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
+        <div id="comment_block">
+        <?php foreach ($currentTask->getComments() AS $comment) { ?>
+            <div class="message" id="comment-<?php echo $comment->id; ?>">
+                <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
 
-				<div class="message-body">
-					<div class="pull-right">
-						<?php if ($comment->user_id == $currentUser->id) { ?>
-							<a href="#" class="comment-edit" data-id="comment-content-<?php echo $comment->id; ?>">
-								<i class="icon-pencil"></i>
-							</a>
-							&nbsp;&nbsp;
-						<?php } ?>
+                <div class="message-body">
+                    <div class="pull-right">
+                        <?php if ($comment->user_id == $currentUser->id) { ?>
+                            <a href="#" class="comment-edit" data-id="comment-content-<?php echo $comment->id; ?>">
+                                <i class="icon-pencil"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                        <?php } ?>
 
-						<abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
-					</div>
-					<h5 class="text-success"><?php echo $comment->getUser()->full_name; ?></h5>
+                        <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($comment->created_at)); ?></abbr>
+                    </div>
+                    <h5 class="text-success"><?php echo $comment->getUser()->full_name; ?></h5>
 
-					<div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-name="comment" data-type="wysihtml5" data-pk="<?php echo $comment->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('task/updatecommentajax'); ?>" data-original-title="Edit Comment" class="editable" tabindex="-1">
-						<?php echo $comment->comment; ?>
-					</div>
-				</div>
-			</div>
-		<?php } ?>
-		</div>
+                    <div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-name="comment" data-type="wysihtml5" data-pk="<?php echo $comment->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('task/updatecommentajax'); ?>" data-original-title="Edit Comment" class="editable" tabindex="-1">
+                        <?php echo $comment->comment; ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        </div>
 
-		<div class="message">
-			<img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
-			<div class="message-body">
-				<h5 class="text-error">Post a Comment</h5>
-				<input type="hidden" name="task_id" id="comment-form-task-id" value="<?php echo $currentTask->id; ?>">
-				<textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
+        <div class="message">
+            <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
+            <div class="message-body">
+                <h5 class="text-error">Post a Comment</h5>
+                <input type="hidden" name="task_id" id="comment-form-task-id" value="<?php echo $currentTask->id; ?>">
+                <textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
 
-				<p>
-					<button id="post-comment" class="btn" data-url="<?php echo $this->url->get('task/postcomment'); ?>">Post Comment</button>
-				</p>
-			</div>
-		</div>
+                <p>
+                    <button id="post-comment" class="btn" data-url="<?php echo $this->url->get('task/postcomment'); ?>">Post Comment</button>
+                </p>
+            </div>
+        </div>
 
-	</div>
+    </div>
 </div>
 <?php } ?>

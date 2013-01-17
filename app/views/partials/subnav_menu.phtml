@@ -1,77 +1,77 @@
 <?php use Phalcon\Tag as Tag ?>
 
 <?php if ($controller == 'user' || $controller == 'install') { ?>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 <?php } else if ($controller == 'dashboard') { ?>
-	<ul>
-		<li>
-			<div class="span2 knob">
-				<h4>Open Tasks</h4>
-				<div id="taskPercent" class="chart" data-percent="<?php echo $taskPercent; ?>">
-					<span id="openTasksCount"><?php echo $openTasksCount; ?></span>
-					/
-					<span id="allTasksCount"><?php echo $allTasksCount; ?></span>
-				</div>
-			</div>
-		</li>
-		<li>
-			<div class="span2 knob">
-				<h4>Productivity</h4>
-					<div id="userTodaysProductivity" class="chart" data-percent="<?php echo $userTodaysProductivity; ?>">
-						<span id="userTodaysProductivityText"><?php echo $userTodaysProductivity; ?></span>%
-					</div>
-			</div>
-		</li>
-		<li>
-			<div class="span2 knob">
-				<h4>Todays Time</h4>
-				<div id="userTodaysTimePercent" class="chart" data-percent="<?php echo $userTodaysTimePercent; ?>">
-					<span id="userTodaysTime"><?php echo $userTodaysTime; ?></span>
-				</div>
-			</div>
-		</li>
-		<li>
-			<div class="span2 knob">
-				<h4>Month's Time</h4>
-				<div id="userMonthsTimePercent" class="chart" data-percent="<?php echo $userMonthsTimePercent; ?>">
-					<span id="userMonthsTime"><?php echo $userMonthsTime; ?></span>
-				</div>
-			</div>
-		</li>
-	</ul>
+    <ul>
+        <li>
+            <div class="span2 knob">
+                <h4>Open Tasks</h4>
+                <div id="taskPercent" class="chart" data-percent="<?php echo $taskPercent; ?>">
+                    <span id="openTasksCount"><?php echo $openTasksCount; ?></span>
+                    /
+                    <span id="allTasksCount"><?php echo $allTasksCount; ?></span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="span2 knob">
+                <h4>Productivity</h4>
+                    <div id="userTodaysProductivity" class="chart" data-percent="<?php echo $userTodaysProductivity; ?>">
+                        <span id="userTodaysProductivityText"><?php echo $userTodaysProductivity; ?></span>%
+                    </div>
+            </div>
+        </li>
+        <li>
+            <div class="span2 knob">
+                <h4>Todays Time</h4>
+                <div id="userTodaysTimePercent" class="chart" data-percent="<?php echo $userTodaysTimePercent; ?>">
+                    <span id="userTodaysTime"><?php echo $userTodaysTime; ?></span>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="span2 knob">
+                <h4>Month's Time</h4>
+                <div id="userMonthsTimePercent" class="chart" data-percent="<?php echo $userMonthsTimePercent; ?>">
+                    <span id="userMonthsTime"><?php echo $userMonthsTime; ?></span>
+                </div>
+            </div>
+        </li>
+    </ul>
 <?php } else if ($controller == 'project') { ?>
-	<ul>
-		<li>
-			<a href="<?php $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
-				<i class="icon-tasks icon-4x"></i>
-				<br>
-				Tasks
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<i class="icon-file icon-4x"></i>
-				<br>
-				Notes
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<i class="icon-cloud icon-4x"></i>
-				<br>
-				Files
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<i class="icon-cogs icon-4x"></i>
-				<br>
-				Manage
-			</a>
-		</li>
-	</ul>
+    <ul>
+        <li>
+            <a href="<?php $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
+                <i class="icon-tasks icon-4x"></i>
+                <br>
+                Tasks
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="icon-file icon-4x"></i>
+                <br>
+                Notes
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="icon-cloud icon-4x"></i>
+                <br>
+                Files
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="icon-cogs icon-4x"></i>
+                <br>
+                Manage
+            </a>
+        </li>
+    </ul>
 <?php } ?>

@@ -4,7 +4,7 @@ use Phalcon\Mvc\Model\Validator\Uniqueness as UniquenessValidator;
 
 class Project extends Phalcon\Mvc\Model
 {
-	public function validation()
+    public function validation()
     {
         $this->validate(new UniquenessValidator(array(
             'field' => 'name',
