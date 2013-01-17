@@ -198,7 +198,7 @@ class UpdateHelper
 		$connection->close();
 	}
 
-	static function updateVersion($currentVersion, $targetVersion, $authDetails = null)
+	static function updateVersion($currentVersion, $targetVersion, $metadata, $authDetails = null)
 	{
 		$sqlDir = __DIR__ . '/../../install/sql/';
 		$currentVersionArray = explode('.', $currentVersion);
@@ -225,9 +225,13 @@ class UpdateHelper
 
             UpdateHelper::updateAppPre($updateVersion);
 
+            $metadata->reset();
+
             if (file_exists($sqlFileName)) {
 	    	   	UpdateHelper::updateData($sqlFileName, $authDetails);
             }
+
+            $metadata->reset();
 
             UpdateHelper::updateAppPost($updateVersion);
         }
