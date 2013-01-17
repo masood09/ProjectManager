@@ -266,6 +266,14 @@ div.navbar-inner a.brand {
 	margin-bottom: 0;
 }
 
+@media (min-width: 980px) {
+	.dropdown-menu {
+		max-height: 400px;
+		overflow: hidden;
+		overflow-y: auto;
+	}
+}
+
 footer {
 	padding: 20px 0;
 	color: #999;
