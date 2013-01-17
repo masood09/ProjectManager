@@ -29,13 +29,15 @@
 							Projects
 						</a>
 						<ul class="dropdown-menu">
-							<li>
-								<a href="#">
-									<i class="icon-plus"></i>
-									Add a new project
-								</a>
-							</li>
-							<li class="divider"></li>
+							<?php if ($currentUser->isAdmin()) { ?>
+								<li>
+									<a href="#">
+										<i class="icon-plus"></i>
+										Add a new project
+									</a>
+								</li>
+								<li class="divider"></li>
+							<?php } ?>
 							<?php foreach($allProjects AS $project) { ?>
 								<li>
 									<a href="<?php echo $this->url->get('project/view/' . $project->id); ?>">
