@@ -131,7 +131,7 @@ class Security extends Phalcon\Mvc\User\Plugin
             $user = User::findFirst('id = "' . $user_id . '"');
 
             if ($user) {
-                if ($user->role_id == 1) {
+                if ($user->isAdmin()) {
                     $role = 'Admin';
                 }
                 else if ($user->role_id == 2) {

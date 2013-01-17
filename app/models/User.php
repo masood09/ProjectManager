@@ -16,6 +16,15 @@ class User extends Phalcon\Mvc\Model
         }
     }
 
+    public function isAdmin()
+    {
+        if ($this->role_id == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getTasksAssigned()
     {
         $tasks = Task::find(array(
