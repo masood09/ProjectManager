@@ -2,12 +2,14 @@
 
 
 <div class="span12 header">
-	<a href="#" class="btn pull-right">
+	<a href="#newTask" data-toggle="modal" class="btn pull-right">
 		<i class="icon-plus"></i>
 		New Task
 	</a>
 	<h4>Tasks</h4>
 </div>
+
+<?php $this->partial('partials/new_task'); ?>
 
 <?php if (!$currentTask) { ?>
 <div class="span12 align-center">

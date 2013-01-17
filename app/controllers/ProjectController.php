@@ -159,4 +159,64 @@ class ProjectController extends ControllerBase
 		$this->view->disable();
 		return;
 	}
+
+	public function newtaskAction($project_id = null)
+	{
+		if ($this->request->isPost()) {
+			$project = Project::findFirst('id = "' . $project_id . '"');
+
+			if (!$project) {
+				$this->response->redirect('dashboard/index/');
+				$this->view->disable();
+				return;
+			}
+
+			if (!$project->isInProject($this->currentUser)) {
+				$this->response->redirect('dashboard/index');
+				$this->view->disable();
+				return;
+			}
+
+			$title = $this->request->getPost('title');
+			$controller = $this->request->getPost('controller');
+			$action = $this->request->getPost('action');
+
+			if (!$controller || !$action) {
+				$controller = 'dashboard';
+				$action = 'index';
+			}
+
+			if (!$title) {
+				$this->flashSession->error('Task title should be specified');
+				$this->response->redirect($controller . '/' . $action);
+				$this->view->disable();
+				return;
+			}
+
+			$task = new Task();
+			$task->title = htmlspecialchars($title);
+			$task->project_id = $project_id;
+			$task->created_by = $this->currentUser->id;
+			$task->created_at = new Phalcon\Db\RawValue('now()');
+			$task->assigned_to = $this->currentUser->id;
+			$task->status = 0;
+
+			if (!$task->save()) {
+				foreach ($task->getMessages() as $message) {
+					$this->flashSession->error((string) $message);
+					$this->response->redirect($controller . '/' . $action);
+					$this->view->disable();
+					return;
+        		}
+			}
+
+			$this->response->redirect('project/view/' . $project->id . '/' . $task->id);
+			$this->view->disable();
+			return;
+		}
+
+		$this->response->redirect('dashboard/index/');
+		$this->view->disable();
+		return;
+	}
 }
