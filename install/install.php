@@ -58,7 +58,7 @@ try {
 
     $di->set('view', function() {
         $view = new \Phalcon\Mvc\View();
-        $view->setViewsDir(__DIR__ . '/views/');
+        $view->setViewsDir(__DIR__ . '/../app/views/');
 
         return $view;
     });

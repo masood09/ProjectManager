@@ -50,9 +50,11 @@ class Security extends Phalcon\Mvc\User\Plugin
 
             // Common resources to which all registered users have access (ie., admin, developers and clients)
             $userResources = array(
-                'ajax' => array('dashboard'),
+                'ajax' => array('dashboard', 'projecttasks'),
                 'dashboard' => array('index'),
                 'index' => array('index'),
+                'project' => array('view', 'getusersajax', 'createproject', 'newtask'),
+                'task' => array('updateajax', 'updatecommentajax', 'postcomment'),
                 'user' => array('logout'),
             );
 
@@ -129,7 +131,7 @@ class Security extends Phalcon\Mvc\User\Plugin
             $user = User::findFirst('id = "' . $user_id . '"');
 
             if ($user) {
-                if ($user->role_id == 1) {
+                if ($user->isAdmin()) {
                     $role = 'Admin';
                 }
                 else if ($user->role_id == 2) {
@@ -156,7 +158,7 @@ class Security extends Phalcon\Mvc\User\Plugin
 
         if ($allowed != Phalcon\Acl::ALLOW) {
             if ($role == 'Guest') {
-                $this->flash->error('Please login before you proceed.');
+                $this->flashSession->error('Please login before you proceed.');
 
                 $dispatcher->forward(
                     array(
@@ -168,7 +170,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 return false;
             }
             else {
-                $this->flash->error('You do not have permission to access this area.');
+                $this->flashSession->error('You do not have permission to access this area.');
                 $dispatcher->forward(
                     array(
                         'controller' => 'index',

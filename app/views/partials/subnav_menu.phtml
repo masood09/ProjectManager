@@ -1,6 +1,6 @@
 <?php use Phalcon\Tag as Tag ?>
 
-<?php if ($controller == 'user') { ?>
+<?php if ($controller == 'user' || $controller == 'install') { ?>
 	<br>
 	<br>
 	<br>
@@ -41,6 +41,37 @@
 					<span id="userMonthsTime"><?php echo $userMonthsTime; ?></span>
 				</div>
 			</div>
+		</li>
+	</ul>
+<?php } else if ($controller == 'project') { ?>
+	<ul>
+		<li>
+			<a href="<?php $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
+				<i class="icon-tasks icon-4x"></i>
+				<br>
+				Tasks
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<i class="icon-file icon-4x"></i>
+				<br>
+				Notes
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<i class="icon-cloud icon-4x"></i>
+				<br>
+				Files
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<i class="icon-cogs icon-4x"></i>
+				<br>
+				Manage
+			</a>
 		</li>
 	</ul>
 <?php } ?>

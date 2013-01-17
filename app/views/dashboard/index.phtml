@@ -1,9 +1,39 @@
 <?php use Phalcon\Tag as Tag ?>
 
-<div class="span3">
-	<h4 class="header">Filter by Project</h4>
+<div class="span4">
+	<h4 class="header">Tasks assigned to you</h4>
+	<br>
+	<?php if (count($tasksAssigned) == 0) { ?>
+	<div class="align-center">
+		<h5>No tasks are open for you!</h5>
+	</div>
+	<?php } else { ?>
+		<div class="message-sidebar">
+			<?php foreach($tasksAssigned AS $assignedTask) { ?>
+				<a href="<?php echo $this->url->get('project/view/' . $assignedTask->getProject()->id . '/' . $assignedTask->id); ?>" class="message-preview new">
+					<abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($assignedTask->created_at)); ?></abbr>
+					<h5>
+						<?php echo $assignedTask->getProject()->name; ?>
+						&nbsp;&nbsp;&nbsp;
+						<span>
+							<i class="icon-comments"></i>
+							<?php echo count($assignedTask->getComment()); ?>
+						</span>
+					</h5>
+					<h6><?php echo $assignedTask->title; ?></h6>
+					<?php if ($assignedTask->status == 0 && $assignedTask->hours > 0) { ?>
+						<div class="progress">
+							<div style="width: <?php echo $assignedTask->getTimePercent(); ?>%;" class="bar bar-success"></div>
+						</div>
+					<?php } ?>
+				</a>
+			<?php } ?>
+		</div>
+	<?php } ?>
 </div>
 
-<div class="span9">
+<div class="span8">
 	<h4 class="header">Activity</h4>
+
+	<?php $this->partial('partials/dashboard_activity'); ?>
 </div>

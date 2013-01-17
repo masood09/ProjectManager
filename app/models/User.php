@@ -16,6 +16,25 @@ class User extends Phalcon\Mvc\Model
         }
     }
 
+    public function isAdmin()
+    {
+        if ($this->role_id == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getTasksAssigned()
+    {
+        $tasks = Task::find(array(
+            'conditions' => 'assigned_to = "' . $this->id . '" AND status = 0',
+            'order' => 'created_at DESC'
+        ));
+
+        return $tasks;
+    }
+
     public function getOpenTasksCount()
     {
         $openTasks = Task::find('assigned_to = "' . $this->id . '" AND status = "0"');
@@ -131,13 +150,16 @@ class User extends Phalcon\Mvc\Model
                 $end = strtotime($attendance->end);
             }
 
-            $monthsTimeStamp += $end - $start;
+            $monthsTimeStamp += ($end - $start);
         }
 
         $oldTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
-        $monthsTime = date('H:i', $monthsTimeStamp);
+        $monthsTime = date('j:H:i', $monthsTimeStamp);
         date_default_timezone_set($oldTimeZone);
+
+        $explode = explode(':', $monthsTime);
+        $monthsTime = ((($explode[0] - 1) * 24) + ($explode[1])) . ':' . $explode[2];
 
         return $monthsTime;
     }
@@ -156,5 +178,27 @@ class User extends Phalcon\Mvc\Model
         $_targetTime = ($daysTargetTime * $workingDays * 60);
 
         return ceil(($_monthsTime / $_targetTime) * 100);
+    }
+
+    public function getAllProjects()
+    {
+        $projects = array();
+        $projectUsers = array();
+        $projectIds = array();
+
+        $projectUsers = ProjectUser::find('user_id="' . $this->id . '"');
+
+        foreach($projectUsers AS $projectUser) {
+            $projectIds[] = $projectUser->project_id;
+        }
+
+        if (count($projectIds) > 0) {
+            $projects = Project::find(array(
+                'conditions' => 'id IN ("' . implode('", "', $projectIds) . '")',
+                'order' => 'name ASC'
+            ));
+        }
+
+        return $projects;
     }
 }

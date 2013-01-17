@@ -41,4 +41,16 @@ class Config extends Phalcon\Mvc\Model
 
         return false;
     }
+
+    static function keyExists($key)
+    {
+        $result = Config::findFirst('path = "' . $key . '"');
+
+        if ($result) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
