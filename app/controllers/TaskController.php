@@ -31,7 +31,13 @@ class TaskController extends ControllerBase
 			}
 
 			if ($data_name == 'assigned_to') {
-				$task->assigned_to = $value;
+				$assignedUser = User::findFirst('id = "' . $value . '"');
+
+				if ($assignedUser) {
+					if ($task->getProject()->isInProject($assignedUser)) {
+						$task->assigned_to = $value;
+					}
+				}
 			}
 
 			if ($data_name == 'hours') {
