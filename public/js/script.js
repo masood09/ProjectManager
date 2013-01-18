@@ -71,35 +71,20 @@ $(document).ready(function() {
             e.preventDefault();
 
             $(this).attr('disabled', 'disabled');
+            $('#new-comment-comment').val($('#comment-textarea').val());
+            $('#new-comment-form').submit();
+        });
 
-            $.ajax({
-                type: "POST",
-                url: $(this).attr("data-url"),
-                dataType: "json",
-                data: {
-                    task_id: $('#comment-form-task-id').val(),
-                    comment: $('#comment-textarea').val()
-                }
-            }).done(function(data) {
-                if (data.success) {
-                    $('#comment-form').each (function() {
-                        this.reset();
-                    });
-
-                    $('#comment_block').append(data.comment_html);
-                    $(".date").easydate({ 'live': false });
-                    $(".date").show();
-                    $(data.comment_html_id).editable();
-
-                    $('.comment-edit').click(function(e) {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        $("#" + $(this).attr("data-id")).editable('toggle');
-                    });
-                }
+        $('#new-comment-form .file-plus').click(function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $('.file-plus').each(function(index) {
+                fileInputName = 'file' + (index + 1);
             });
 
-            $(this).removeAttr('disabled');
+            fileInputHtml = '<p><input type="file" name="' + fileInputName + '"></p>';
+
+            $('#new-comment-file-upload').append(fileInputHtml);
         });
 
         var ajax_call_project_tasks = function() {

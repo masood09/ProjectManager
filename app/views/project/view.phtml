@@ -97,12 +97,30 @@
             <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
             <div class="message-body">
                 <h5 class="text-error">Post a Comment</h5>
-                <input type="hidden" name="task_id" id="comment-form-task-id" value="<?php echo $currentTask->id; ?>">
-                <textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
+                <form id="new-comment-form" enctype="multipart/form-data" method="post" action="<?php echo $this->url->get('task/postcomment'); ?>">
+                    <input type="hidden" name="task_id" id="comment-form-task-id" value="<?php echo $currentTask->id; ?>">
+                    <input type="hidden" name="comment" id="new-comment-comment">
+                    <input type="hidden" name="controller" value="<?php echo $controller; ?>">
+                    <input type="hidden" name="action" value="<?php echo $action . '/' . $url_params; ?>">
+                    <textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
 
-                <p>
-                    <button id="post-comment" class="btn" data-url="<?php echo $this->url->get('task/postcomment'); ?>">Post Comment</button>
-                </p>
+                    <div id="new-comment-file-upload">
+                        <p>
+                            <input type="file" name="file0">
+
+                            <span class="pull-right">
+                                <a href="#" class="btn btn-small btn-warning file-plus">
+                                    <i class="icon-plus"></i>
+                                    Add more files
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+
+                    <p>
+                        <button id="post-comment" class="btn" data-url="<?php echo $this->url->get('task/postcomment'); ?>">Post Comment</button>
+                    </p>
+                </form>
             </div>
         </div>
 
