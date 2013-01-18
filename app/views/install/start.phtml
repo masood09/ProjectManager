@@ -1,0 +1,42 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="span3">
+    <ul class="nav nav-tabs nav-stacked">
+        <li class="active">
+            <a href="<?php echo $this->url->get('install/start'); ?>">Start Installation</a>
+        </li>
+        <li class="disabled">
+            <a href="<?php echo $this->url->get('install/configuration'); ?>">Configuration</a>
+        </li>
+        <li class="disabled">
+            <a href="<?php echo $this->url->get('install/finish'); ?>">You're All Set</a>
+        </li>
+    </ul>
+
+    <br>
+    <p>
+        Having trouble installing Project Manager?
+        <br>
+        Check out our <a href="#">Installation Guide</a>
+    </p>
+</div>
+
+<div class="span9">
+    <h4 class="header">Welcome to Project Manager's Installation Wizard!</h4>
+
+    <div class="gpl_license">
+        <?php $this->partial('partials/gpl_license'); ?>
+    </div>
+
+    <form>
+        <label class="checkbox">
+            <input type="checkbox"> I agree to the above terms and conditions
+        </label>
+
+        <p class="pull-right">
+            <button type="submit" class="btn btn-primary">
+                Continue
+            </button>
+        </p>
+    </form>
+</div>

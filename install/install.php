@@ -101,6 +101,19 @@ try {
         return $flashSession;
     });
 
+    /**
+     * Application version.
+     */
+    $di->set('AppVersion', function() {
+        $version = array(
+            'major' => 1,
+            'minor' => 0,
+            'patch' => 0,
+        );
+
+        return $version;
+    });
+
     $application = new \Phalcon\Mvc\Application();
     $application->setDI($di);
     echo $application->handle()->getContent();

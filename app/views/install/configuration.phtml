@@ -1,0 +1,98 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="span3">
+    <ul class="nav nav-tabs nav-stacked">
+        <li>
+            <a href="<?php echo $this->url->get('install/start'); ?>">Start Installation</a>
+        </li>
+        <li class="active">
+            <a href="<?php echo $this->url->get('install/configuration'); ?>">Configuration</a>
+        </li>
+        <li class="disabled">
+            <a href="<?php echo $this->url->get('install/finish'); ?>">You're All Set</a>
+        </li>
+    </ul>
+
+    <br>
+    <p>
+        Having trouble installing Project Manager?
+        <br>
+        Check out our <a href="#">Installation Guide</a>
+    </p>
+</div>
+
+<div class="span9">
+    <h4 class="header">Configuration</h4>
+
+    <form>
+        <div class="row">
+            <div class="span4">
+                <fieldset>
+                    <legend>Database Connection</legend>
+                    <div class="control-group">
+                        <label class="control-label" for="dbHost">Database Host</label>
+                        <div class="controls">
+                            <input type="text" id="dbHost" placeholder="Database Host" name="dbHost" value="localhost">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="dbName">Database Name</label>
+                        <div class="controls">
+                            <input type="text" id="dbName" placeholder="Database Name" name="dbName">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="dbUsername">Database Username</label>
+                        <div class="controls">
+                            <input type="text" id="dbUsername" placeholder="Database Username" name="dbUsername">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="dbPassword">Database Password</label>
+                        <div class="controls">
+                            <input type="password" id="dbPassword" placeholder="Database Password" name="dbPassword">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="span4">
+                <fieldset>
+                    <legend>Account Information</legend>
+                    <div class="control-group">
+                        <label class="control-label" for="userEmail">Email</label>
+                        <div class="controls">
+                            <input type="email" id="userEmail" placeholder="Enter your email address" name="userEmail">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword1">Password</label>
+                        <div class="controls">
+                            <input type="password" id="inputPassword1" placeholder="Password" name="userPassword1">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="inputPassword2">Verify Password</label>
+                        <div class="controls">
+                            <input type="password" id="inputPassword2" placeholder="Re-enter your Password" name="userPassword2">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <p class="pull-right">
+                <button type="submit" class="btn btn-primary">
+                    Continue
+                </button>
+            </p>
+        </div>
+    </form>
+</div>
