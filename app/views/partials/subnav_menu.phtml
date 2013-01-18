@@ -46,7 +46,7 @@
 <?php } else if ($controller == 'project') { ?>
     <ul>
         <li>
-            <a href="<?php $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
                 <i class="icon-tasks icon-4x"></i>
                 <br>
                 Tasks
