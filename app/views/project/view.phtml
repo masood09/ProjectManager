@@ -88,6 +88,28 @@
                     <div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-name="comment" data-type="wysihtml5" data-pk="<?php echo $comment->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('task/updatecommentajax'); ?>" data-original-title="Edit Comment" class="editable" tabindex="-1">
                         <?php echo $comment->comment; ?>
                     </div>
+
+                    <?php if (count($comment->getUpload()) > 0) { ?>
+                        <br>
+                        <div class="uploads">
+                            <h6>Attachments</h6>
+
+                            <?php foreach ($comment->getUpload() AS $upload) { ?>
+                                <div class="media">
+                                    <a class="pull-left" href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>">
+                                        <img class="media-object" src="<?php echo $this->url->get('img/mimes/' . $upload->getIconFile()); ?>">
+                                    </a>
+
+                                    <div class="media-body">
+                                        <p class="media-heading">
+                                            <a href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>"><?php echo $upload->filename; ?></a>
+                                        </p>
+                                        <p class="comment-link"><?php echo $upload->getSize(); ?></p>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         <?php } ?>
