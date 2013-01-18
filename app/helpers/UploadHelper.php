@@ -61,7 +61,6 @@ class UploadHelper extends Phalcon\Mvc\User\Plugin
 
         $fileName = $this->getUniqueFileName($file->getName(), $fileDir);
         $filePath = $fileDir . $fileName;
-        $fileUrl = 'uploads/' . $project_id . '/' . $fileName;
         $size = $file->getSize();
 
         move_uploaded_file($file->getTempName(), $filePath);
