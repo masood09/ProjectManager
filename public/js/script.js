@@ -18,6 +18,8 @@ $(document).ready(function() {
     body_id = $('body').attr('id');
 
     if (body_id == 'dashboard') {
+        ajaxUrl = $('#dashboard_ajax_url').val();
+
         $('.chart').easyPieChart({
             barColor: function(percent) {
                 percent /= 100;
@@ -31,7 +33,7 @@ $(document).ready(function() {
         });
 
         var ajax_call = function() {
-            $.getJSON('/ProjectManager/ajax/dashboard', function(data) {
+            $.getJSON(ajaxUrl, function(data) {
                 $('#openTasksCount').html(data.openTasksCount);
                 $('#allTasksCount').html(data.allTasksCount);
                 $('#userTodaysProductivityText').html(data.userTodaysProductivity);
