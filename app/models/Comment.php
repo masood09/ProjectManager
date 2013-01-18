@@ -27,5 +27,6 @@ class Comment extends Phalcon\Mvc\Model
     {
         $this->belongsTo('user_id', 'User', 'id');
         $this->belongsTo('task_id', 'Task', 'id');
+        $this->hasMany('id', 'Upload', 'comment_id');
     }
 }
