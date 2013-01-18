@@ -56,13 +56,22 @@ class ProjectController extends ControllerBase
         }
 
         NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
-        NotificationHelper::markTaskRead($this->currentUser->id, $project->id, $currentTask->id);
+
+        if ($currentTask) {
+            NotificationHelper::markTaskRead($this->currentUser->id, $project->id, $currentTask->id);
+        }
 
         $this->view->setVar('currentProject', $project);
         $this->view->setVar('allProjectTasks', $allProjectTasks);
         $this->view->setVar('currentTask', $currentTask);
         $this->view->setVar('body_id', 'project_tasks');
-        $this->view->setVar('url_params', $project->id . '/' . $currentTask->id);
+
+        if ($currentTask) {
+            $this->view->setVar('url_params', $project->id . '/' . $currentTask->id);
+        }
+        else {
+            $this->view->setVar('url_params', $project->id);
+        }
 
         if ($currentTask) {
             Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
