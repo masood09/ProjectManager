@@ -132,6 +132,17 @@ try {
         return $flashSession;
     });
 
+    /*
+     * The directory in which we will save the uploads.
+     */
+    $di->set('UploadDir', function() {
+        return __DIR__ . '/uploads/';
+    });
+
+    $di->set('uploadHelper', function() use ($di) {
+        return new UploadHelper($di);
+    });
+
     /**
      * Application version.
      */
