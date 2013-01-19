@@ -100,6 +100,27 @@ $(document).ready(function() {
 
         setInterval(ajax_call_project_tasks, 5 * 1000);
     }
+    else if (body_id == 'project_notes') {
+        $('#note_title').editable();
+        $('#note-content').editable();
+
+        $('#content-edit').click(function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $('#note-content').editable('toggle');
+        });
+
+        var ajax_call_project_notes = function() {
+            $.getJSON('/ProjectManager/ajax/projectnotes', function(data) {
+                $('#header-notification').html(data.notificationsHtml);
+
+                $(".date").easydate({ 'live': false });
+                $(".date").show();
+            });
+        };
+
+        setInterval(ajax_call_project_notes, 5 * 1000);
+    }
 
     $(".date").easydate({ 'live': false });
     $(".date").show();

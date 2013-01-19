@@ -22,6 +22,8 @@ ALTER TABLE `task` ADD `hours_spent` TIME NULL DEFAULT NULL AFTER `hours`;
 ALTER TABLE `task` ADD `closed_by` INT(10) UNSIGNED NULL DEFAULT NULL;
 ALTER TABLE `task` ADD `comments` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `assigned_to`;
 
+ALTER TABLE `note` CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
 CREATE TABLE IF NOT EXISTS `notification` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `user_id` int(10) unsigned NOT NULL,

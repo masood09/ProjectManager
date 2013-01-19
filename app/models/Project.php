@@ -76,6 +76,16 @@ class Project extends Phalcon\Mvc\Model
         return $tasks;
     }
 
+    public function getAllNotes()
+    {
+        $notes = Note::find(array(
+            'conditions' => 'project_id=' . $this->id,
+            'order' => 'created_at DESC',
+        ));
+
+        return $notes;
+    }
+
     public function getProjectUsers()
     {
         $users = array();

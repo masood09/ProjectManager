@@ -81,6 +81,71 @@ class ProjectController extends ControllerBase
         }
     }
 
+    public function notesAction($project_id, $note_id = null)
+    {
+        if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $project_id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($this->currentUser)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $allProjectNotes = $project->getAllNotes();
+
+        if (count($allProjectNotes) > 0) {
+            if (is_null($note_id)) {
+                $currentNote = $allProjectNotes[0];
+            }
+            else {
+                $currentNote = Note::findFirst('id = "' . $note_id . '"');
+
+                if (!$currentNote) {
+                    $this->response->redirect('project/notes/' . $project->id);
+                    $this->view->disable();
+                    return;
+                }
+            }
+        }
+
+        NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
+
+        if ($currentNote) {
+            NotificationHelper::markNoteRead($this->currentUser->id, $project->id, $currentNote->id);
+        }
+
+        $this->view->setVar('currentProject', $project);
+        $this->view->setVar('allProjectNotes', $allProjectNotes);
+        $this->view->setVar('currentNote', $currentNote);
+        $this->view->setVar('body_id', 'project_notes');
+
+        if ($currentNote) {
+            $this->view->setVar('url_params', $project->id . '/' . $currentNote->id);
+        }
+        else {
+            $this->view->setVar('url_params', $project->id);
+        }
+
+        if ($currentNote) {
+            Phalcon\Tag::setTitle($project->name . ' | ' . $currentNote->title);
+        }
+        else {
+            Phalcon\Tag::setTitle($project->name);
+        }
+    }
+
     public function getusersajaxAction($id=null)
     {
         $return = array();
@@ -234,6 +299,66 @@ class ProjectController extends ControllerBase
             }
 
             $this->response->redirect('project/view/' . $project->id . '/' . $task->id);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index/');
+        $this->view->disable();
+        return;
+    }
+
+    public function newnoteAction($project_id = null)
+    {
+        if ($this->request->isPost()) {
+            $project = Project::findFirst('id = "' . $project_id . '"');
+
+            if (!$project) {
+                $this->response->redirect('dashboard/index/');
+                $this->view->disable();
+                return;
+            }
+
+            if (!$project->isInProject($this->currentUser)) {
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
+            }
+
+            $title = $this->request->getPost('title');
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'dashboard';
+                $action = 'index';
+            }
+
+            if (!$title) {
+                $this->flashSession->error('Note title should be specified');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            $note = new Note();
+            $note->title = htmlspecialchars($title);
+            $note->project_id = $project_id;
+            $note->user_id = $this->currentUser->id;
+            $note->created_at = new Phalcon\Db\RawValue('now()');
+
+            if (!$note->save()) {
+                foreach ($note->getMessages() as $message) {
+                    $this->flashSession->error((string) $message);
+                    $this->response->redirect($controller . '/' . $action);
+                    $this->view->disable();
+                    return;
+                }
+            }
+
+            NotificationHelper::newNoteNotification($project, $note);
+
+            $this->response->redirect('project/notes/' . $project->id . '/' . $note->id);
             $this->view->disable();
             return;
         }

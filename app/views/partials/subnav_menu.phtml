@@ -53,7 +53,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="<?php echo $this->url->get('project/notes/' . $currentProject->id); ?>" <?php echo ($action == 'notes') ? 'class="active"' : ''; ?>>
                 <i class="icon-file icon-4x"></i>
                 <br>
                 Notes

@@ -1,0 +1,50 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="span12 header">
+    <a href="#newNote" data-toggle="modal" class="btn pull-right">
+        <i class="icon-plus"></i>
+        New Note
+    </a>
+    <h4>Notes</h4>
+</div>
+
+<?php $this->partial('partials/new_note'); ?>
+
+<?php if (!$currentNote) { ?>
+<div class="span12 align-center">
+    <h5>No notes for this Project! Why not add some?</h5>
+</div>
+<?php } else { ?>
+<div class="span4">
+    <div class="message-sidebar">
+        <?php foreach($allProjectNotes AS $projectNote) { ?>
+            <a href="<?php echo $this->url->get('project/notes/' . $currentProject->id . '/' . $projectNote->id); ?>" class="message-preview <?php echo ($projectNote->id == $currentNote->id) ? 'active' : ''; ?>">
+                <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($projectNote->created_at)); ?></abbr>
+                <h5>
+                    <?php echo $projectNote->getUser()->full_name; ?>
+                </h5>
+                <h6><?php echo $projectNote->title; ?></h6>
+            </a>
+        <?php } ?>
+    </div>
+</div>
+
+<div class="span8">
+    <div class="messages">
+        <h4 class="header">
+            <a href="#" id="note_title" data-name="title" data-type="text" data-pk="<?php echo $currentNote->id; ?>" data-url="<?php echo $this->url->get('note/updateajax'); ?>" data-original-title="Enter Note Title" class="editable editable-click"><?php echo $currentNote->title; ?></a>
+        </h4>
+
+        <div class="pull-right">
+            <a href="#" id="content-edit" class="content-edit" data-id="note-content">
+                <i class="icon-pencil"></i>
+            </a>
+        </div>
+
+        <div id="note-content" class="note_content" data-name="content" data-type="wysihtml5" data-pk="<?php echo $currentNote->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('note/updateajax'); ?>" data-original-title="Edit Note" class="editable" tabindex="-1">
+            <?php echo $currentNote->content; ?>
+        </div>
+
+    </div>
+</div>
+<?php } ?>

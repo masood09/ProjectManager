@@ -36,6 +36,16 @@ class NotificationHelper
         }
     }
 
+    static function markNoteRead($user_id, $project_id, $note_id)
+    {
+        $notifications = Notification::find('user_id = "' . $user_id . '" AND project_id = "' . $project_id . '" AND task_id = "' . $note_id . '"');
+
+        foreach ($notifications AS $notification) {
+            $notification->read = 1;
+            $notification->save();
+        }
+    }
+
     static function taskClosedNotification($project, $task, $user)
     {
         foreach ($task->getTaskUser() AS $taskUser) {
@@ -145,6 +155,24 @@ class NotificationHelper
             $notification->project_id = $project->id;
             $notification->read = 0;
             $notification->created_by = $user->id;
+            $notification->created_at = new Phalcon\Db\RawValue('now()');
+
+            $notification->save();
+        }
+    }
+
+    static function newNoteNotification($project, $note)
+    {
+        $projectUsers = ProjectUser::find('project_id = "' . $project->id . '" AND user_id != "' . $note->user_id . '"');
+
+        foreach ($projectUsers AS $projectUser) {
+            $notification = new Notification();
+
+            $notification->user_id = $projectUser->user_id;
+            $notification->message = '<strong>' . $note->getUser()->full_name . '</strong> has created a new note <strong>' . $note->title . '</strong> for project <strong>' . $project->name . '</strong>';
+            $notification->project_id = $project->id;
+            $notification->read = 0;
+            $notification->created_by = $note->user_id;
             $notification->created_at = new Phalcon\Db\RawValue('now()');
 
             $notification->save();
