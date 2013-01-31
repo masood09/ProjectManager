@@ -66,6 +66,7 @@
                 Files
             </a>
         </li>
+        <?php if ($currentUser->isAdmin()) { ?>
         <li>
             <a href="#">
                 <i class="icon-cogs icon-4x"></i>
@@ -73,5 +74,6 @@
                 Manage
             </a>
         </li>
+        <?php } ?>
     </ul>
 <?php } ?>
