@@ -51,6 +51,17 @@ class TaskController extends ControllerBase
                     if ($task->getProject()->isInProject($assignedUser)) {
                         $task->assigned_to = $value;
 
+                        $taskUser = TaskUser::findFirst('user_id="' . $assignedUser->id . '" AND task_id="' . $task->id . '"');
+
+                        if (!$taskUser) {
+                            $taskUser = new TaskUser();
+                            $taskUser->user_id = $assignedUser->id;
+                            $taskUser->task_id = $task->id;
+                            $taskUser->created_at = new Phalcon\Db\RawValue('now()');
+
+                            $taskUser->save();
+                        }
+
                         if ($value != $this->currentUser->id) {
                             NotificationHelper::taskAssignedNotification($task->getProject(), $task, $this->currentUser);
                         }
