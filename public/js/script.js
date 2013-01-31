@@ -121,6 +121,19 @@ $(document).ready(function() {
 
         setInterval(ajax_call_project_notes, 5 * 1000);
     }
+    else if (body_id == 'project_files') {
+        ajaxUrl = $('#project_files_ajax_url').val();
+        var ajax_call_project_files = function() {
+            $.getJSON(ajaxUrl, function(data) {
+                $('#header-notification').html(data.notificationsHtml);
+
+                $(".date").easydate({ 'live': false });
+                $(".date").show();
+            });
+        };
+
+        setInterval(ajax_call_project_files, 5 * 1000);
+    }
 
     $(".date").easydate({ 'live': false });
     $(".date").show();

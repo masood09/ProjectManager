@@ -299,6 +299,10 @@ div.navbar-inner a.brand {
     margin-bottom: 0;
 }
 
+div.media-files a {
+    margin-right: 15px;
+}
+
 .gpl_license {
     margin-top: 10px;
     margin-bottom: 20px;

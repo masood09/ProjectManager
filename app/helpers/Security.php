@@ -64,11 +64,11 @@ class Security extends Phalcon\Mvc\User\Plugin
 
             // Common resources to which all registered users have access (ie., admin, developers and clients)
             $userResources = array(
-                'ajax' => array('dashboard', 'projecttasks', 'projectnotes'),
+                'ajax' => array('dashboard', 'projecttasks', 'projectnotes', 'projectfiles'),
                 'dashboard' => array('index'),
                 'index' => array('index'),
                 'note' => array('updateajax'),
-                'project' => array('view', 'getusersajax', 'createproject', 'newtask', 'notes', 'newnote'),
+                'project' => array('view', 'getusersajax', 'createproject', 'newtask', 'notes', 'newnote', 'files', 'newfile'),
                 'task' => array('updateajax', 'updatecommentajax', 'postcomment'),
                 'user' => array('logout'),
             );

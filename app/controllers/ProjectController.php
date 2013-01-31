@@ -367,4 +367,94 @@ class ProjectController extends ControllerBase
         $this->view->disable();
         return;
     }
+
+    public function filesAction($project_id)
+    {
+        if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $project_id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($this->currentUser)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $allProjectFiles = $project->getProjectFiles(false);
+        $allTasksFiles = $project->getTaskFiles();
+
+        NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
+
+        $this->view->setVar('currentProject', $project);
+        $this->view->setVar('allProjectFiles', $allProjectFiles);
+        $this->view->setVar('allTasksFiles', $allTasksFiles);
+        $this->view->setVar('body_id', 'project_files');
+
+        $this->view->setVar('url_params', $project->id);
+
+        Phalcon\Tag::setTitle($project->name . ' | Files');
+    }
+
+    public function newfileAction($project_id)
+    {
+        if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if ($this->request->isPost()) {
+            $project = Project::findFirst('id = "' . $project_id . '"');
+
+            if (!$project) {
+                $this->response->redirect('dashboard/index/');
+                $this->view->disable();
+                return;
+            }
+
+            if (!$project->isInProject($this->currentUser)) {
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
+            }
+
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'dashboard';
+                $action = 'index';
+            }
+
+            if ($this->request->hasFiles() == true) {
+                foreach ($this->request->getUploadedFiles() as $file) {
+                    if (!$file->getName() || !$file->getTempName() || $file->getSize() == 0) {
+                        continue;
+                    }
+
+                    $this->uploadHelper->uploadFile($this->currentUser->id, $file, $project->id);
+                }
+
+                $this->flashSession->success('File uploaded successfully');
+            }
+
+            $this->response->redirect($controller . '/' . $action . '#comment-' . $comment->id);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index/');
+        $this->view->disable();
+        return;
+    }
 }

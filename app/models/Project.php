@@ -86,6 +86,34 @@ class Project extends Phalcon\Mvc\Model
         return $notes;
     }
 
+    public function getProjectFiles($inclTasks = true)
+    {
+        if ($inclTasks) {
+            $uploads = Upload::find(array(
+                'conditions' => 'project_id = "' . $this->id . '"',
+                'order' => 'uploaded_at DESC',
+            ));
+        }
+        else {
+            $uploads = Upload::find(array(
+                'conditions' => 'project_id = "' . $this->id . '" AND task_id IS NULL AND comment_id IS NULL',
+                'order' => 'uploaded_at DESC',
+            ));
+        }
+
+        return $uploads;
+    }
+
+    public function getTaskFiles()
+    {
+        $uploads = Upload::find(array(
+            'conditions' => 'project_id = "' . $this->id . '" AND (task_id IS NOT NULL OR comment_id IS NOT NULL)',
+            'order' => 'uploaded_at DESC',
+        ));
+
+        return $uploads;
+    }
+
     public function getProjectUsers()
     {
         $users = array();

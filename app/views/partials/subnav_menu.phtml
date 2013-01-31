@@ -60,7 +60,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="<?php echo $this->url->get('project/files/' . $currentProject->id); ?>" <?php echo ($action == 'files') ? 'class="active"' : ''; ?>>
                 <i class="icon-cloud icon-4x"></i>
                 <br>
                 Files
