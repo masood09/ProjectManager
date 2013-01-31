@@ -89,8 +89,10 @@ $(document).ready(function() {
             $('#new-comment-file-upload').append(fileInputHtml);
         });
 
+        ajaxUrl = $('#project_tasks_ajax_url').val();
+
         var ajax_call_project_tasks = function() {
-            $.getJSON('/ProjectManager/ajax/projecttasks', function(data) {
+            $.getJSON(ajaxUrl, function(data) {
                 $('#header-notification').html(data.notificationsHtml);
 
                 $(".date").easydate({ 'live': false });
@@ -110,8 +112,10 @@ $(document).ready(function() {
             $('#note-content').editable('toggle');
         });
 
+        ajaxUrl = $('#project_notes_ajax_url').val();
+
         var ajax_call_project_notes = function() {
-            $.getJSON('/ProjectManager/ajax/projectnotes', function(data) {
+            $.getJSON(ajaxUrl, function(data) {
                 $('#header-notification').html(data.notificationsHtml);
 
                 $(".date").easydate({ 'live': false });
