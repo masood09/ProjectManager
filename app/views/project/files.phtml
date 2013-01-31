@@ -34,14 +34,14 @@
                     </a>
 
                     <div class="media-body">
-                        <p class="pull-right">
-                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->uploaded_at)); ?></abbr>
-                        </p>
                         <p class="media-heading">
                             <a href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>"><?php echo $upload->filename; ?></a>
                         </p>
                         <p class="comment-link"><?php echo $upload->getSize(); ?></p>
                         <p class="comment-link">Uploaded by <?php echo $upload->getUser()->full_name; ?></p>
+                        <p class="comment-link">
+                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->uploaded_at)); ?></abbr>
+                        </p>
                     </div>
                 </div>
 
@@ -70,14 +70,14 @@
                     </a>
 
                     <div class="media-body">
-                        <p class="pull-right">
-                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->uploaded_at)); ?></abbr>
-                        </p>
                         <p class="media-heading">
                             <a href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>"><?php echo $upload->filename; ?></a>
                         </p>
                         <p class="comment-link"><?php echo $upload->getSize(); ?></p>
                         <p class="comment-link">Uploaded by <?php echo $upload->getUser()->full_name; ?></p>
+                        <p class="comment-link">
+                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->uploaded_at)); ?></abbr>
+                        </p>
                     </div>
                 </div>
 
