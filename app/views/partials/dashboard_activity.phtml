@@ -9,7 +9,7 @@
         <?php foreach ($activities AS $activity) { ?>
             <a href="<?php echo $this->url->get($activity->getUrl()); ?>" class="activity-preview <?php echo ($activity->read == 0) ? 'new' : ''; ?>">
                 <div class="media">
-                    <img class="media-object pull-left" src="<?php echo $this->url->get('profile/default.jpg'); ?>">
+                    <img class="media-object pull-left" src="<?php echo $this->url->get('profile/' . $activity->getUser()->getProfilePicture()); ?>">
 
                     <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($activity->created_at)); ?></abbr>
 

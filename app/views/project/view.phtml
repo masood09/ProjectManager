@@ -71,7 +71,7 @@
         <div id="comment_block">
         <?php foreach ($currentTask->getComments() AS $comment) { ?>
             <div class="message" id="comment-<?php echo $comment->id; ?>">
-                <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
+                <img src="<?php echo $this->url->get('profile/' . $comment->getUser()->getProfilePicture()); ?>" class="img-rounded pull-left">
 
                 <div class="message-body">
                     <div class="pull-right">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="message">
-            <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
+            <img src="<?php echo $this->url->get('profile/' . $currentUser->getProfilePicture()); ?>" class="img-rounded pull-left">
             <div class="message-body">
                 <h5 class="text-error">Post a Comment</h5>
                 <form id="new-comment-form" enctype="multipart/form-data" method="post" action="<?php echo $this->url->get('task/postcomment'); ?>">
