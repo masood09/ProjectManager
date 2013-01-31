@@ -65,6 +65,13 @@
                 <span>
                     Hours : <a href="#" id="task_hours" data-name="hours" data-type="number" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Hours" class="editable editable-click"><?php echo $currentTask->getHours(); ?></a>
                 </span>
+
+                <?php if ($currentTask->getTimeSpent()) { ?>
+                    &nbsp;
+                    <span>
+                        Spent : <span class="text-warning"><?php echo $currentTask->getTimeSpent(); ?></span>
+                    </span>
+                <?php } ?>
             </p>
         </div>
 
