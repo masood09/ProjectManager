@@ -89,6 +89,14 @@ $(document).ready(function() {
             $('#new-comment-file-upload').append(fileInputHtml);
         });
 
+        $('.people-checkbox').change(function() {
+            subscribeUrl = $(this).attr('data-url');
+
+            $.getJSON(subscribeUrl, function(data) {
+
+            });
+        });
+
         ajaxUrl = $('#project_tasks_ajax_url').val();
 
         var ajax_call_project_tasks = function() {

@@ -225,4 +225,95 @@ class TaskController extends ControllerBase
         $this->view->disable();
         return;
     }
+
+    public function subscribeajaxAction($project_id, $task_id, $user_id)
+    {
+    if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (is_null($task_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (is_null($user_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $project_id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($this->currentUser)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $user = User::findFirst('id = "' . $user_id . '"');
+
+        if (!$user) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($user)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $task = Task::findFirst('id = "' . $task_id . '"');
+
+        if (!$task) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if ($task->assigned_to == $user->id) {
+            $return['subscribed'] = true;
+            echo json_encode($return);
+            $this->view->disable();
+            return;
+        }
+
+        $taskUser = TaskUser::findFirst('user_id="' . $user->id . '" AND task_id="' . $task->id . '"');
+
+        if (!$taskUser) {
+            $taskUser = new TaskUser();
+            $taskUser->user_id = $user->id;
+            $taskUser->task_id = $task->id;
+            $taskUser->created_at = new Phalcon\Db\RawValue('now()');
+
+            $taskUser->save();
+
+            $return['subscribed'] = true;
+            echo json_encode($return);
+            $this->view->disable();
+            return;
+        }
+        else {
+            $taskUser->delete();
+            $return['subscribed'] = false;
+            echo json_encode($return);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
 }

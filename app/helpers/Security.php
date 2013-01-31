@@ -69,7 +69,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 'index' => array('index'),
                 'note' => array('updateajax'),
                 'project' => array('view', 'getusersajax', 'createproject', 'newtask', 'notes', 'newnote', 'files', 'newfile'),
-                'task' => array('updateajax', 'updatecommentajax', 'postcomment'),
+                'task' => array('updateajax', 'updatecommentajax', 'postcomment', 'subscribeajax'),
                 'user' => array('logout'),
             );
 

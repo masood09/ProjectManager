@@ -147,6 +147,36 @@
             </div>
         </div>
 
+        <div id="task_people" class="people_block">
+            <?php $_i = 0; ?>
+            <?php $projectUsers = $currentProject->getProjectUsers(); ?>
+            <?php foreach($projectUsers AS $projectUser) { ?>
+                <?php if ($_i % 2 == 0) { ?>
+                    <div class="row">
+                <?php } ?>
+
+                    <div class="span4">
+                        <div class="people">
+                            <img src="<?php echo $this->url->get('profile/' . $projectUser->getProfilePicture()); ?>" class="img-rounded pull-left" alt="<?php echo $projectUser->full_name; ?>">
+                            <div class="people-body">
+                                <h5><?php echo $projectUser->full_name; ?></h5>
+                                <p class="text-warning"><?php echo $currentTask->calculateTotalTimeSpentByUser($projectUser->id); ?></p>
+                                <label class="checkbox">
+                                    <input type="checkbox" <?php echo ($currentTask->isSubscribed($projectUser->id)) ? 'checked="checked"' : ''; ?> <?php echo ($currentTask->assigned_to == $projectUser->id) ? 'disabled="disabled"' : ''; ?> class="people-checkbox" data-url="<?php echo $this->url->get('task/subscribeajax/' . $currentProject->id . '/' . $currentTask->id . '/' . $projectUser->id); ?>">
+                                    Subscribe
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                <?php if (($_i + 1) % 2 == 0 || ($_i + 1) == count($projectUsers)) { ?>
+                    </div>
+                <?php } ?>
+
+                <?php $_i++; ?>
+            <?php } ?>
+        </div>
+
     </div>
 </div>
 <?php } ?>

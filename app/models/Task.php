@@ -92,6 +92,36 @@ class Task extends Phalcon\Mvc\Model
         return $tasksTime;
     }
 
+    public function calculateTotalTimeSpentByUser($user_id)
+    {
+        $tasksTimeStamp = 0;
+
+        $attendances = Attendance::find('task_id = "' . $this->id . '" AND user_id = "' . $user_id . '"');
+
+        foreach ($attendances AS $attendance) {
+            $start = strtotime($attendance->start);
+
+            if (is_null($attendance->end)) {
+                $end = $start;
+            }
+            else {
+                $end = strtotime($attendance->end);
+            }
+
+            $tasksTimeStamp += $end - $start;
+        }
+
+        $oldTimeZone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+        $tasksTime = date('j:H:i:s', $tasksTimeStamp);
+        date_default_timezone_set($oldTimeZone);
+
+        $explode = explode(':', $tasksTime);
+        $tasksTime = ((($explode[0] - 1) * 24) + ($explode[1])) . ':' . $explode[2];
+
+        return $tasksTime;
+    }
+
     public function getTimeSpent()
     {
         if ($this->hours_spent == 0) {
@@ -110,5 +140,16 @@ class Task extends Phalcon\Mvc\Model
         ));
 
         return $comments;
+    }
+
+    public function isSubscribed($user_id)
+    {
+        $projectUser = TaskUser::findFirst('task_id = "' . $this->id . '" AND user_id = "' . $user_id . '"');
+
+        if ($projectUser) {
+            return true;
+        }
+
+        return false;
     }
 }
