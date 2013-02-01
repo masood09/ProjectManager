@@ -25,23 +25,15 @@
         <?php echo Tag::stylesheetLink('css/jquery.easy-pie-chart.css'); ?>
         <?php echo Tag::stylesheetLink('css/bootstrap-wysihtml5-0.0.2.css'); ?>
         <?php echo Tag::stylesheetLink('css/style.css'); ?>
-
-        <?php echo Tag::javascriptInclude('js/wysihtml5-0.3.0.min.js'); ?>
-        <?php echo Tag::javascriptInclude('js/jquery-1.8.3.min.js'); ?>
-        <?php echo Tag::javascriptInclude('js/bootstrap.min.js'); ?>
-        <?php echo Tag::javascriptInclude('js/bootstrap-editable.min.js'); ?>
-        <?php echo Tag::javascriptInclude('js/jquery.easydate-0.2.4.min.js'); ?>
-        <?php echo Tag::javascriptInclude('js/jquery.easy-pie-chart.js'); ?>
-        <?php echo Tag::javascriptInclude('js/bootstrap-wysihtml5-0.0.2.min.js'); ?>
-        <?php echo Tag::javascriptInclude('js/wysihtml5-editable.js'); ?>
-
-        <?php echo Tag::javascriptInclude('js/script.js'); ?>
     </head>
 
     <body <?php echo ($body_id) ? 'id="' . $body_id . '"' : ''; ?> <?php echo ($body_class) ? 'class="' . $body_class . '"' : ''; ?>>
         <header class="navbar navbar-fixed-top">
             <?php $this->partial('partials/header'); ?>
         </header>
+
+        <input id="lastUpdate" type="hidden" value="<?php echo time(); ?>">
+        <input id="ajaxUrl" type="hidden" value="<?php echo $this->url->get('ajax/getupdates'); ?>">
 
         <div class="page-sub-nav">
             <div class="container">
@@ -87,5 +79,16 @@
                 <?php $this->partial('partials/new_project'); ?>
             <?php } ?>
         <?php } ?>
+
+        <?php echo Tag::javascriptInclude('js/wysihtml5-0.3.0.min.js'); ?>
+        <?php echo Tag::javascriptInclude('js/jquery-1.8.3.min.js'); ?>
+        <?php echo Tag::javascriptInclude('js/bootstrap.min.js'); ?>
+        <?php echo Tag::javascriptInclude('js/bootstrap-editable.min.js'); ?>
+        <?php echo Tag::javascriptInclude('js/jquery.easydate-0.2.4.min.js'); ?>
+        <?php echo Tag::javascriptInclude('js/jquery.easy-pie-chart.js'); ?>
+        <?php echo Tag::javascriptInclude('js/bootstrap-wysihtml5-0.0.2.min.js'); ?>
+        <?php echo Tag::javascriptInclude('js/wysihtml5-editable.js'); ?>
+
+        <?php echo Tag::javascriptInclude('js/script.js'); ?>
     </body>
 </html>
