@@ -15,11 +15,8 @@
 
 $(document).ready(function() {
     $.fn.editable.defaults.mode = 'inline';
-    body_id = $('body').attr('id');
 
-    if (body_id == 'dashboard') {
-        ajaxUrl = $('#dashboard_ajax_url').val();
-
+    if ($("#dashboard").get(0)) {
         $('.chart').easyPieChart({
             barColor: function(percent) {
                 percent /= 100;
@@ -31,29 +28,9 @@ $(document).ready(function() {
             lineWidth: 15,
             animate: 2000
         });
-
-        var ajax_call = function() {
-            $.getJSON(ajaxUrl, function(data) {
-                $('#openTasksCount').html(data.openTasksCount);
-                $('#allTasksCount').html(data.allTasksCount);
-                $('#userTodaysProductivityText').html(data.userTodaysProductivity);
-                $('#userTodaysTime').html(data.userTodaysTime);
-                $('#userMonthsTime').html(data.userMonthsTime);
-                $('#header-notification').html(data.notificationsHtml);
-
-                $('#taskPercent').data('easyPieChart').update(data.taskPercent);
-                $('#userTodaysProductivity').data('easyPieChart').update(data.userTodaysProductivity);
-                $('#userTodaysTimePercent').data('easyPieChart').update(data.userTodaysTimePercent);
-                $('#userMonthsTimePercent').data('easyPieChart').update(data.userMonthsTimePercent);
-
-                $(".date").easydate({ 'live': false });
-                $(".date").show();
-            });
-        };
-
-        setInterval(ajax_call, 5 * 1000);
     }
-    else if (body_id == 'project_tasks') {
+
+    if ($("#project_tasks").get(0)) {
         $('#task_title').editable();
         $('#task_job_id').editable();
         $('#task_hours').editable();
@@ -96,21 +73,9 @@ $(document).ready(function() {
 
             });
         });
-
-        ajaxUrl = $('#project_tasks_ajax_url').val();
-
-        var ajax_call_project_tasks = function() {
-            $.getJSON(ajaxUrl, function(data) {
-                $('#header-notification').html(data.notificationsHtml);
-
-                $(".date").easydate({ 'live': false });
-                $(".date").show();
-            });
-        };
-
-        setInterval(ajax_call_project_tasks, 5 * 1000);
     }
-    else if (body_id == 'project_notes') {
+
+    if ($("#project_notes").get(0)) {
         $('#note_title').editable();
         $('#note-content').editable();
 
@@ -119,33 +84,40 @@ $(document).ready(function() {
             e.preventDefault();
             $('#note-content').editable('toggle');
         });
-
-        ajaxUrl = $('#project_notes_ajax_url').val();
-
-        var ajax_call_project_notes = function() {
-            $.getJSON(ajaxUrl, function(data) {
-                $('#header-notification').html(data.notificationsHtml);
-
-                $(".date").easydate({ 'live': false });
-                $(".date").show();
-            });
-        };
-
-        setInterval(ajax_call_project_notes, 5 * 1000);
     }
-    else if (body_id == 'project_files') {
-        ajaxUrl = $('#project_files_ajax_url').val();
-        var ajax_call_project_files = function() {
-            $.getJSON(ajaxUrl, function(data) {
-                $('#header-notification').html(data.notificationsHtml);
 
-                $(".date").easydate({ 'live': false });
-                $(".date").show();
-            });
-        };
+    var ajax_call = function () {
+        $.getJSON($('#ajaxUrl').val() + '/' + $('#lastUpdate').val(), function(data) {
 
-        setInterval(ajax_call_project_files, 5 * 1000);
-    }
+            if ($("#openTasksCount").get(0)) {
+                $('#openTasksCount').html(data.openTasksCount);
+                $('#allTasksCount').html(data.allTasksCount);
+                $('#userTodaysProductivityText').html(data.userTodaysProductivity);
+                $('#userTodaysTime').html(data.userTodaysTime);
+                $('#userMonthsTime').html(data.userMonthsTime);
+                $('#taskPercent').data('easyPieChart').update(data.taskPercent);
+                $('#userTodaysProductivity').data('easyPieChart').update(data.userTodaysProductivity);
+                $('#userTodaysTimePercent').data('easyPieChart').update(data.userTodaysTimePercent);
+                $('#userMonthsTimePercent').data('easyPieChart').update(data.userMonthsTimePercent);
+                $('#dashboardActivityBlock').prepend(data.notificationDropdown);
+            }
+
+            if ($('#notificationsCount').html() === "0") {
+                $('#notificationDropdown').html(data.notificationDropdown);
+            }
+            else {
+                $('#notificationDropdown').prepend(data.notificationDropdown);
+            }
+
+            $('#notificationsCount').html(parseFloat($('#notificationsCount').html()) + parseFloat(data.notificationsCount));
+            $('#lastUpdate').val(data.lastUpdate);
+
+            $(".date").easydate({ 'live': false });
+            $(".date").show();
+        });
+    };
+
+    setInterval(ajax_call, 5 * 1000);
 
     $(".date").easydate({ 'live': false });
     $(".date").show();
