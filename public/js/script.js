@@ -102,14 +102,17 @@ $(document).ready(function() {
                 $('#dashboardActivityBlock').prepend(data.notificationDropdown);
             }
 
-            if ($('#notificationsCount').html() === "0") {
+            if ($('#notificationsCount').html() === "0" && data.notificationDropdown !== "") {
                 $('#notificationDropdown').html(data.notificationDropdown);
             }
-            else {
+            else if (data.notificationDropdown !== "") {
                 $('#notificationDropdown').prepend(data.notificationDropdown);
             }
 
-            $('#notificationsCount').html(parseFloat($('#notificationsCount').html()) + parseFloat(data.notificationsCount));
+            if (data.notificationDropdown !== "") {
+                $('#notificationsCount').html(parseFloat($('#notificationsCount').html()) + parseFloat(data.notificationsCount));
+            }
+
             $('#lastUpdate').val(data.lastUpdate);
 
             $(".date").easydate({ 'live': false });
