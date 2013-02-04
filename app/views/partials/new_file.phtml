@@ -1,0 +1,26 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div id="newFile" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Add a new file</h3>
+    </div>
+
+    <?php echo Tag::form(array('project/newfile/' . $currentProject->id, 'class' => 'form-horizontal', 'enctype' => 'multipart/form-data')); ?>
+        <div class="modal-body">
+            <div class="control-group">
+                <label class="control-label" for="newFileInput">Add File</label>
+                <div class="controls">
+                    <input type="file" class="input-block-level" placeholder="Select file to upload" name="file" id="newFileInput">
+                    <input type="hidden" value="<?php echo $controller; ?>" name="controller">
+                    <input type="hidden" value="<?php echo $action . '/' . $url_params; ?>" name="action">
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-primary">Add File</button>
+        </div>
+    </form>
+</div>

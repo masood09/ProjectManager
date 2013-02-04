@@ -16,17 +16,12 @@
 
 class AjaxController extends ControllerBase
 {
-    protected function _generateNotificationsHtml()
+    public function getupdatesAction($lastUpdate = null)
     {
-        $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
-        $this->view->render('partials', 'header_notification');
-        $this->view->finish();
+        if (is_null($lastUpdate)) {
+            $lastUpdate = time();
+        }
 
-        return $this->view->getContent();
-    }
-
-    public function dashboardAction()
-    {
         $return['openTasksCount'] = $this->currentUser->getOpenTasksCount();
         $return['allTasksCount'] = $this->currentUser->getAllTasksCount();
         $return['taskPercent'] = ceil ((($return['allTasksCount'] - $return['openTasksCount']) / $return['allTasksCount']) * 100);
@@ -35,19 +30,30 @@ class AjaxController extends ControllerBase
         $return['userMonthsTime'] = $this->currentUser->getMonthsTime();
         $return['userMonthsTimePercent'] = $this->currentUser->getMonthsTimePercent($return['userMonthsTime']);
         $return['userTodaysProductivity'] = $this->currentUser->getTodaysProductivity($return['userTodaysTime']);
-        $return['notificationsHtml'] = $this->_generateNotificationsHtml();
+
+        $notifications = Notification::find(array(
+            'conditions' => 'user_id = "' . $this->currentUser->id . '" AND created_at >= "' . date('Y-m-d H:i:s', $lastUpdate) . '" AND read = "0"',
+            'order' => 'created_at DESC',
+        ));
+
+        $return['notificationsCount'] = count($notifications);
+
+        if (count($notifications) > 0) {
+            $return['notificationDropdown'] = '';
+            foreach ($notifications AS $notification) {
+                $return['notificationDropdown'] .= '<a href="' . $this->url->get($notification->getUrl()) . '" class="activity-preview new"><div class="media"><img class="media-object pull-left" src="' . $this->url->get('profile/' . $notification->getUser()->getProfilePicture()) . '"><abbr class="date pull-right">' . date('D, j M Y H:i:s O', strtotime($notification->created_at)) . '</abbr><div class="media-body"><p class="media-heading span4">' . $notification->message . '</p></div></div></a>
+                ';
+            }
+        }
+        else {
+            $return['notificationDropdown'] = '';
+        }
+
+        $return ['lastUpdate'] = time();
 
         echo json_encode($return);
 
         $this->view->disable();
-    }
-
-    public function projecttasksAction()
-    {
-        $return['notificationsHtml'] = $this->_generateNotificationsHtml();
-
-        echo json_encode($return);
-
-        $this->view->disable();
+        return;
     }
 }

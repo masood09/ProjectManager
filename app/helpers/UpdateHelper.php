@@ -167,26 +167,6 @@ class UpdateHelper
                     }
                 }
 
-                $uploads = Upload::find('task_id IS NULL AND comment_id IS NULL');
-
-                foreach ($uploads AS $upload) {
-                    foreach ($upload->getProject()->getProjectUser() AS $projectUser) {
-                        if ($upload->user_id != $projectUser) {
-                            $notification = new Notification();
-
-                            $notification->user_id = $projectUser->user_id;
-                            $notification->message = '<strong>' . $upload->getUser()->full_name . '</strong> uploaded a new file to the project <strong>' . $upload->getProject()->name . '</strong> : "' . $upload->filename . '"';
-                            $notification->project_id = $upload->project_id;
-                            $notification->upload_id = $upload->id;
-                            $notification->read = 1;
-                            $notification->created_by = $upload->user_id;
-                            $notification->created_at = $upload->uploaded_at;
-
-                            $notification->save();
-                        }
-                    }
-                }
-
                 Config::setValue('core/version', $version);
                 break;
             default:

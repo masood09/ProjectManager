@@ -1,0 +1,93 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<input type="hidden" id="project_files_ajax_url" value="<?php echo $this->url->get('ajax/projectfiles'); ?>">
+
+<div class="span12 header">
+    <a href="#newFile" data-toggle="modal" class="btn pull-right">
+        <i class="icon-plus"></i>
+        Add File
+    </a>
+    <h4>Files</h4>
+</div>
+
+<?php $this->partial('partials/new_file'); ?>
+
+<?php if (count($allProjectFiles) == 0 && count($allTasksFiles) == 0) { ?>
+    <div class="span12 align-center">
+        <h5>No files for this Project! Why not add some?</h5>
+    </div>
+<?php } else { ?>
+    <div class="span12">
+        <?php if (count($allProjectFiles) > 0) { ?>
+            <h4 class="header">Project Files</h4>
+
+            <?php $_i = 0; ?>
+
+            <?php foreach ($allProjectFiles AS $upload) { ?>
+                <?php if ($_i % 3 == 0) { ?>
+                    <div class="row">
+                <?php } ?>
+
+                <div class="media-files span4">
+                    <a class="pull-left" href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>">
+                        <img class="media-object" src="<?php echo $this->url->get('img/mimes/' . $upload->getIconFile()); ?>">
+                    </a>
+
+                    <div class="media-body">
+                        <p class="media-heading">
+                            <a href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>"><?php echo $upload->filename; ?></a>
+                        </p>
+                        <p class="comment-link"><?php echo $upload->getSize(); ?></p>
+                        <p class="comment-link">Uploaded by <?php echo $upload->getUser()->full_name; ?></p>
+                        <p class="comment-link">
+                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->uploaded_at)); ?></abbr>
+                        </p>
+                    </div>
+                </div>
+
+                <?php if (($_i + 1) % 3 == 0 || ($_i + 1) == count($allProjectFiles)) { ?>
+                    </div>
+                    <br><br>
+                <?php } ?>
+
+                <?php $_i++; ?>
+            <?php } ?>
+        <?php } ?>
+
+        <?php if (count($allTasksFiles) > 0) { ?>
+            <h4 class="header">Files posted in tasks</h4>
+
+            <?php $_i = 0; ?>
+
+            <?php foreach ($allTasksFiles AS $upload) { ?>
+                <?php if ($_i % 3 == 0) { ?>
+                    <div class="row">
+                <?php } ?>
+
+                <div class="media-files span4">
+                    <a class="pull-left" href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>">
+                        <img class="media-object" src="<?php echo $this->url->get('img/mimes/' . $upload->getIconFile()); ?>">
+                    </a>
+
+                    <div class="media-body">
+                        <p class="media-heading">
+                            <a href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>"><?php echo $upload->filename; ?></a>
+                        </p>
+                        <p class="comment-link"><?php echo $upload->getSize(); ?></p>
+                        <p class="comment-link">Uploaded by <?php echo $upload->getUser()->full_name; ?></p>
+                        <p class="comment-link">
+                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->uploaded_at)); ?></abbr>
+                        </p>
+                    </div>
+                </div>
+
+                <?php if (($_i + 1) % 3 == 0 || ($_i + 1) == count($allTasksFiles)) { ?>
+                    </div>
+                    <br><br>
+                <?php } ?>
+
+                <?php $_i++; ?>
+            <?php } ?>
+        <?php } ?>
+    </div>
+<?php } ?>

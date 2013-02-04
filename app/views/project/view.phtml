@@ -1,5 +1,6 @@
 <?php use Phalcon\Tag as Tag ?>
 
+<input type="hidden" id="project_tasks_ajax_url" value="<?php echo $this->url->get('ajax/projecttasks'); ?>">
 
 <div class="span12 header">
     <a href="#newTask" data-toggle="modal" class="btn pull-right">
@@ -64,13 +65,20 @@
                 <span>
                     Hours : <a href="#" id="task_hours" data-name="hours" data-type="number" data-pk="<?php echo $currentTask->id; ?>" data-url="<?php echo $this->url->get('task/updateajax'); ?>" data-original-title="Hours" class="editable editable-click"><?php echo $currentTask->getHours(); ?></a>
                 </span>
+
+                <?php if ($currentTask->getTimeSpent()) { ?>
+                    &nbsp;
+                    <span>
+                        Spent : <span class="text-warning"><?php echo $currentTask->getTimeSpent(); ?></span>
+                    </span>
+                <?php } ?>
             </p>
         </div>
 
         <div id="comment_block">
         <?php foreach ($currentTask->getComments() AS $comment) { ?>
             <div class="message" id="comment-<?php echo $comment->id; ?>">
-                <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
+                <img src="<?php echo $this->url->get('profile/' . $comment->getUser()->getProfilePicture()); ?>" class="img-rounded pull-left">
 
                 <div class="message-body">
                     <div class="pull-right">
@@ -88,22 +96,92 @@
                     <div id="comment-content-<?php echo $comment->id; ?>" class="comment_content" data-name="comment" data-type="wysihtml5" data-pk="<?php echo $comment->id; ?>" data-toggle="manual" data-url="<?php echo $this->url->get('task/updatecommentajax'); ?>" data-original-title="Edit Comment" class="editable" tabindex="-1">
                         <?php echo $comment->comment; ?>
                     </div>
+
+                    <?php if (count($comment->getUpload()) > 0) { ?>
+                        <br>
+                        <div class="uploads">
+                            <h6>Attachments</h6>
+
+                            <?php foreach ($comment->getUpload() AS $upload) { ?>
+                                <div class="media">
+                                    <a class="pull-left" href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>">
+                                        <img class="media-object" src="<?php echo $this->url->get('img/mimes/' . $upload->getIconFile()); ?>">
+                                    </a>
+
+                                    <div class="media-body">
+                                        <p class="media-heading">
+                                            <a href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>"><?php echo $upload->filename; ?></a>
+                                        </p>
+                                        <p class="comment-link"><?php echo $upload->getSize(); ?></p>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         <?php } ?>
         </div>
 
         <div class="message">
-            <img src="<?php echo $this->url->get('profile/default.jpg'); ?>" class="img-rounded pull-left">
+            <img src="<?php echo $this->url->get('profile/' . $currentUser->getProfilePicture()); ?>" class="img-rounded pull-left">
             <div class="message-body">
                 <h5 class="text-error">Post a Comment</h5>
-                <input type="hidden" name="task_id" id="comment-form-task-id" value="<?php echo $currentTask->id; ?>">
-                <textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
+                <form id="new-comment-form" enctype="multipart/form-data" method="post" action="<?php echo $this->url->get('task/postcomment'); ?>">
+                    <input type="hidden" name="task_id" id="comment-form-task-id" value="<?php echo $currentTask->id; ?>">
+                    <input type="hidden" name="comment" id="new-comment-comment">
+                    <input type="hidden" name="controller" value="<?php echo $controller; ?>">
+                    <input type="hidden" name="action" value="<?php echo $action . '/' . $url_params; ?>">
+                    <textarea id="comment-textarea" class="input-block-level" rows="6"></textarea>
 
-                <p>
-                    <button id="post-comment" class="btn" data-url="<?php echo $this->url->get('task/postcomment'); ?>">Post Comment</button>
-                </p>
+                    <div id="new-comment-file-upload">
+                        <p>
+                            <input type="file" name="file0">
+
+                            <span class="pull-right">
+                                <a href="#" class="btn btn-small btn-warning file-plus">
+                                    <i class="icon-plus"></i>
+                                    Add more files
+                                </a>
+                            </span>
+                        </p>
+                    </div>
+
+                    <p>
+                        <button id="post-comment" class="btn" data-url="<?php echo $this->url->get('task/postcomment'); ?>">Post Comment</button>
+                    </p>
+                </form>
             </div>
+        </div>
+
+        <div id="task_people" class="people_block">
+            <?php $_i = 0; ?>
+            <?php $projectUsers = $currentProject->getProjectUsers(); ?>
+            <?php foreach($projectUsers AS $projectUser) { ?>
+                <?php if ($_i % 2 == 0) { ?>
+                    <div class="row">
+                <?php } ?>
+
+                    <div class="span4">
+                        <div class="people">
+                            <img src="<?php echo $this->url->get('profile/' . $projectUser->getProfilePicture()); ?>" class="img-rounded pull-left" alt="<?php echo $projectUser->full_name; ?>">
+                            <div class="people-body">
+                                <h5><?php echo $projectUser->full_name; ?></h5>
+                                <p class="text-warning"><?php echo $currentTask->calculateTotalTimeSpentByUser($projectUser->id); ?></p>
+                                <label class="checkbox">
+                                    <input type="checkbox" <?php echo ($currentTask->isSubscribed($projectUser->id)) ? 'checked="checked"' : ''; ?> <?php echo ($currentTask->assigned_to == $projectUser->id) ? 'disabled="disabled"' : ''; ?> class="people-checkbox" data-url="<?php echo $this->url->get('task/subscribeajax/' . $currentProject->id . '/' . $currentTask->id . '/' . $projectUser->id); ?>">
+                                    Subscribe
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                <?php if (($_i + 1) % 2 == 0 || ($_i + 1) == count($projectUsers)) { ?>
+                    </div>
+                <?php } ?>
+
+                <?php $_i++; ?>
+            <?php } ?>
         </div>
 
     </div>

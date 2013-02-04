@@ -56,16 +56,90 @@ class ProjectController extends ControllerBase
         }
 
         NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
-        NotificationHelper::markTaskRead($this->currentUser->id, $project->id, $currentTask->id);
+
+        if ($currentTask) {
+            NotificationHelper::markTaskRead($this->currentUser->id, $project->id, $currentTask->id);
+        }
 
         $this->view->setVar('currentProject', $project);
         $this->view->setVar('allProjectTasks', $allProjectTasks);
         $this->view->setVar('currentTask', $currentTask);
         $this->view->setVar('body_id', 'project_tasks');
-        $this->view->setVar('url_params', $project->id . '/' . $currentTask->id);
+
+        if ($currentTask) {
+            $this->view->setVar('url_params', $project->id . '/' . $currentTask->id);
+        }
+        else {
+            $this->view->setVar('url_params', $project->id);
+        }
 
         if ($currentTask) {
             Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
+        }
+        else {
+            Phalcon\Tag::setTitle($project->name);
+        }
+    }
+
+    public function notesAction($project_id, $note_id = null)
+    {
+        if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $project_id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($this->currentUser)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $allProjectNotes = $project->getAllNotes();
+
+        if (count($allProjectNotes) > 0) {
+            if (is_null($note_id)) {
+                $currentNote = $allProjectNotes[0];
+            }
+            else {
+                $currentNote = Note::findFirst('id = "' . $note_id . '"');
+
+                if (!$currentNote) {
+                    $this->response->redirect('project/notes/' . $project->id);
+                    $this->view->disable();
+                    return;
+                }
+            }
+        }
+
+        NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
+
+        if ($currentNote) {
+            NotificationHelper::markNoteRead($this->currentUser->id, $project->id, $currentNote->id);
+        }
+
+        $this->view->setVar('currentProject', $project);
+        $this->view->setVar('allProjectNotes', $allProjectNotes);
+        $this->view->setVar('currentNote', $currentNote);
+        $this->view->setVar('body_id', 'project_notes');
+
+        if ($currentNote) {
+            $this->view->setVar('url_params', $project->id . '/' . $currentNote->id);
+        }
+        else {
+            $this->view->setVar('url_params', $project->id);
+        }
+
+        if ($currentNote) {
+            Phalcon\Tag::setTitle($project->name . ' | ' . $currentNote->title);
         }
         else {
             Phalcon\Tag::setTitle($project->name);
@@ -225,6 +299,156 @@ class ProjectController extends ControllerBase
             }
 
             $this->response->redirect('project/view/' . $project->id . '/' . $task->id);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index/');
+        $this->view->disable();
+        return;
+    }
+
+    public function newnoteAction($project_id = null)
+    {
+        if ($this->request->isPost()) {
+            $project = Project::findFirst('id = "' . $project_id . '"');
+
+            if (!$project) {
+                $this->response->redirect('dashboard/index/');
+                $this->view->disable();
+                return;
+            }
+
+            if (!$project->isInProject($this->currentUser)) {
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
+            }
+
+            $title = $this->request->getPost('title');
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'dashboard';
+                $action = 'index';
+            }
+
+            if (!$title) {
+                $this->flashSession->error('Note title should be specified');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            $note = new Note();
+            $note->title = htmlspecialchars($title);
+            $note->project_id = $project_id;
+            $note->user_id = $this->currentUser->id;
+            $note->created_at = new Phalcon\Db\RawValue('now()');
+
+            if (!$note->save()) {
+                foreach ($note->getMessages() as $message) {
+                    $this->flashSession->error((string) $message);
+                    $this->response->redirect($controller . '/' . $action);
+                    $this->view->disable();
+                    return;
+                }
+            }
+
+            NotificationHelper::newNoteNotification($project, $note);
+
+            $this->response->redirect('project/notes/' . $project->id . '/' . $note->id);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index/');
+        $this->view->disable();
+        return;
+    }
+
+    public function filesAction($project_id)
+    {
+        if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $project_id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($this->currentUser)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $allProjectFiles = $project->getProjectFiles(false);
+        $allTasksFiles = $project->getTaskFiles();
+
+        NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
+
+        $this->view->setVar('currentProject', $project);
+        $this->view->setVar('allProjectFiles', $allProjectFiles);
+        $this->view->setVar('allTasksFiles', $allTasksFiles);
+        $this->view->setVar('body_id', 'project_files');
+
+        $this->view->setVar('url_params', $project->id);
+
+        Phalcon\Tag::setTitle($project->name . ' | Files');
+    }
+
+    public function newfileAction($project_id)
+    {
+        if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if ($this->request->isPost()) {
+            $project = Project::findFirst('id = "' . $project_id . '"');
+
+            if (!$project) {
+                $this->response->redirect('dashboard/index/');
+                $this->view->disable();
+                return;
+            }
+
+            if (!$project->isInProject($this->currentUser)) {
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
+            }
+
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'dashboard';
+                $action = 'index';
+            }
+
+            if ($this->request->hasFiles() == true) {
+                foreach ($this->request->getUploadedFiles() as $file) {
+                    if (!$file->getName() || !$file->getTempName() || $file->getSize() == 0) {
+                        continue;
+                    }
+
+                    $this->uploadHelper->uploadFile($this->currentUser->id, $file, $project->id);
+                }
+
+                $this->flashSession->success('File uploaded successfully');
+            }
+
+            $this->response->redirect($controller . '/' . $action . '#comment-' . $comment->id);
             $this->view->disable();
             return;
         }

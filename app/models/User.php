@@ -215,4 +215,13 @@ class User extends Phalcon\Mvc\Model
 
         return $projects;
     }
+
+    public function getProfilePicture()
+    {
+        if (file_exists(__DIR__ . '/../../public/profile/' . $this->id . '.jpg')) {
+            return $this->id . '.jpg';
+        }
+
+        return 'default.jpg';
+    }
 }

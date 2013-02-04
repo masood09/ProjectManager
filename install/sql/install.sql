@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `note` (
   `user_id` int(10) unsigned NOT NULL,
   `project_id` int(10) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
-  `content` text NOT NULL,
+  `content` text,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

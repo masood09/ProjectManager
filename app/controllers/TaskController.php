@@ -51,6 +51,17 @@ class TaskController extends ControllerBase
                     if ($task->getProject()->isInProject($assignedUser)) {
                         $task->assigned_to = $value;
 
+                        $taskUser = TaskUser::findFirst('user_id="' . $assignedUser->id . '" AND task_id="' . $task->id . '"');
+
+                        if (!$taskUser) {
+                            $taskUser = new TaskUser();
+                            $taskUser->user_id = $assignedUser->id;
+                            $taskUser->task_id = $task->id;
+                            $taskUser->created_at = new Phalcon\Db\RawValue('now()');
+
+                            $taskUser->save();
+                        }
+
                         if ($value != $this->currentUser->id) {
                             NotificationHelper::taskAssignedNotification($task->getProject(), $task, $this->currentUser);
                         }
@@ -136,37 +147,35 @@ class TaskController extends ControllerBase
     public function postcommentAction()
     {
         if ($this->request->isPost()) {
-            $return = array();
-
             $task_id = $this->request->getPost('task_id');
             $task = Task::findFirst('id = "' . $task_id . '"');
 
             if (!$task) {
+                $this->response->redirect('dashboard/index/');
                 $this->view->disable();
-
-                $return['success'] = false;
-                echo json_encode($return);
-
                 return;
             }
 
             if (!$task->getProject()->isInProject($this->currentUser)) {
+                $this->response->redirect('dashboard/index/');
                 $this->view->disable();
-
-                $return['success'] = false;
-                echo json_encode($return);
-
                 return;
             }
 
             $message = $this->request->getPost('comment');
 
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'dashboard';
+                $action = 'index';
+            }
+
             if (!$message || $message == '') {
+                $this->flashSession->error('Comment should be specified');
+                $this->response->redirect($controller . '/' . $action);
                 $this->view->disable();
-
-                $return['success'] = false;
-                echo json_encode($return);
-
                 return;
             }
 
@@ -177,11 +186,12 @@ class TaskController extends ControllerBase
             $comment->created_at = new Phalcon\Db\RawValue('now()');
 
             if ($comment->save() != true) {
+                foreach ($comment->getMessages() as $message) {
+                    $this->flashSession->error((string) $message);
+                }
+
+                $this->response->redirect($controller . '/' . $action);
                 $this->view->disable();
-
-                $return['success'] = false;
-                echo json_encode($return);
-
                 return;
             }
 
@@ -196,9 +206,18 @@ class TaskController extends ControllerBase
                 $taskUser->save();
             }
 
-            // Let's increase the task comment count by 1.
             $task->comments += 1;
             $task->save();
+
+            if ($this->request->hasFiles() == true) {
+                foreach ($this->request->getUploadedFiles() as $file) {
+                    if (!$file->getName() || !$file->getTempName() || $file->getSize() == 0) {
+                        continue;
+                    }
+
+                    $this->uploadHelper->uploadFile($this->currentUser->id, $file, $task->getProject()->id, $task->id, $comment->id);
+                }
+            }
 
             NotificationHelper::newCommentNotification(
                 $task->getProject(),
@@ -206,20 +225,105 @@ class TaskController extends ControllerBase
                 $comment
             );
 
-            $this->view->setVar('comment', Comment::findFirst('id = "' . $comment->id . '"'));
-            $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
-            $this->view->render('ajax', 'comment');
-            $this->view->finish();
+            $this->flashSession->success('Comment posted successfully');
 
-            $return['success'] = true;
-            $return['comment_html'] = $this->view->getContent();
-            $return['comment_html_id'] = '#comment-content-' . $comment->id;
+            $this->response->redirect($controller . '/' . $action . '#comment-' . $comment->id);
+            $this->view->disable();
+            return;
+        }
 
+        $this->response->redirect('dashboard/index/');
+        $this->view->disable();
+        return;
+    }
+
+    public function subscribeajaxAction($project_id, $task_id, $user_id)
+    {
+    if (is_null($project_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (is_null($task_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (is_null($user_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $project_id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($this->currentUser)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $user = User::findFirst('id = "' . $user_id . '"');
+
+        if (!$user) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$project->isInProject($user)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $task = Task::findFirst('id = "' . $task_id . '"');
+
+        if (!$task) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if ($task->assigned_to == $user->id) {
+            $return['subscribed'] = true;
             echo json_encode($return);
             $this->view->disable();
             return;
         }
 
+        $taskUser = TaskUser::findFirst('user_id="' . $user->id . '" AND task_id="' . $task->id . '"');
+
+        if (!$taskUser) {
+            $taskUser = new TaskUser();
+            $taskUser->user_id = $user->id;
+            $taskUser->task_id = $task->id;
+            $taskUser->created_at = new Phalcon\Db\RawValue('now()');
+
+            $taskUser->save();
+
+            $return['subscribed'] = true;
+            echo json_encode($return);
+            $this->view->disable();
+            return;
+        }
+        else {
+            $taskUser->delete();
+            $return['subscribed'] = false;
+            echo json_encode($return);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
         $this->view->disable();
         return;
     }

@@ -1,5 +1,7 @@
 <?php use Phalcon\Tag as Tag ?>
 
+<input type="hidden" id="dashboard_ajax_url" value="<?php echo $this->url->get('ajax/dashboard'); ?>">
+
 <div class="span4">
     <h4 class="header">Tasks assigned to you</h4>
     <br>
@@ -35,5 +37,27 @@
 <div class="span8">
     <h4 class="header">Activity</h4>
 
-    <?php $this->partial('partials/dashboard_activity'); ?>
+    <div id="dashboardActivityBlock" class="activity">
+        <?php if (count($activities) == 0) { ?>
+            <div class="align-center">
+                <h5>No activity!</h5>
+            </div>
+        <?php } else { ?>
+            <?php foreach ($activities AS $activity) { ?>
+                <a href="<?php echo $this->url->get($activity->getUrl()); ?>" class="activity-preview <?php echo ($activity->read == 0) ? 'new' : ''; ?>">
+                    <div class="media">
+                        <img class="media-object pull-left" src="<?php echo $this->url->get('profile/' . $activity->getUser()->getProfilePicture()); ?>">
+
+                        <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($activity->created_at)); ?></abbr>
+
+                        <div class="media-body">
+                            <p class="media-heading span6">
+                                <?php echo $activity->message; ?>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            <?php } ?>
+        <?php } ?>
+    </div>
 </div>

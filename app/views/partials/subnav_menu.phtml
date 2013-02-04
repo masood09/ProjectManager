@@ -46,26 +46,27 @@
 <?php } else if ($controller == 'project') { ?>
     <ul>
         <li>
-            <a href="<?php $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
                 <i class="icon-tasks icon-4x"></i>
                 <br>
                 Tasks
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="<?php echo $this->url->get('project/notes/' . $currentProject->id); ?>" <?php echo ($action == 'notes') ? 'class="active"' : ''; ?>>
                 <i class="icon-file icon-4x"></i>
                 <br>
                 Notes
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="<?php echo $this->url->get('project/files/' . $currentProject->id); ?>" <?php echo ($action == 'files') ? 'class="active"' : ''; ?>>
                 <i class="icon-cloud icon-4x"></i>
                 <br>
                 Files
             </a>
         </li>
+        <?php if ($currentUser->isAdmin()) { ?>
         <li>
             <a href="#">
                 <i class="icon-cogs icon-4x"></i>
@@ -73,5 +74,6 @@
                 Manage
             </a>
         </li>
+        <?php } ?>
     </ul>
 <?php } ?>

@@ -58,7 +58,39 @@
                         </li>
                     <?php } else { ?>
                         <li id="header-notification" class="dropdown">
-                            <?php $this->partial('partials/header_notification'); ?>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span id="notificationsCount" class="badge badge-important"><?php echo count($notifications); ?></span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <?php if (count($notifications) == 0) { ?>
+                                        <div id="notificationDropdown" class="activity span6">
+                                            <div class="align-center">
+                                                <h5>No new notifications!</h5>
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div id="notificationDropdown" class="activity span6">
+                                            <?php foreach ($notifications AS $notification) { ?>
+                                                <a href="<?php echo $this->url->get($notification->getUrl()); ?>" class="activity-preview new">
+                                                    <div class="media">
+                                                        <img class="media-object pull-left" src="<?php echo $this->url->get('profile/default.jpg'); ?>">
+
+                                                        <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($notification->created_at)); ?></abbr>
+
+                                                        <div class="media-body">
+                                                            <p class="media-heading span4">
+                                                                <?php echo $notification->message; ?>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            <?php } ?>
+                                        </div>
+                                    <?php } ?>
+                                </li>
+                            </ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
