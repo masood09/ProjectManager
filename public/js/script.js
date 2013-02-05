@@ -16,7 +16,7 @@
 $(document).ready(function() {
     $.fn.editable.defaults.mode = 'inline';
 
-    if ($("#dashboard").get(0)) {
+    if ($("#openTasksCount").get(0)) {
         $('.chart').easyPieChart({
             barColor: function(percent) {
                 percent /= 100;

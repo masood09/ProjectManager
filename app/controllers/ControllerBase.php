@@ -53,7 +53,25 @@ class ControllerBase extends Phalcon\Mvc\Controller
             $this->view->setVar('notifications', $notifications);
 
             $this->userTodaysTime = $this->currentUser->getDaysTime();
+            $openTasksCount = $this->currentUser->getOpenTasksCount();
+            $allTasksCount = $this->currentUser->getAllTasksCount();
+            $closedTasksCount = $allTasksCount - $openTasksCount;
+
+            $this->view->setVar('openTasksCount', $openTasksCount);
+            $this->view->setVar('allTasksCount', $allTasksCount);
+            $this->view->setVar('taskPercent', ceil (($closedTasksCount / $allTasksCount) * 100));
+
+            $userTodaysTime = $this->userTodaysTime;
+            $userTodaysTimePercent = $this->currentUser->getDaysTimePercent($userTodaysTime);
+            $userMonthsTime = $this->currentUser->getMonthsTime();
+            $userMonthsTimePercent = $this->currentUser->getMonthsTimePercent($userMonthsTime);
+            $userTodaysProductivity = $this->currentUser->getDaysProductivity($userTodaysTime);
+
             $this->view->setVar('userTodaysTime', $this->userTodaysTime);
+            $this->view->setVar('userTodaysProductivity', $userTodaysProductivity);
+            $this->view->setVar('userTodaysTimePercent', $userTodaysTimePercent);
+            $this->view->setVar('userMonthsTime', $userMonthsTime);
+            $this->view->setVar('userMonthsTimePercent', $userMonthsTimePercent);
 
             $this->attendance = Attendance::findFirst('user_id = "' . $this->currentUser->id . '" AND date = CURDATE() AND end IS NULL');
 
