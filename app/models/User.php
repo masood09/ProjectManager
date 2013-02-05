@@ -159,7 +159,7 @@ class User extends Phalcon\Mvc\Model
 
     public function getDaysTimePercent($todaysTime)
     {
-        $targetTime = 8;
+        $targetTime = (int)Config::getValue('attendance/days_target_time');
         $explode = explode(':', $todaysTime);
 
         $_daysTime = ($explode[0] * 60) + $explode[1];
@@ -220,7 +220,7 @@ class User extends Phalcon\Mvc\Model
             $year = date('Y');
         }
 
-        $daysTargetTime = 8;
+        $daysTargetTime = (int)Config::getValue('attendance/days_target_time');
         $startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
         $endDate = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
         $workingDays = AttendanceHelper::getWorkingDays($startDate, $endDate);
