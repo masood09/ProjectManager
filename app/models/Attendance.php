@@ -28,4 +28,33 @@ class Attendance extends Phalcon\Mvc\Model
         $this->belongsTo('user_id', 'User', 'id');
         $this->belongsTo('task_id', 'Task', 'id');
     }
+
+    public function getTimeSpent()
+    {
+        $timeStamp = 0;
+
+        $start = strtotime($this->start);
+
+        if (is_null($this->end) && $this->date == date('Y-m-d')) {
+            $end = time();
+        }
+        else if (is_null($this->end)) {
+            $end = $start;
+        }
+        else {
+            $end = strtotime($this->end);
+        }
+
+        $timeStamp += ($end - $start);
+
+        $oldTimeZone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+        $time = date('j:H:i', $timeStamp);
+        date_default_timezone_set($oldTimeZone);
+
+        $explode = explode(':', $time);
+        $time = ((($explode[0] - 1) * 24) + ($explode[1])) . ':' . $explode[2];
+
+        return $time;
+    }
 }

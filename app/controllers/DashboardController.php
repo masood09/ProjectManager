@@ -26,14 +26,13 @@ class DashboardController extends ControllerBase
         $this->view->setVar('allTasksCount', $allTasksCount);
         $this->view->setVar('taskPercent', ceil (($closedTasksCount / $allTasksCount) * 100));
 
-        $userTodaysTime = $this->currentUser->getTodaysTime();
+        $userTodaysTime = $this->userTodaysTime;
         $userTodaysTimePercent = $this->currentUser->getTodaysTimePercent($userTodaysTime);
         $userMonthsTime = $this->currentUser->getMonthsTime();
         $userMonthsTimePercent = $this->currentUser->getMonthsTimePercent($userMonthsTime);
         $userTodaysProductivity = $this->currentUser->getTodaysProductivity($userTodaysTime);
 
         $this->view->setVar('userTodaysProductivity', $userTodaysProductivity);
-        $this->view->setVar('userTodaysTime', $userTodaysTime);
         $this->view->setVar('userTodaysTimePercent', $userTodaysTimePercent);
         $this->view->setVar('userMonthsTime', $userMonthsTime);
         $this->view->setVar('userMonthsTimePercent', $userMonthsTimePercent);

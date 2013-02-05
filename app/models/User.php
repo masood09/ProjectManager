@@ -216,6 +216,28 @@ class User extends Phalcon\Mvc\Model
         return $projects;
     }
 
+    public function getAllTasks()
+    {
+        $tasks = array();
+        $userTasks = array();
+        $taskIds = array();
+
+        $userTasks = TaskUser::find('user_id = "' . $this->id . '"');
+
+        foreach ($userTasks AS $userTask) {
+            $taskIds[] = $userTask->task_id;
+        }
+
+        if (count($taskIds) > 0) {
+            $tasks = Task::find(array(
+                'conditions' => 'id IN ("' . implode('", "', $taskIds) . '") AND status = 0',
+                'order' => 'project_id ASC, created_at DESC'
+            ));
+        }
+
+        return $tasks;
+    }
+
     public function getProfilePicture()
     {
         if (file_exists(__DIR__ . '/../../public/profile/' . $this->id . '.jpg')) {

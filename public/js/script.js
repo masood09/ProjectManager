@@ -89,6 +89,12 @@ $(document).ready(function() {
     var ajax_call = function () {
         $.getJSON($('#ajaxUrl').val() + '/' + $('#lastUpdate').val(), function(data) {
 
+            $('#timer-userTodaysTime').html(data.userTodaysTime);
+
+            if ($("#timer-currentTaskTime").get(0)) {
+                $("#timer-currentTaskTime").html(data.currentTaskTime);
+            }
+
             if ($("#openTasksCount").get(0)) {
                 $('#openTasksCount').html(data.openTasksCount);
                 $('#allTasksCount').html(data.allTasksCount);
@@ -121,6 +127,15 @@ $(document).ready(function() {
     };
 
     setInterval(ajax_call, 5 * 1000);
+
+    $('.timer-task-a').click(function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        task_id = $(this).attr('data-task-id');
+        $('#timer-form-task-id').val(task_id);
+        $('#timer-form').submit();
+    });
 
     $(".date").easydate({ 'live': false });
     $(".date").show();

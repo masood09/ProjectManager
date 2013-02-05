@@ -17,6 +17,8 @@
 class ControllerBase extends Phalcon\Mvc\Controller
 {
     protected $currentUser = null;
+    protected $userTodaysTime = null;
+    protected $currentAttendance = null;
 
     protected function _checkSystem()
     {
@@ -49,6 +51,20 @@ class ControllerBase extends Phalcon\Mvc\Controller
             ));
 
             $this->view->setVar('notifications', $notifications);
+
+            $this->userTodaysTime = $this->currentUser->getTodaysTime();
+            $this->view->setVar('userTodaysTime', $this->userTodaysTime);
+
+            $this->attendance = Attendance::findFirst('user_id = "' . $this->currentUser->id . '" AND date = CURDATE() AND end IS NULL');
+
+            if ($this->attendance) {
+                $this->view->setVar('currentAttendance', $this->attendance);
+                $this->view->setVar('userTasks', null);
+            }
+            else {
+                $this->view->setVar('currentAttendance', null);
+                $this->view->setVar('userTasks', $this->currentUser->getAllTasks());
+            }
         }
     }
 }

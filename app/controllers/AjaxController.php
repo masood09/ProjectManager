@@ -49,6 +49,10 @@ class AjaxController extends ControllerBase
             $return['notificationDropdown'] = '';
         }
 
+        if ($this->attendance) {
+            $return['currentTaskTime'] = $this->attendance->getTimeSpent();
+        }
+
         $return ['lastUpdate'] = time();
 
         echo json_encode($return);
