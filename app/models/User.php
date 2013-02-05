@@ -63,12 +63,24 @@ class User extends Phalcon\Mvc\Model
         return count($allTasks);
     }
 
-    public function getTodaysProductivity($todaysTime)
+    public function getDaysProductivity($daysTime, $date=null, $month=null, $year = null)
     {
+        if (is_null($date)) {
+            $date = date('d');
+        }
+
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
         $start = 0;
         $end = 0;
 
-        $attendances = Attendance::find('user_id = "' . $this->id . '" AND date = CURDATE()');
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND DAY(date) = "' . $date. '" AND MONTH(date) = "' . $month . '" AND YEAR(date) = "' . $year . '"');
 
         $i = 0;
 
@@ -87,30 +99,42 @@ class User extends Phalcon\Mvc\Model
             $i++;
         }
 
-        $totalTodaysTimeStamp = $end - $start;
+        $totalDaysTimeStamp = $end - $start;
 
-        if ($totalTodaysTimeStamp == 0) {
+        if ($totalDaysTimeStamp == 0) {
             return 0;
         }
 
         $oldTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
-        $totalTodaysTime = date('H:i', $totalTodaysTimeStamp);
+        $totalDaysTime = date('H:i', $totalDaysTimeStamp);
         date_default_timezone_set($oldTimeZone);
 
-        $explode = explode(':', $todaysTime);
-        $_todaysTime = ($explode[0] * 60) + $explode[1];
-        $explode = explode(':', $totalTodaysTime);
-        $_totalTodaysTime = ($explode[0] * 60) + $explode[1];
+        $explode = explode(':', $daysTime);
+        $_daysTime = ($explode[0] * 60) + $explode[1];
+        $explode = explode(':', $totalDaysTime);
+        $_totalDaysTime = ($explode[0] * 60) + $explode[1];
 
-        return ceil(($_todaysTime / $_totalTodaysTime) * 100);
+        return ceil(($_daysTime / $_totalDaysTime) * 100);
     }
 
-    public function getTodaysTime()
+    public function getDaysTime($date=null, $month=null, $year=null)
     {
-        $todaysTimeStamp = 0;
+        if (is_null($date)) {
+            $date = date('d');
+        }
 
-        $attendances = Attendance::find('user_id = "' . $this->id . '" AND date = CURDATE()');
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
+        $daysTimeStamp = 0;
+
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND DAY(date) = "' . $date. '" AND MONTH(date) = "' . $month . '" AND YEAR(date) = "' . $year . '"');
 
         foreach ($attendances AS $attendance) {
             $start = strtotime($attendance->start);
@@ -122,34 +146,42 @@ class User extends Phalcon\Mvc\Model
                 $end = strtotime($attendance->end);
             }
 
-            $todaysTimeStamp += $end - $start;
+            $daysTimeStamp += $end - $start;
         }
 
         $oldTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
-        $todaysTime = date('H:i', $todaysTimeStamp);
+        $daysTime = date('H:i', $daysTimeStamp);
         date_default_timezone_set($oldTimeZone);
 
-        return $todaysTime;
+        return $daysTime;
     }
 
-    public function getTodaysTimePercent($todaysTime)
+    public function getDaysTimePercent($todaysTime)
     {
         $targetTime = 8;
         $explode = explode(':', $todaysTime);
 
-        $_todaysTime = ($explode[0] * 60) + $explode[1];
+        $_daysTime = ($explode[0] * 60) + $explode[1];
 
         $_targetTime = ($targetTime * 60);
 
-        return ceil(($_todaysTime / $_targetTime) * 100);
+        return ceil(($_daysTime / $_targetTime) * 100);
     }
 
-    public function getMonthsTime()
+    public function getMonthsTime($month=null, $year=null)
     {
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
         $monthsTimeStamp = 0;
 
-        $attendances = Attendance::find('user_id = "' . $this->id . '" AND MONTH(date) = MONTH(NOW()) AND YEAR(date) = YEAR(NOW())');
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND MONTH(date) = "' . $month . '" AND YEAR(date) = "' . $year . '"');
 
         foreach ($attendances AS $attendance) {
             $start = strtotime($attendance->start);
@@ -178,11 +210,19 @@ class User extends Phalcon\Mvc\Model
         return $monthsTime;
     }
 
-    public function getMonthsTimePercent($monthsTime)
+    public function getMonthsTimePercent($monthsTime, $month=null, $year=null)
     {
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
         $daysTargetTime = 8;
-        $startDate = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        $endDate = date('Y-m-t', mktime(0, 0, 0, date('m'), 1, date('Y')));
+        $startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
+        $endDate = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
         $workingDays = AttendanceHelper::getWorkingDays($startDate, $endDate);
 
         $explode = explode(':', $monthsTime);

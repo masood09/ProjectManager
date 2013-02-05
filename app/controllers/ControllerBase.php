@@ -52,7 +52,7 @@ class ControllerBase extends Phalcon\Mvc\Controller
 
             $this->view->setVar('notifications', $notifications);
 
-            $this->userTodaysTime = $this->currentUser->getTodaysTime();
+            $this->userTodaysTime = $this->currentUser->getDaysTime();
             $this->view->setVar('userTodaysTime', $this->userTodaysTime);
 
             $this->attendance = Attendance::findFirst('user_id = "' . $this->currentUser->id . '" AND date = CURDATE() AND end IS NULL');
