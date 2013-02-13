@@ -162,15 +162,24 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown <?php echo ($controller == 'user' || $controller == 'admin') ? 'active' : ''; ?>">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <?php echo $currentUser->full_name; ?>
                             </a>
 
                             <ul class="dropdown-menu">
                                 <li>
+                                    <a href="<?php echo $this->url->get('user/account'); ?>">
+                                        <i class="icon-user"></i>
+                                        &nbsp;&nbsp;
+                                        My Account
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
                                     <a href="<?php echo $this->url->get('user/logout'); ?>">
                                         <i class="icon-off"></i>
+                                        &nbsp;&nbsp;
                                         Logout
                                     </a>
                                 </li>

@@ -72,6 +72,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 'project' => array('view', 'getusersajax', 'createproject', 'newtask', 'notes', 'newnote', 'files', 'newfile'),
                 'task' => array('updateajax', 'updatecommentajax', 'postcomment', 'subscribeajax'),
                 'user' => array('logout'),
+                'user' => array('logout', 'account', 'save', 'changepassword'),
             );
 
             // Resources to which all have access (ie., both registered and not registered users).
@@ -122,10 +123,13 @@ class Security extends Phalcon\Mvc\User\Plugin
             // Grant access to public areas to all.
             foreach ($publicResources AS $resource => $actions) {
                 $acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
-                $acl->allow('Admin', $resource, '*');
-                $acl->allow('Developer', $resource, '*');
-                $acl->allow('Client', $resource, '*');
-                $acl->allow('Guest', $resource, '*');
+
+                foreach ($actions AS $action) {
+                    $acl->allow('Admin', $resource, $action);
+                    $acl->allow('Developer', $resource, $action);
+                    $acl->allow('Client', $resource, $action);
+                    $acl->allow('Guest', $resource, $action);
+                }
             }
 
             $this->_acl = $acl;

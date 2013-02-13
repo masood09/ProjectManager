@@ -51,4 +51,139 @@ class UserController extends ControllerBase
         $this->view->disable();
         return;
     }
+
+    public function accountAction()
+    {
+        $this->view->setVar('body_id', 'user_account');
+        Phalcon\Tag::setTitle('My Account');
+    }
+
+    public function saveAction()
+    {
+        if ($this->request->isPost()) {
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'user';
+                $action = 'account';
+            }
+
+            if ($this->request->hasFiles() == true) {
+                foreach ($this->request->getUploadedFiles() as $file) {
+                    if (!$file->getName() || !$file->getTempName() || $file->getSize() == 0) {
+                        continue;
+                    }
+
+                    $extension = pathinfo($file->getName(), PATHINFO_EXTENSION);
+                    $extension = strtolower($extension);
+
+                    if (!in_array($extension, array('jpg', 'jpeg', 'png'))) {
+                        $this->flashSession->error('You can only upload PNG or JPG files');
+                        $this->response->redirect($controller . '/' . $action);
+                        $this->view->disable();
+                        return;
+                    }
+
+                    switch ($extension) {
+                        case 'jpg':
+                        case 'jpeg':
+                            $ProfileImageOrig = imagecreatefromjpeg($file->getTempName());
+                            break;
+                        case 'png':
+                            $ProfileImageOrig = imagecreatefrompng($file->getTempName());
+                            break;
+                    }
+
+                    list($ProfileImageOrigWidth, $ProfileImageOrigHeight) = getimagesize($file->getTempName());
+
+                    $ProfileImage = imagecreatetruecolor(60, 60);
+                    imagecopyresampled($ProfileImage, $ProfileImageOrig, 0, 0, 0, 0, 60, 60, $ProfileImageOrigWidth, $ProfileImageOrigHeight);
+                    $ProfileImagePath = __DIR__ . '/../../public/profile/' . $this->currentUser->id . '.jpg';
+                    imagejpeg($ProfileImage, $ProfileImagePath, 90);
+                    imagedestroy($ProfileImageOrig);
+                    imagedestroy($ProfileImage);
+                }
+            }
+
+            $full_name = $this->request->getPost('full_name');
+            $email = $this->request->getPost('email');
+
+            $this->currentUser->full_name = $full_name;
+            $this->currentUser->email = $email;
+
+            if (!$this->currentUser->save()) {
+                foreach ($this->currentUser->getMessages() as $message) {
+                    $this->flashSession->error((string) $message);
+                    $this->response->redirect($controller . '/' . $action);
+                    $this->view->disable();
+                    return;
+                }
+            }
+
+            $this->flashSession->success('Changes have been saved successfully!');
+
+            $this->response->redirect($controller . '/' . $action);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
+    public function changepasswordAction()
+    {
+        if ($this->request->isPost()) {
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'user';
+                $action = 'account';
+            }
+
+            $old_password = $this->request->getPost('old_password');
+            $new_password1 = $this->request->getPost('new_password1');
+            $new_password2 = $this->request->getPost('new_password2');
+
+            $Bcrypt = new Bcrypt();
+
+            if (!$Bcrypt->verify($old_password, $this->currentUser->password)) {
+                $this->flashSession->error('You did not enter the correct password');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if ($new_password1 !== $new_password2) {
+                $this->flashSession->error('Passwords do not match.');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            $this->currentUser->password = $Bcrypt->hash($new_password1);
+
+            if (!$this->currentUser->save()) {
+                foreach ($this->currentUser->getMessages() as $message) {
+                    $this->flashSession->error((string) $message);
+                    $this->response->redirect($controller . '/' . $action);
+                    $this->view->disable();
+                    return;
+                }
+            }
+
+            $this->flashSession->success('Password has been changed successfully!');
+
+            $this->response->redirect($controller . '/' . $action);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
 }
