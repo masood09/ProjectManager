@@ -1,12 +1,12 @@
 <?php use Phalcon\Tag as Tag ?>
 
-<?php if ($controller == 'user' || $controller == 'install') { ?>
+<?php if (($controller == 'user' && $action == 'login') || $controller == 'install') { ?>
     <br>
     <br>
     <br>
     <br>
     <br>
-<?php } else if ($controller == 'dashboard') { ?>
+<?php } else if ($controller == 'dashboard' || $controller == 'user') { ?>
     <ul>
         <li>
             <div class="span2 knob">

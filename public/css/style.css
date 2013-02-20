@@ -338,6 +338,10 @@ div.media-files a {
     margin: 0;
 }
 
+.datepicker {
+    z-index: 10000;
+}
+
 footer {
     padding: 20px 0;
     color: #999;

@@ -58,6 +58,133 @@ class UserController extends ControllerBase
         Phalcon\Tag::setTitle('My Account');
     }
 
+    public function leavesAction()
+    {
+        $this->view->setVar('availLeaves', $this->currentUser->getAvailLeavesCount());
+        $this->view->setVar('body_id', 'user_leaves');
+        Phalcon\Tag::setTitle('My Leaves');
+    }
+
+    public function getallleavesajaxAction()
+    {
+        $start = $this->request->getQuery('start');
+        $end = $this->request->getQuery('end');
+        $leavesArray = array();
+
+        $leaves = Leaves::find(array(
+            'conditions' => 'date >= "' . date('Y-m-d', $start) . '" AND date <= "' . date('Y-m-d', $end) . '" AND user_id = "' . $this->currentUser->id . '"',
+            'order' => 'date DESC',
+        ));
+
+        foreach ($leaves AS $leave) {
+            $temp = array();
+            $temp['id'] = 'leave_' . $leave->id;
+            $temp['title'] = $leave->getUser()->full_name;
+            $temp['start'] = $leave->date;
+            $temp['allDay'] = true;
+
+            if (is_null($leave->approved)) {
+                $temp['color'] = '#fcf8e3';
+            }
+            else if ($leave->approved == 1) {
+                $temp['color'] = '#dff0d8';
+            }
+            else if ($leave->approved == 0) {
+                $temp['color'] = '#f2dede';
+            }
+
+            $temp['textColor'] = '#333333';
+
+            $temp['eventType'] = 'leave';
+
+            $temp['leaveId'] = $leave->id;
+            $temp['leaveDate'] = $leave->date;
+            $temp['leaveReason'] = $leave->reason;
+            $temp['leaveApproved'] = $leave->approved;
+
+            $leavesArray[] = $temp;
+        }
+
+        $holidays = Holiday::find(array(
+            'conditions' => 'date >= "' . date('Y-m-d', $start) . '" AND date <= "' . date('Y-m-d', $end) . '"',
+            'order' => 'date DESC',
+        ));
+
+        foreach ($holidays AS $holiday) {
+            $temp = array();
+            $temp['id'] = 'holiday_' . $holiday->id;
+            $temp['title'] = $holiday->name;
+            $temp['start'] = $holiday->date;
+            $temp['allDay'] = true;
+            $temp['color'] = '#d9edf7';
+            $temp['textColor'] = '#333333';
+
+            $temp['eventType'] = 'holiday';
+
+            $temp['holidayId'] = $holiday->id;
+            $temp['holidayName'] = $holiday->name;
+            $temp['holidayDate'] = $holiday->date;
+
+            $leavesArray[] = $temp;
+        }
+
+        echo json_encode($leavesArray);
+
+        $this->view->disable();
+        return;
+    }
+
+    public function applyleaveAction()
+    {
+        if ($this->request->isPost()) {
+            $from = $this->request->getPost('leavesFrom');
+            $to = $this->request->getPost('leavesTo');
+            $reason = $this->request->getPost('leavesReason');
+            $user = $this->currentUser;
+
+            if (!$user) {
+                $this->view->disable();
+                return;
+            }
+
+            $appliedLeaves = array();
+            $Bcrypt = new Bcrypt();
+            $holidays = AttendanceHelper::getHolidays($from, $to);
+
+            $counterFrom = strtotime($from);
+            $counterTo = strtotime($to);
+
+            while(strtotime('+1 day', $counterFrom) <= strtotime('+1 day', $counterTo)) {
+                echo date('Y-m-d', $counterFrom) . "<br>";
+                if (
+                    !in_array(date('N', $counterFrom), $user->getWeekOffs())
+                    && !in_array(date('Y-m-d', $counterFrom), $holidays)
+                ) {
+                    $appliedLeaves[] = date('Y-m-d', $counterFrom);
+                }
+
+                $counterFrom = strtotime('+1 day', $counterFrom);
+            }
+
+            foreach ($appliedLeaves AS $appliedLeave) {
+                $leave = new Leaves();
+                $leave->user_id = $user->id;
+                $leave->date = $appliedLeave;
+                $leave->reason = $reason;
+                $leave->approved_by = $this->currentUser->id;
+                $leave->created_at = new Phalcon\Db\RawValue('now()');
+                $leave->save();
+            }
+
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
     public function saveAction()
     {
         if ($this->request->isPost()) {

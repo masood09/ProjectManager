@@ -405,6 +405,15 @@ class User extends Phalcon\Mvc\Model
         return $leaves;
     }
 
+    public function getAvailLeavesCount()
+    {
+        $allocatedLeaves = $this->leaves;
+
+        $leaves = Leaves::find('user_id = "' . $this->id . '" AND approved = "1"');
+
+        return $allocatedLeaves - count($leaves);
+    }
+
     public function getWeekOffs()
     {
         if (is_null($this->weekoffs)) {

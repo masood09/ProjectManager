@@ -71,8 +71,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 'note' => array('updateajax'),
                 'project' => array('view', 'getusersajax', 'createproject', 'newtask', 'notes', 'newnote', 'files', 'newfile'),
                 'task' => array('updateajax', 'updatecommentajax', 'postcomment', 'subscribeajax'),
-                'user' => array('logout'),
-                'user' => array('logout', 'account', 'save', 'changepassword'),
+                'user' => array('logout', 'account', 'save', 'changepassword', 'leaves', 'getallleavesajax', 'applyleave'),
             );
 
             // Resources to which all have access (ie., both registered and not registered users).
