@@ -49,7 +49,7 @@ class Security extends Phalcon\Mvc\User\Plugin
 
             // Resources to which only admins have access.
             $adminResources = array(
-
+                'admin' => array('index', 'users', 'leaves', 'getallleavesajax', 'applyleave', 'approveleave'),
             );
 
             // Resources to which only developers have access.

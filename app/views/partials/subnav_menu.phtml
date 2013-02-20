@@ -76,4 +76,28 @@
         </li>
         <?php } ?>
     </ul>
+<?php } else if ($controller == 'admin') { ?>
+    <ul>
+        <li>
+            <a href="<?php echo $this->url->get('admin/index'); ?>" <?php echo ($action == 'index') ? 'class="active"' : ''; ?>>
+                <i class="icon-cogs icon-4x"></i>
+                <br>
+                Manage
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url->get('admin/users'); ?>" <?php echo ($action == 'users') ? 'class="active"' : ''; ?>>
+                <i class="icon-group icon-4x"></i>
+                <br>
+                Users
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url->get('admin/leaves'); ?>" <?php echo ($action == 'leaves') ? 'class="active"' : ''; ?>>
+                <i class="icon-calendar icon-4x"></i>
+                <br>
+                Leaves
+            </a>
+        </li>
+    </ul>
 <?php } ?>

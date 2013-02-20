@@ -175,6 +175,15 @@
                                         My Account
                                     </a>
                                 </li>
+                                <?php if ($currentUser->isAdmin()) { ?>
+                                    <li>
+                                        <a href="<?php echo $this->url->get('admin/index'); ?>">
+                                            <i class="icon-cogs"></i>
+                                            &nbsp;&nbsp;
+                                            Admin
+                                        </a>
+                                    </li>
+                                <?php } ?>
                                 <li class="divider"></li>
                                 <li>
                                     <a href="<?php echo $this->url->get('user/logout'); ?>">

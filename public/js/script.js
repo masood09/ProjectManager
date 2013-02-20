@@ -90,10 +90,10 @@ $(document).ready(function() {
         $('#fullCalendar').fullCalendar({
             events: $('#fullCalendarEvenUrl').val(),
             eventClick: function(calEvent, jsEvent, view) {
-
-                alert('Event: ' + calEvent.leaveReason);
-                alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-                alert('View: ' + view.name);
+                if ($('#editLeave').get(0)) {
+                    $('#editLeaveId').val(calEvent.leaveId);
+                    $('#editLeave').modal();
+                }
             },
             selectable: true,
             select: function(start, end, allDay) {
@@ -157,6 +157,42 @@ $(document).ready(function() {
                 $('#newLeave').modal('hide');
             });
         });
+
+        if ($('#editLeave').get(0)) {
+            $('#editLeaveFormDecline').click(function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: $('#editLeaveForm').attr('action'),
+                    data: {
+                        'leave_id': $('#editLeaveId').val(),
+                        'approved': '0'
+                    }
+                }).done (function (data) {
+                    $('#fullCalendar').fullCalendar('refetchEvents');
+                    $('#editLeave').modal('hide');
+                });
+            });
+
+            $('#editLeaveFormApprove').click(function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: $('#editLeaveForm').attr('action'),
+                    data: {
+                        'leave_id': $('#editLeaveId').val(),
+                        'approved': '1'
+                    }
+                }).done (function (data) {
+                    $('#fullCalendar').fullCalendar('refetchEvents');
+                    $('#editLeave').modal('hide');
+                });
+            });
+        }
     }
 
     var ajax_call = function () {
