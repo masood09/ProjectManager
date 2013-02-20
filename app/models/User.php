@@ -404,4 +404,16 @@ class User extends Phalcon\Mvc\Model
 
         return $leaves;
     }
+
+    public function getWeekOffs()
+    {
+        if (is_null($this->weekoffs)) {
+            $weekoffs = Config::getValue('attendance/weekoffs');
+        }
+        else {
+            $weekoffs = $this->weekoffs;
+        }
+
+        return explode(',', $weekoffs);
+    }
 }
