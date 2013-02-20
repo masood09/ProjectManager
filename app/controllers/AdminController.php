@@ -66,7 +66,6 @@ class AdminController extends ControllerBase
             $counterTo = strtotime($to);
 
             while(strtotime('+1 day', $counterFrom) <= strtotime('+1 day', $counterTo)) {
-                echo date('Y-m-d', $counterFrom) . "<br>";
                 if (
                     !in_array(date('N', $counterFrom), $user->getWeekOffs())
                     && !in_array(date('Y-m-d', $counterFrom), $holidays)
