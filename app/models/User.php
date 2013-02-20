@@ -223,7 +223,8 @@ class User extends Phalcon\Mvc\Model
         $daysTargetTime = (int)Config::getValue('attendance/days_target_time');
         $startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
         $endDate = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
-        $workingDays = AttendanceHelper::getWorkingDays($startDate, $endDate);
+
+        $workingDays = AttendanceHelper::getWorkingDays($this->id, $startDate, $endDate);
 
         $explode = explode(':', $monthsTime);
 

@@ -38,7 +38,7 @@ class AttendanceHelper
         return $holidays;
     }
 
-    static function getWorkingDays($startDate = null, $endDate = null)
+    static function getWorkingDays($user_id, $startDate = null, $endDate = null)
     {
         if ($startDate == null) {
             $startDate = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
