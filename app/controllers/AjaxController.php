@@ -25,11 +25,11 @@ class AjaxController extends ControllerBase
         $return['openTasksCount'] = $this->currentUser->getOpenTasksCount();
         $return['allTasksCount'] = $this->currentUser->getAllTasksCount();
         $return['taskPercent'] = ceil ((($return['allTasksCount'] - $return['openTasksCount']) / $return['allTasksCount']) * 100);
-        $return['userTodaysTime'] = $this->currentUser->getTodaysTime();
-        $return['userTodaysTimePercent'] = $this->currentUser->getTodaysTimePercent($return['userTodaysTime']);
+        $return['userTodaysTime'] = $this->currentUser->getDaysTime();
+        $return['userTodaysTimePercent'] = $this->currentUser->getDaysTimePercent($return['userTodaysTime']);
         $return['userMonthsTime'] = $this->currentUser->getMonthsTime();
         $return['userMonthsTimePercent'] = $this->currentUser->getMonthsTimePercent($return['userMonthsTime']);
-        $return['userTodaysProductivity'] = $this->currentUser->getTodaysProductivity($return['userTodaysTime']);
+        $return['userTodaysProductivity'] = $this->currentUser->getDaysProductivity($return['userTodaysTime']);
 
         $notifications = Notification::find(array(
             'conditions' => 'user_id = "' . $this->currentUser->id . '" AND created_at >= "' . date('Y-m-d H:i:s', $lastUpdate) . '" AND read = "0"',
