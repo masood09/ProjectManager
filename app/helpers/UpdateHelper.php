@@ -78,6 +78,22 @@ class UpdateHelper
     {
         switch ($version) {
             case '1.0.0':
+                Config::setValue('attendance/days_target_time', '8');
+                Config::setValue('attendance/leaves_per_month', '2');
+                Config::setValue('attendance/leaves_per_quarter', '6');
+                Config::setValue('attendance/leaves_per_year', '24');
+                Config::setValue('attendance/leaves_method', 'quarter');
+                Config::setValue('attendance/leaves_carries', '1');
+                Config::setValue('attendance/weekoffs', '6,7');
+
+                $users = User::find();
+
+                foreach ($users AS $user) {
+                    $user->leaves = $user->getAllocatedLeavesCount();
+                    $user->leaves_assigned_on = new Phalcon\Db\RawValue('now()');
+                    $user->save();
+                }
+
                 $projectUsers = ProjectUser::find();
 
                 foreach ($projectUsers AS $projectUser) {

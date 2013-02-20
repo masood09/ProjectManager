@@ -24,6 +24,10 @@ ALTER TABLE `task` ADD `comments` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `assi
 
 ALTER TABLE `note` CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
+ALTER TABLE `user` ADD `weekoffs` VARCHAR(255) NULL DEFAULT NULL AFTER `role_id`;
+ALTER TABLE `user` ADD `leaves` INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `role_id`;
+ALTER TABLE `user` ADD `leaves_assigned_on` DATETIME AFTER `leaves`;
+
 CREATE TABLE IF NOT EXISTS `notification` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `user_id` int(10) unsigned NOT NULL,

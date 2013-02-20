@@ -287,4 +287,121 @@ class User extends Phalcon\Mvc\Model
 
         return 'default.jpg';
     }
+
+    public function getAllocatedLeavesCount()
+    {
+        if (Config::getValue('attendance/leaves_carries') == '1') {
+            $canCarryOver = true;
+        }
+        else {
+            $canCarryOver = false;
+        }
+
+        $query = new Phalcon\Mvc\Model\Query('SELECT MIN(date) AS start_date, MAX(date) AS end_date FROM Attendance WHERE user_id = "' . $this->id . '"');
+        $query->setDI($this->getDi());
+        $attendances = $query->execute();
+
+        $months = 0;
+        $years = 0;
+        $leaves = 0;
+
+        foreach ($attendances AS $attendance) {
+            $start = strtotime($attendance->start_date);
+            $end = strtotime($attendance->end_date);
+        }
+
+        $start_year = (int)date('Y', $start);
+        $end_year = (int)date('Y', $end);
+        $start_month = (int)date('m', $start);
+        $end_month = (int)date('m', $end);
+
+        $months = ((($end_year * 12) + $end_month) - (($start_year * 12) + $start_month)) + 1;
+        $years = ($end_year - $start_year) + 1;
+
+        if (Config::getValue('attendance/leaves_method') === 'month') {
+            if ($canCarryOver) {
+                $leaves = ($months * (int)Config::getValue('attendance/leaves_per_month'));
+            }
+            else {
+                $leaves = (int)Config::getValue('attendance/leaves_per_month');
+            }
+        }
+        else if (Config::getValue('attendance/leaves_method') === 'quarter') {
+            $startCounterDate = strtotime(date('Y-m-1', $start));
+            $endCounterDate = strtotime(date('Y-m-1', $end));
+
+            if (!in_array((int)date('m', $startCounterDate), array(1, 4, 7, 10))) {
+                $_leavesPerMonth = ((int)Config::getValue('attendance/leaves_per_quarter')) / 3;
+
+                if (date('m', $startCounterDate) < 4) {
+                    $leaves = (4 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+                else if (date('m', $startCounterDate) < 7) {
+                    $leaves = (7 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+                else if (date('m', $startCounterDate) < 10) {
+                    $leaves = (10 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+                else {
+                    $leaves = (13 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+            }
+
+            while (strtotime('+1 MONTH', $startCounterDate) <= $endCounterDate) {
+                if (in_array((int)date('m', $startCounterDate), array(1, 4, 7, 10))) {
+                    if ($canCarryOver) {
+                        $leaves += (int)Config::getValue('attendance/leaves_per_quarter');
+                    }
+                    else {
+                        $leaves = (int)Config::getValue('attendance/leaves_per_quarter');
+                    }
+                }
+
+                $startCounterDate = strtotime('+1 MONTH', $startCounterDate);
+            }
+
+            if (in_array((int)date('m', $endCounterDate), array(1, 4, 7, 10))) {
+                if ($canCarryOver) {
+                    $leaves += (int)Config::getValue('attendance/leaves_per_quarter');
+                }
+                else {
+                    $leaves = (int)Config::getValue('attendance/leaves_per_quarter');
+                }
+            }
+        }
+        else if (Config::getValue('attendance/leaves_method') === 'year') {
+            if ($canCarryOver) {
+                $startCounterDate = strtotime(date('Y-m-01', $start));
+                $endCounterDate = strtotime(date('Y-01-01', $end));
+
+                $_leavesPerMonth = ((int)Config::getValue('attendance/leaves_per_year')) / 12;
+
+                while (strtotime('+1 MONTH', $startCounterDate) <= $endCounterDate) {
+                    $leaves += $_leavesPerMonth;
+                    $startCounterDate = strtotime('+1 MONTH', $startCounterDate);
+                }
+
+                $thisYearsMonths = 12 - (int)date('m', $start) + 1;
+
+                if ($thisYearsMonths == 12) {
+                    $leaves += (int)Config::getValue('attendance/leaves_per_year');
+                }
+                else {
+                    $leaves += $_leavesPerMonth * $thisYearsMonths;
+                }
+            }
+            else {
+                $thisYearsMonths = 12 - (int)date('m', $start) + 1;
+
+                if ($thisYearsMonths == 12) {
+                    $leaves = (int)Config::getValue('attendance/leaves_per_year');
+                }
+                else {
+                    $leaves = $_leavesPerMonth * $thisYearsMonths;
+                }
+            }
+        }
+
+        return $leaves;
+    }
 }
