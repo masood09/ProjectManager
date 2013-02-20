@@ -170,7 +170,7 @@ class UserController extends ControllerBase
             }
 
             foreach ($appliedLeaves AS $appliedLeave) {
-                $leave = Leaves::findFirst('user_id = "' . $user->id . '" AND date = ' . $appliedLeave);
+                $leave = Leaves::findFirst('user_id = "' . $user->id . '" AND date = "' . $appliedLeave . '"');
 
                 if (!$leave) {
                     $leave = new Leaves();
