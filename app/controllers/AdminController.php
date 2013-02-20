@@ -53,6 +53,10 @@ class AdminController extends ControllerBase
                 return;
             }
 
+            if (!$reason) {
+                $reason = '';
+            }
+
             $appliedLeaves = array();
             $Bcrypt = new Bcrypt();
             $uuid = $Bcrypt->hash($user->id . $user->email . time());

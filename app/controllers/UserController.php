@@ -147,6 +147,10 @@ class UserController extends ControllerBase
                 return;
             }
 
+            if (!$reason) {
+                $reason = '';
+            }
+
             $appliedLeaves = array();
             $Bcrypt = new Bcrypt();
             $holidays = AttendanceHelper::getHolidays($from, $to);
