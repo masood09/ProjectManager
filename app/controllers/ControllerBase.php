@@ -28,6 +28,18 @@ class ControllerBase extends Phalcon\Mvc\Controller
         }
 
         UpdateHelper::updateVersion(Config::getValue('core/version'), $this->AppVersion, $this->modelsMetadata);
+
+        $users = User::find();
+
+        foreach ($users AS $user) {
+            $timestamp = strtotime($user->leaves_assigned_on);
+
+            if ((int)date('Ym') > (int)date('Ym', $timestamp)) {
+                $user->leaves = $user->getAllocatedLeavesCount();
+                $user->leaves_assigned_on = new Phalcon\Db\RawValue('now()');
+                $user->save();
+            }
+        }
     }
 
     protected function initialize()
