@@ -171,13 +171,17 @@ class UserController extends ControllerBase
             }
 
             foreach ($appliedLeaves AS $appliedLeave) {
-                $leave = new Leaves();
-                $leave->user_id = $user->id;
-                $leave->date = $appliedLeave;
-                $leave->reason = $reason;
-                $leave->approved_by = $this->currentUser->id;
-                $leave->created_at = new Phalcon\Db\RawValue('now()');
-                $leave->save();
+                $leave = Leaves::findFirst('user_id = "' . $user->id . '" AND date = ' . $appliedLeave);
+
+                if (!$leave) {
+                    $leave = new Leaves();
+                    $leave->user_id = $user->id;
+                    $leave->date = $appliedLeave;
+                    $leave->reason = $reason;
+                    $leave->approved_by = $this->currentUser->id;
+                    $leave->created_at = new Phalcon\Db\RawValue('now()');
+                    $leave->save();
+                }
             }
 
             $this->view->disable();
