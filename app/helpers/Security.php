@@ -49,7 +49,14 @@ class Security extends Phalcon\Mvc\User\Plugin
 
             // Resources to which only admins have access.
             $adminResources = array(
-                'admin' => array('index', 'users', 'leaves', 'getallleavesajax', 'applyleave', 'approveleave'),
+		'admin' => array(
+		    'index',
+		    'users',
+		    'leaves',
+		    'getallleavesajax',
+		    'applyleave',
+		    'approveleave'
+		),
             );
 
             // Resources to which only developers have access.
@@ -64,19 +71,53 @@ class Security extends Phalcon\Mvc\User\Plugin
 
             // Common resources to which all registered users have access (ie., admin, developers and clients)
             $userResources = array(
-                'ajax' => array('getupdates'),
-                'attendance' => array('startstop'),
-                'dashboard' => array('index'),
-                'index' => array('index'),
-                'note' => array('updateajax'),
-                'project' => array('view', 'getusersajax', 'createproject', 'newtask', 'notes', 'newnote', 'files', 'newfile'),
-                'task' => array('updateajax', 'updatecommentajax', 'postcomment', 'subscribeajax'),
-                'user' => array('logout', 'account', 'save', 'changepassword', 'leaves', 'getallleavesajax', 'applyleave'),
+		'ajax' => array(
+		    'getupdates'
+		),
+		'attendance' => array(
+		    'startstop'
+		),
+		'dashboard' => array(
+		    'index'
+		),
+		'index' => array(
+		    'index'
+		),
+		'note' => array(
+		    'updateajax'
+		),
+		'project' => array(
+		    'view',
+		    'getusersajax',
+		    'createproject',
+		    'newtask',
+		    'notes',
+		    'newnote',
+		    'files',
+		    'newfile'
+		),
+		'task' => array(
+		    'updateajax',
+		    'updatecommentajax',
+		    'postcomment',
+		    'subscribeajax'
+		),
+		'user' => array(
+		    'logout',
+		    'account',
+		    'save',
+		    'changepassword',
+		    'leaves',
+		    'getallleavesajax',
+		    'applyleave'
+		),
             );
 
             // Resources to which all have access (ie., both registered and not registered users).
             $publicResources = array(
-                'user' => array('login'),
+		'user' => array(
+		    'login'
+		),
             );
 
             // Grant access to admin areas to admins.
