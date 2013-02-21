@@ -18,7 +18,8 @@ $actionPath = str_replace('_url=', '', $_SERVER['QUERY_STRING']);
 $actionPath = str_replace('&', '?', $actionPath);
 
 
-$baseUrl = 'http://' . $_SERVER['HTTP_HOST'] . str_replace($actionPath, '', $_SERVER['REQUEST_URI']) . '/';
+$baseUrl = 'http://' . $_SERVER['HTTP_HOST'] . str_replace($actionPath, '', $_SERVER['REQUEST_URI']);
+$baseUrl = preg_replace('/\/$/', '', $baseUrl) . '/';
 
 error_reporting(E_ALL);
 
@@ -112,6 +113,10 @@ try {
         );
 
         return $version;
+    });
+
+    $di->set('baseUrl', function() use ($baseUrl) {
+        return $baseUrl;
     });
 
     $application = new \Phalcon\Mvc\Application();
