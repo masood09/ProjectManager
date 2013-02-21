@@ -58,7 +58,7 @@ class ProjectController extends ControllerBase
         NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
 
         if ($currentTask) {
-            NotificationHelper::markTaskRead($this->currentUser->id, $project->id, $currentTask->id);
+	    NotificationHelper::markTaskRead($this->currentUser->id, $currentTask->id);
         }
 
         $this->view->setVar('currentProject', $project);
@@ -123,7 +123,7 @@ class ProjectController extends ControllerBase
         NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
 
         if ($currentNote) {
-            NotificationHelper::markNoteRead($this->currentUser->id, $project->id, $currentNote->id);
+	    NotificationHelper::markNoteRead($this->currentUser->id, $currentNote->id);
         }
 
         $this->view->setVar('currentProject', $project);

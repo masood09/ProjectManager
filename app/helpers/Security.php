@@ -86,6 +86,9 @@ class Security extends Phalcon\Mvc\User\Plugin
 		'note' => array(
 		    'updateajax'
 		),
+		'notification' => array(
+		    'goto',
+		),
 		'project' => array(
 		    'view',
 		    'getusersajax',

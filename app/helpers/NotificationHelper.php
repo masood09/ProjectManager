@@ -18,7 +18,7 @@ class NotificationHelper
 {
     static function markProjectRead($user_id, $project_id)
     {
-        $notifications = Notification::find('user_id = "' . $user_id . '" AND project_id = "' . $project_id . '" AND task_id IS NULL AND comment_id IS NULL AND note_id IS NULL AND upload_id IS NULL');
+	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "project" AND type_id = "' . $project_id . '"');
 
         foreach ($notifications AS $notification) {
             $notification->read = 1;
@@ -26,9 +26,9 @@ class NotificationHelper
         }
     }
 
-    static function markTaskRead($user_id, $project_id, $task_id)
+    static function markTaskRead($user_id, $task_id)
     {
-        $notifications = Notification::find('user_id = "' . $user_id . '" AND project_id = "' . $project_id . '" AND task_id = "' . $task_id . '"');
+	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "task" AND type_id = "' . $task_id . '"');
 
         foreach ($notifications AS $notification) {
             $notification->read = 1;
@@ -36,9 +36,19 @@ class NotificationHelper
         }
     }
 
-    static function markNoteRead($user_id, $project_id, $note_id)
+    static function markCommentRead($user_id, $comment_id)
     {
-        $notifications = Notification::find('user_id = "' . $user_id . '" AND project_id = "' . $project_id . '" AND task_id = "' . $note_id . '"');
+	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "comment" AND type_id = "' . $comment_id . '"');
+
+	foreach ($notifications AS $notification) {
+	    $notification->read = 1;
+	    $notification->save();
+	}
+    }
+
+    static function markNoteRead($user_id, $note_id)
+    {
+	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "note" AND type_id = "' . $note_id . '"');
 
         foreach ($notifications AS $notification) {
             $notification->read = 1;
@@ -53,9 +63,9 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
+		$notification->type = 'task';
+		$notification->type_id = $task->id;
                 $notification->message = '<strong>' . $user->full_name . '</strong> closed the task <strong>' . $task->title . '</strong> in project <strong> ' . $project->name . '</strong>';
-                $notification->project_id = $task->project_id;
-                $notification->task_id = $task->id;
                 $notification->read = 0;
                 $notification->created_by = $user->id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
@@ -72,9 +82,9 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
+		$notification->type = 'task';
+		$notification->type_id = $task->id;
                 $notification->message = '<strong>' . $user->full_name . '</strong> re-opened the task <strong>' . $task->title . '</strong> in project <strong> ' . $project->name . '</strong>';
-                $notification->project_id = $task->project_id;
-                $notification->task_id = $task->id;
                 $notification->read = 0;
                 $notification->created_by = $user->id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
@@ -89,9 +99,9 @@ class NotificationHelper
         $notification = new Notification();
 
         $notification->user_id = $task->assigned_to;
+	$notification->type = 'task';
+	$notification->type_id = $task->id;
         $notification->message = '<strong>' . $user->full_name . '</strong> has assigned the task <strong>' . $task->title . '</strong> of the project <strong>' . $project->name . '</strong> to you';
-        $notification->project_id = $project->id;
-        $notification->task_id = $task->id;
         $notification->read = 0;
         $notification->created_by = $user->id;
         $notification->created_at = new Phalcon\Db\RawValue('now()');
@@ -108,10 +118,9 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
+		$notification->type = 'comment';
+		$notification->type_id = $comment->id;
                 $notification->message = '<strong>' . $commentUser->full_name . '</strong> updated comment on your task <strong>' . $task->title . '</strong> : "' . substr(strip_tags($comment->comment), 0, 200) . '..."';
-                $notification->project_id = $task->project_id;
-                $notification->task_id = $comment->task_id;
-                $notification->comment_id = $comment->id;
                 $notification->read = 0;
                 $notification->created_by = $comment->user_id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
@@ -130,10 +139,9 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
+		$notification->type = 'comment';
+		$notification->type_id = $comment->id;
                 $notification->message = '<strong>' . $commentUser->full_name . '</strong> has posted a new comment on your task <strong>' . $task->title . '</strong> : "' . substr(strip_tags($comment->comment), 0, 200) . '..."';
-                $notification->project_id = $task->project_id;
-                $notification->task_id = $comment->task_id;
-                $notification->comment_id = $comment->id;
                 $notification->read = 0;
                 $notification->created_by = $comment->user_id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
@@ -151,8 +159,9 @@ class NotificationHelper
             $notification = new Notification();
 
             $notification->user_id = $projectUser->user_id;
+	    $notification->type = 'project';
+	    $notification->type_id = $project->id;
             $notification->message = '<strong>' . $user->full_name . '</strong> has created a new project <strong>' . $project->name . '</strong>';
-            $notification->project_id = $project->id;
             $notification->read = 0;
             $notification->created_by = $user->id;
             $notification->created_at = new Phalcon\Db\RawValue('now()');
@@ -169,8 +178,9 @@ class NotificationHelper
             $notification = new Notification();
 
             $notification->user_id = $projectUser->user_id;
+	    $notification->type = 'notes';
+	    $notification->type_id = $note->id;
             $notification->message = '<strong>' . $note->getUser()->full_name . '</strong> has created a new note <strong>' . $note->title . '</strong> for project <strong>' . $project->name . '</strong>';
-            $notification->project_id = $project->id;
             $notification->read = 0;
             $notification->created_by = $note->user_id;
             $notification->created_at = new Phalcon\Db\RawValue('now()');
