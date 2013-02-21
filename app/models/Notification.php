@@ -35,6 +35,6 @@ class Notification extends Phalcon\Mvc\Model
 
     public function getUrl()
     {
-	return 'notification/goto/' . $this->id;
+        return 'notification/goto/' . $this->id;
     }
 }

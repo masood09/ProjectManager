@@ -18,7 +18,7 @@ class NotificationHelper
 {
     static function markProjectRead($user_id, $project_id)
     {
-	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "project" AND type_id = "' . $project_id . '"');
+        $notifications = Notification::find('user_id = "' . $user_id . '" AND type = "project" AND type_id = "' . $project_id . '"');
 
         foreach ($notifications AS $notification) {
             $notification->read = 1;
@@ -28,7 +28,7 @@ class NotificationHelper
 
     static function markTaskRead($user_id, $task_id)
     {
-	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "task" AND type_id = "' . $task_id . '"');
+        $notifications = Notification::find('user_id = "' . $user_id . '" AND type = "task" AND type_id = "' . $task_id . '"');
 
         foreach ($notifications AS $notification) {
             $notification->read = 1;
@@ -38,17 +38,17 @@ class NotificationHelper
 
     static function markCommentRead($user_id, $comment_id)
     {
-	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "comment" AND type_id = "' . $comment_id . '"');
+        $notifications = Notification::find('user_id = "' . $user_id . '" AND type = "comment" AND type_id = "' . $comment_id . '"');
 
-	foreach ($notifications AS $notification) {
-	    $notification->read = 1;
-	    $notification->save();
-	}
+        foreach ($notifications AS $notification) {
+            $notification->read = 1;
+            $notification->save();
+        }
     }
 
     static function markNoteRead($user_id, $note_id)
     {
-	$notifications = Notification::find('user_id = "' . $user_id . '" AND type = "note" AND type_id = "' . $note_id . '"');
+        $notifications = Notification::find('user_id = "' . $user_id . '" AND type = "note" AND type_id = "' . $note_id . '"');
 
         foreach ($notifications AS $notification) {
             $notification->read = 1;
@@ -63,8 +63,8 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
-		$notification->type = 'task';
-		$notification->type_id = $task->id;
+                $notification->type = 'task';
+                $notification->type_id = $task->id;
                 $notification->message = '<strong>' . $user->full_name . '</strong> closed the task <strong>' . $task->title . '</strong> in project <strong> ' . $project->name . '</strong>';
                 $notification->read = 0;
                 $notification->created_by = $user->id;
@@ -82,8 +82,8 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
-		$notification->type = 'task';
-		$notification->type_id = $task->id;
+                $notification->type = 'task';
+                $notification->type_id = $task->id;
                 $notification->message = '<strong>' . $user->full_name . '</strong> re-opened the task <strong>' . $task->title . '</strong> in project <strong> ' . $project->name . '</strong>';
                 $notification->read = 0;
                 $notification->created_by = $user->id;
@@ -99,8 +99,8 @@ class NotificationHelper
         $notification = new Notification();
 
         $notification->user_id = $task->assigned_to;
-	$notification->type = 'task';
-	$notification->type_id = $task->id;
+        $notification->type = 'task';
+        $notification->type_id = $task->id;
         $notification->message = '<strong>' . $user->full_name . '</strong> has assigned the task <strong>' . $task->title . '</strong> of the project <strong>' . $project->name . '</strong> to you';
         $notification->read = 0;
         $notification->created_by = $user->id;
@@ -118,8 +118,8 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
-		$notification->type = 'comment';
-		$notification->type_id = $comment->id;
+                $notification->type = 'comment';
+                $notification->type_id = $comment->id;
                 $notification->message = '<strong>' . $commentUser->full_name . '</strong> updated comment on your task <strong>' . $task->title . '</strong> : "' . substr(strip_tags($comment->comment), 0, 200) . '..."';
                 $notification->read = 0;
                 $notification->created_by = $comment->user_id;
@@ -139,8 +139,8 @@ class NotificationHelper
                 $notification = new Notification();
 
                 $notification->user_id = $taskUser->user_id;
-		$notification->type = 'comment';
-		$notification->type_id = $comment->id;
+                $notification->type = 'comment';
+                $notification->type_id = $comment->id;
                 $notification->message = '<strong>' . $commentUser->full_name . '</strong> has posted a new comment on your task <strong>' . $task->title . '</strong> : "' . substr(strip_tags($comment->comment), 0, 200) . '..."';
                 $notification->read = 0;
                 $notification->created_by = $comment->user_id;
@@ -159,8 +159,8 @@ class NotificationHelper
             $notification = new Notification();
 
             $notification->user_id = $projectUser->user_id;
-	    $notification->type = 'project';
-	    $notification->type_id = $project->id;
+            $notification->type = 'project';
+            $notification->type_id = $project->id;
             $notification->message = '<strong>' . $user->full_name . '</strong> has created a new project <strong>' . $project->name . '</strong>';
             $notification->read = 0;
             $notification->created_by = $user->id;
@@ -178,8 +178,8 @@ class NotificationHelper
             $notification = new Notification();
 
             $notification->user_id = $projectUser->user_id;
-	    $notification->type = 'notes';
-	    $notification->type_id = $note->id;
+            $notification->type = 'notes';
+            $notification->type_id = $note->id;
             $notification->message = '<strong>' . $note->getUser()->full_name . '</strong> has created a new note <strong>' . $note->title . '</strong> for project <strong>' . $project->name . '</strong>';
             $notification->read = 0;
             $notification->created_by = $note->user_id;
