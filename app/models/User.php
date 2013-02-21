@@ -305,9 +305,17 @@ class User extends Phalcon\Mvc\Model
         $years = 0;
         $leaves = 0;
 
+        $start = time();
+        $end = time();
+
         foreach ($attendances AS $attendance) {
-            $start = strtotime($attendance->start_date);
-            $end = strtotime($attendance->end_date);
+            if (!is_null($attendance->start_date)) {
+                $start = strtotime($attendance->start_date);
+            }
+
+            if (!is_null($attendance->end_date)) {
+                $end = strtotime($attendance->end_date);
+            }
         }
 
         $start_year = (int)date('Y', $start);

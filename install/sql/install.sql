@@ -17,214 +17,61 @@
 -- Table structure for table `attendance`
 --
 
-CREATE TABLE IF NOT EXISTS `attendance` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `date` date NOT NULL,
-  `task_id` int(10) NOT NULL DEFAULT '0',
-  `start` datetime NOT NULL,
-  `end` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `comment`
---
-
-CREATE TABLE IF NOT EXISTS `comment` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `task_id` int(10) unsigned NOT NULL,
-  `comment` text NOT NULL,
-  `created_at` datetime NOT NULL,
-  `uuid` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `config`
---
-
-CREATE TABLE IF NOT EXISTS `config` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `path` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `holiday`
---
-
-CREATE TABLE IF NOT EXISTS `holiday` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `date` date NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `note`
---
-
-CREATE TABLE IF NOT EXISTS `note` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `project_id` int(10) unsigned NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `content` text,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `notification`
---
-
-CREATE TABLE IF NOT EXISTS `notification` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `message` text NOT NULL,
-  `project_id` int(10) unsigned DEFAULT NULL,
-  `task_id` int(10) unsigned DEFAULT NULL,
-  `comment_id` int(10) unsigned DEFAULT NULL,
-  `note_id` int(10) unsigned DEFAULT NULL,
-  `upload_id` int(10) unsigned DEFAULT NULL,
-  `read` tinyint(1) NOT NULL DEFAULT '0',
-  `created_by` int(10) unsigned NOT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `project`
---
-
-CREATE TABLE IF NOT EXISTS `project` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(70) NOT NULL,
-  `description` text,
-  `created_by` int(10) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `project_user`
---
-
-CREATE TABLE IF NOT EXISTS `project_user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `project_id` int(10) unsigned NOT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `project_id` (`project_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `session`
---
-
-CREATE TABLE IF NOT EXISTS `session` (
-  `session_id` varchar(255) NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `created_at` datetime NOT NULL,
-  `expiring_at` datetime NOT NULL,
-  PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `task`
---
-
-CREATE TABLE IF NOT EXISTS `task` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `job_id` varchar(20) DEFAULT '',
-  `title` varchar(70) NOT NULL,
-  `project_id` int(10) NOT NULL,
-  `created_by` int(10) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `assigned_to` int(10) NOT NULL,
-  `comments` int(10) unsigned DEFAULT NULL,
-  `hours` time DEFAULT NULL,
-  `hours_spent` time DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
-  `completed_on` date DEFAULT NULL,
-  `closed_by` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `task_user`
---
-
-CREATE TABLE IF NOT EXISTS `task_user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `task_id` int(10) unsigned NOT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `task_id` (`task_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `upload`
---
-
-CREATE TABLE IF NOT EXISTS `upload` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `filename` varchar(255) NOT NULL,
-  `filepath` varchar(255) NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `size` int(50) NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `project_id` int(10) unsigned NOT NULL,
-  `task_id` int(10) unsigned DEFAULT NULL,
-  `comment_id` int(10) unsigned DEFAULT NULL,
-  `uploaded_at` datetime NOT NULL,
-  `uuid` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user`
---
-
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `full_name` varchar(70) NOT NULL,
-  `email` varchar(70) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role_id` int(10) unsigned NOT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+INSERT INTO `config`
+(
+  `path`,
+  `value`
+)
+VALUES
+(
+  'core/version',
+  '1.0.0'
+),
+(
+  'email/host',
+  'localhost'
+),
+(
+  'email/username',
+  ''
+),
+(
+  'email/password',
+  ''
+),
+(
+  'email/port',
+  '25'
+),
+(
+  'email/ssl',
+  '0'
+),
+(
+  'attendance/days_target_time',
+  '8'
+),
+(
+  'attendance/leaves_per_month',
+  '2'
+),
+(
+  'attendance/leaves_per_quarter',
+  '6'
+),
+(
+  'attendance/leaves_per_year',
+  '24'
+),
+(
+  'attendance/leaves_method',
+  'quarter'
+),
+(
+  'attendance/leaves_carries',
+  '1'
+),
+(
+  'attendance/weekoffs',
+  '6,7'
+);

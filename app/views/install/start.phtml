@@ -28,13 +28,13 @@
         <?php $this->partial('partials/gpl_license'); ?>
     </div>
 
-    <form>
+    <form action="<?php echo $this->url->get('install/configuration'); ?>" method="post">
         <label class="checkbox">
-            <input type="checkbox"> I agree to the above terms and conditions
+            <input id="terms_condition_checkbox" type="checkbox" name="term_condition"> I agree to the above terms and conditions
         </label>
 
         <p class="pull-right">
-            <button type="submit" class="btn btn-primary">
+            <button id="start_continue" type="submit" class="btn btn-primary">
                 Continue
             </button>
         </p>
