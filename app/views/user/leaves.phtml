@@ -1,0 +1,48 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<input type="hidden" id="fullCalendarEvenUrl" value="<?php echo $this->url->get('user/getallleavesajax'); ?>">
+
+<div class="span4">
+    <?php $this->partial('partials/user_sidenav'); ?>
+</div>
+
+<div class="span8">
+    <h4 class="header <?php echo ($availLeaves > 0) ? 'text-success' : 'text-error'; ?>">You have <?php echo $availLeaves; ?> leaves remaining</h4>
+    <div id="fullCalendar">
+    </div>
+</div>
+
+<div id="newLeave" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Add a new Leave</h3>
+    </div>
+
+    <form id="applyLeaveForm" class="form-horizontal" action="<?php echo $this->url->get('user/applyleave'); ?>">
+        <div class="modal-body">
+            <div class="control-group">
+                <label class="control-label" for="leavesFrom">From</label>
+                <div class="controls">
+                    <input type="text" name="leavesFrom" value="2013-02-10" data-date-format="yyyy-mm-dd" id="leavesFrom" class="datepicker" readonly>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="leavesTo">To</label>
+                <div class="controls">
+                    <input type="text" name="leavesTo" value="" data-date-format="yyyy-mm-dd" id="leavesTo" class="datepicker" readonly>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="leavesReason">Reason</label>
+                <div class="controls">
+                    <textarea id="leavesReason" name="leavesReason" rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="applyLeaveFormSave" class="btn btn-primary">Apply Leave</button>
+        </div>
+    </form>
+</div>

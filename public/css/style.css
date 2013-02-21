@@ -50,6 +50,10 @@ legend {
     font-size: 16px;
 }
 
+.hidden {
+    display: none;
+}
+
 .align-center {
     text-align: center;
 }
@@ -332,6 +336,10 @@ div.media-files a {
 #task_people h5,
 #task_people p {
     margin: 0;
+}
+
+.datepicker {
+    z-index: 10000;
 }
 
 footer {

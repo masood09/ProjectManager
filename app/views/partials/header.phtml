@@ -1,4 +1,11 @@
 <?php use Phalcon\Tag as Tag ?>
+
+<form id="timer-form" class="hidden" action="<?php echo $this->url->get('attendance/startstop'); ?>" method="post">
+    <input type="hidden" id="timer-form-task-id" value="" name="task_id">
+    <input type="hidden" value="<?php echo $controller; ?>" name="controller">
+    <input type="hidden" value="<?php echo $action . '/' . $url_params; ?>" name="action">
+</form>
+
 <div class="navbar-inner">
     <div class="container">
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -57,6 +64,69 @@
                             </a>
                         </li>
                     <?php } else { ?>
+                        <li id="header-timer" class="dropdown">
+                            <a href="#" class="dropdow-toggle" data-toggle="dropdown">
+                                <i class="icon-time icon-white"></i>
+                            </a>
+
+                            <ul class="dropdown-menu span6">
+                                <li>
+                                    <div class="align-center">
+                                        <h5>
+                                            Todays Time :
+                                            &nbsp;
+                                            <span id="timer-userTodaysTime" class="text-warning">
+                                                <?php echo $userTodaysTime; ?>
+                                            </span>
+                                            <?php if ($currentAttendance) { ?>
+                                                &nbsp;&nbsp;|&nbsp;&nbsp;
+                                                Current Task Time :
+                                                &nbsp;
+                                                <span id="timer-currentTaskTime" class="text-warning">
+                                                    <?php echo $currentAttendance->getTimeSpent(); ?>
+                                                </span>
+                                            <?php } ?>
+                                        </h5>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+
+                                <?php if ($currentAttendance) { ?>
+                                    <li>
+                                        <a class="timer-task-a" href="#" data-task-id="<?php echo $currentAttendance->task_id; ?>">
+                                            <i class="icon-stop"></i>
+                                            &nbsp;&nbsp;
+                                            <?php if ($currentAttendance->task_id == 0) { ?>
+                                                No task
+                                            <?php } else { ?>
+                                                (<?php echo $currentAttendance->getTask()->getProject()->name; ?>)
+                                                &nbsp;
+                                                <?php echo $currentAttendance->getTask()->title; ?>
+                                            <?php } ?>
+                                        </a>
+                                    </li>
+                                <?php } else { ?>
+                                    <li>
+                                        <a class="timer-task-a" href="#" data-task-id="0">
+                                            <i class="icon-play"></i>
+                                            &nbsp;&nbsp;
+                                            No Task
+                                        </a>
+                                    </li>
+                                    <?php foreach ($userTasks AS $userTask) { ?>
+                                        <li>
+                                            <a class="timer-task-a" href="#" data-task-id="<?php echo $userTask->id; ?>">
+                                                <i class="icon-play"></i>
+                                                &nbsp;&nbsp;
+                                                (<?php echo $userTask->getProject()->name; ?>)
+                                                &nbsp;
+                                                <?php echo $userTask->title; ?>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+                                <?php } ?>
+                            </ul>
+                        </li>
                         <li id="header-notification" class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span id="notificationsCount" class="badge badge-important"><?php echo count($notifications); ?></span>
@@ -92,15 +162,33 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown <?php echo ($controller == 'user' || $controller == 'admin') ? 'active' : ''; ?>">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <?php echo $currentUser->full_name; ?>
                             </a>
 
                             <ul class="dropdown-menu">
                                 <li>
+                                    <a href="<?php echo $this->url->get('user/account'); ?>">
+                                        <i class="icon-user"></i>
+                                        &nbsp;&nbsp;
+                                        My Account
+                                    </a>
+                                </li>
+                                <?php if ($currentUser->isAdmin()) { ?>
+                                    <li>
+                                        <a href="<?php echo $this->url->get('admin/index'); ?>">
+                                            <i class="icon-cogs"></i>
+                                            &nbsp;&nbsp;
+                                            Admin
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                                <li class="divider"></li>
+                                <li>
                                     <a href="<?php echo $this->url->get('user/logout'); ?>">
                                         <i class="icon-off"></i>
+                                        &nbsp;&nbsp;
                                         Logout
                                     </a>
                                 </li>

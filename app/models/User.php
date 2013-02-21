@@ -63,12 +63,24 @@ class User extends Phalcon\Mvc\Model
         return count($allTasks);
     }
 
-    public function getTodaysProductivity($todaysTime)
+    public function getDaysProductivity($daysTime, $date=null, $month=null, $year = null)
     {
+        if (is_null($date)) {
+            $date = date('d');
+        }
+
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
         $start = 0;
         $end = 0;
 
-        $attendances = Attendance::find('user_id = "' . $this->id . '" AND date = CURDATE()');
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND DAY(date) = "' . $date. '" AND MONTH(date) = "' . $month . '" AND YEAR(date) = "' . $year . '"');
 
         $i = 0;
 
@@ -87,30 +99,42 @@ class User extends Phalcon\Mvc\Model
             $i++;
         }
 
-        $totalTodaysTimeStamp = $end - $start;
+        $totalDaysTimeStamp = $end - $start;
 
-        if ($totalTodaysTimeStamp == 0) {
+        if ($totalDaysTimeStamp == 0) {
             return 0;
         }
 
         $oldTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
-        $totalTodaysTime = date('H:i', $totalTodaysTimeStamp);
+        $totalDaysTime = date('H:i', $totalDaysTimeStamp);
         date_default_timezone_set($oldTimeZone);
 
-        $explode = explode(':', $todaysTime);
-        $_todaysTime = ($explode[0] * 60) + $explode[1];
-        $explode = explode(':', $totalTodaysTime);
-        $_totalTodaysTime = ($explode[0] * 60) + $explode[1];
+        $explode = explode(':', $daysTime);
+        $_daysTime = ($explode[0] * 60) + $explode[1];
+        $explode = explode(':', $totalDaysTime);
+        $_totalDaysTime = ($explode[0] * 60) + $explode[1];
 
-        return ceil(($_todaysTime / $_totalTodaysTime) * 100);
+        return ceil(($_daysTime / $_totalDaysTime) * 100);
     }
 
-    public function getTodaysTime()
+    public function getDaysTime($date=null, $month=null, $year=null)
     {
-        $todaysTimeStamp = 0;
+        if (is_null($date)) {
+            $date = date('d');
+        }
 
-        $attendances = Attendance::find('user_id = "' . $this->id . '" AND date = CURDATE()');
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
+        $daysTimeStamp = 0;
+
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND DAY(date) = "' . $date. '" AND MONTH(date) = "' . $month . '" AND YEAR(date) = "' . $year . '"');
 
         foreach ($attendances AS $attendance) {
             $start = strtotime($attendance->start);
@@ -122,34 +146,42 @@ class User extends Phalcon\Mvc\Model
                 $end = strtotime($attendance->end);
             }
 
-            $todaysTimeStamp += $end - $start;
+            $daysTimeStamp += $end - $start;
         }
 
         $oldTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
-        $todaysTime = date('H:i', $todaysTimeStamp);
+        $daysTime = date('H:i', $daysTimeStamp);
         date_default_timezone_set($oldTimeZone);
 
-        return $todaysTime;
+        return $daysTime;
     }
 
-    public function getTodaysTimePercent($todaysTime)
+    public function getDaysTimePercent($todaysTime)
     {
-        $targetTime = 8;
+        $targetTime = (int)Config::getValue('attendance/days_target_time');
         $explode = explode(':', $todaysTime);
 
-        $_todaysTime = ($explode[0] * 60) + $explode[1];
+        $_daysTime = ($explode[0] * 60) + $explode[1];
 
         $_targetTime = ($targetTime * 60);
 
-        return ceil(($_todaysTime / $_targetTime) * 100);
+        return ceil(($_daysTime / $_targetTime) * 100);
     }
 
-    public function getMonthsTime()
+    public function getMonthsTime($month=null, $year=null)
     {
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
         $monthsTimeStamp = 0;
 
-        $attendances = Attendance::find('user_id = "' . $this->id . '" AND MONTH(date) = MONTH(NOW()) AND YEAR(date) = YEAR(NOW())');
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND MONTH(date) = "' . $month . '" AND YEAR(date) = "' . $year . '"');
 
         foreach ($attendances AS $attendance) {
             $start = strtotime($attendance->start);
@@ -178,12 +210,21 @@ class User extends Phalcon\Mvc\Model
         return $monthsTime;
     }
 
-    public function getMonthsTimePercent($monthsTime)
+    public function getMonthsTimePercent($monthsTime, $month=null, $year=null)
     {
-        $daysTargetTime = 8;
-        $startDate = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        $endDate = date('Y-m-t', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        $workingDays = AttendanceHelper::getWorkingDays($startDate, $endDate);
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
+        $daysTargetTime = (int)Config::getValue('attendance/days_target_time');
+        $startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
+        $endDate = date('Y-m-t', mktime(0, 0, 0, $month, 1, $year));
+
+        $workingDays = AttendanceHelper::getWorkingDays($this->id, $startDate, $endDate);
 
         $explode = explode(':', $monthsTime);
 
@@ -216,6 +257,28 @@ class User extends Phalcon\Mvc\Model
         return $projects;
     }
 
+    public function getAllTasks()
+    {
+        $tasks = array();
+        $userTasks = array();
+        $taskIds = array();
+
+        $userTasks = TaskUser::find('user_id = "' . $this->id . '"');
+
+        foreach ($userTasks AS $userTask) {
+            $taskIds[] = $userTask->task_id;
+        }
+
+        if (count($taskIds) > 0) {
+            $tasks = Task::find(array(
+                'conditions' => 'id IN ("' . implode('", "', $taskIds) . '") AND status = 0',
+                'order' => 'project_id ASC, created_at DESC'
+            ));
+        }
+
+        return $tasks;
+    }
+
     public function getProfilePicture()
     {
         if (file_exists(__DIR__ . '/../../public/profile/' . $this->id . '.jpg')) {
@@ -223,5 +286,150 @@ class User extends Phalcon\Mvc\Model
         }
 
         return 'default.jpg';
+    }
+
+    public function getAllocatedLeavesCount()
+    {
+        if (Config::getValue('attendance/leaves_carries') == '1') {
+            $canCarryOver = true;
+        }
+        else {
+            $canCarryOver = false;
+        }
+
+        $query = new Phalcon\Mvc\Model\Query('SELECT MIN(date) AS start_date, MAX(date) AS end_date FROM Attendance WHERE user_id = "' . $this->id . '"');
+        $query->setDI($this->getDi());
+        $attendances = $query->execute();
+
+        $months = 0;
+        $years = 0;
+        $leaves = 0;
+
+        foreach ($attendances AS $attendance) {
+            $start = strtotime($attendance->start_date);
+            $end = strtotime($attendance->end_date);
+        }
+
+        $start_year = (int)date('Y', $start);
+        $end_year = (int)date('Y', $end);
+        $start_month = (int)date('m', $start);
+        $end_month = (int)date('m', $end);
+
+        $months = ((($end_year * 12) + $end_month) - (($start_year * 12) + $start_month)) + 1;
+        $years = ($end_year - $start_year) + 1;
+
+        if (Config::getValue('attendance/leaves_method') === 'month') {
+            if ($canCarryOver) {
+                $leaves = ($months * (int)Config::getValue('attendance/leaves_per_month'));
+            }
+            else {
+                $leaves = (int)Config::getValue('attendance/leaves_per_month');
+            }
+        }
+        else if (Config::getValue('attendance/leaves_method') === 'quarter') {
+            $startCounterDate = strtotime(date('Y-m-1', $start));
+            $endCounterDate = strtotime(date('Y-m-1', $end));
+
+            if (!in_array((int)date('m', $startCounterDate), array(1, 4, 7, 10))) {
+                $_leavesPerMonth = ((int)Config::getValue('attendance/leaves_per_quarter')) / 3;
+
+                if (date('m', $startCounterDate) < 4) {
+                    $leaves = (4 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+                else if (date('m', $startCounterDate) < 7) {
+                    $leaves = (7 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+                else if (date('m', $startCounterDate) < 10) {
+                    $leaves = (10 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+                else {
+                    $leaves = (13 - date('m', $startCounterDate)) * $_leavesPerMonth;
+                }
+            }
+
+            while (strtotime('+1 MONTH', $startCounterDate) <= $endCounterDate) {
+                if (in_array((int)date('m', $startCounterDate), array(1, 4, 7, 10))) {
+                    if ($canCarryOver) {
+                        $leaves += (int)Config::getValue('attendance/leaves_per_quarter');
+                    }
+                    else {
+                        $leaves = (int)Config::getValue('attendance/leaves_per_quarter');
+                    }
+                }
+
+                $startCounterDate = strtotime('+1 MONTH', $startCounterDate);
+            }
+
+            if (in_array((int)date('m', $endCounterDate), array(1, 4, 7, 10))) {
+                if ($canCarryOver) {
+                    $leaves += (int)Config::getValue('attendance/leaves_per_quarter');
+                }
+                else {
+                    $leaves = (int)Config::getValue('attendance/leaves_per_quarter');
+                }
+            }
+        }
+        else if (Config::getValue('attendance/leaves_method') === 'year') {
+            if ($canCarryOver) {
+                $startCounterDate = strtotime(date('Y-m-01', $start));
+                $endCounterDate = strtotime(date('Y-01-01', $end));
+
+                $_leavesPerMonth = ((int)Config::getValue('attendance/leaves_per_year')) / 12;
+
+                while (strtotime('+1 MONTH', $startCounterDate) <= $endCounterDate) {
+                    $leaves += $_leavesPerMonth;
+                    $startCounterDate = strtotime('+1 MONTH', $startCounterDate);
+                }
+
+                $thisYearsMonths = 12 - (int)date('m', $start) + 1;
+
+                if ($thisYearsMonths == 12) {
+                    $leaves += (int)Config::getValue('attendance/leaves_per_year');
+                }
+                else {
+                    $leaves += $_leavesPerMonth * $thisYearsMonths;
+                }
+            }
+            else {
+                $thisYearsMonths = 12 - (int)date('m', $start) + 1;
+
+                if ($thisYearsMonths == 12) {
+                    $leaves = (int)Config::getValue('attendance/leaves_per_year');
+                }
+                else {
+                    $leaves = $_leavesPerMonth * $thisYearsMonths;
+                }
+            }
+        }
+
+        return $leaves;
+    }
+
+    public function getAvailLeavesCount()
+    {
+        $allocatedLeaves = $this->leaves;
+
+        $leaves = Leaves::find('user_id = "' . $this->id . '" AND approved = "1"');
+
+        return $allocatedLeaves - count($leaves);
+    }
+
+    public function getPendingLeavesCount()
+    {
+        $leaves = Leaves::find('user_id = "' . $this->id . '" AND approved IS NULL');
+
+        return count($leaves);
+    }
+
+    public function getWeekOffs()
+    {
+        if (is_null($this->weekoffs)) {
+            $weekoffs = Config::getValue('attendance/weekoffs');
+        }
+        else {
+            $weekoffs = $this->weekoffs;
+        }
+
+        return explode(',', $weekoffs);
     }
 }

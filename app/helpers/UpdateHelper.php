@@ -78,6 +78,22 @@ class UpdateHelper
     {
         switch ($version) {
             case '1.0.0':
+                Config::setValue('attendance/days_target_time', '8');
+                Config::setValue('attendance/leaves_per_month', '2');
+                Config::setValue('attendance/leaves_per_quarter', '6');
+                Config::setValue('attendance/leaves_per_year', '24');
+                Config::setValue('attendance/leaves_method', 'quarter');
+                Config::setValue('attendance/leaves_carries', '1');
+                Config::setValue('attendance/weekoffs', '6,7');
+
+                $users = User::find();
+
+                foreach ($users AS $user) {
+                    $user->leaves = $user->getAllocatedLeavesCount();
+                    $user->leaves_assigned_on = new Phalcon\Db\RawValue('now()');
+                    $user->save();
+                }
+
                 $projectUsers = ProjectUser::find();
 
                 foreach ($projectUsers AS $projectUser) {
@@ -88,7 +104,7 @@ class UpdateHelper
                         $notification->message = '<strong>' . $projectUser->getProject()->getUser()->full_name . '</strong> has added you to the project <strong>' . $projectUser->getProject()->name . '</strong>';
                         $notification->project_id = $projectUser->project_id;
                         $notification->read = 1;
-                        $notification->created_by = $projectUser->getProject()->created_by;
+                        $notification->created_by = $projectUser->getProject()->getUser()->id;
                         $notification->created_at = $projectUser->created_at;
 
                         $notification->save();
@@ -106,7 +122,7 @@ class UpdateHelper
                         $notification->project_id = $task->project_id;
                         $notification->task_id = $task->id;
                         $notification->read = 1;
-                        $notification->created_by = $task->getProject()->created_by;
+                        $notification->created_by = $task->getCreatedBy()->id;
                         $notification->created_at = $task->created_at;
 
                         $notification->save();
@@ -139,7 +155,7 @@ class UpdateHelper
                             $notification->task_id = $comment->task_id;
                             $notification->comment_id = $comment->id;
                             $notification->read = 1;
-                            $notification->created_by = $comment->user_id;
+                            $notification->created_by = $comment->getUser()->id;
                             $notification->created_at = $comment->created_at;
 
                             $notification->save();
@@ -159,7 +175,7 @@ class UpdateHelper
                             $notification->project_id = $note->project_id;
                             $notification->note_id = $note->id;
                             $notification->read = 1;
-                            $notification->created_by = $note->user_id;
+                            $notification->created_by = $note->getUser()->id;
                             $notification->created_at = $note->created_at;
 
                             $notification->save();

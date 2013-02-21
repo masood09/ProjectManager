@@ -14,22 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-class DashboardController extends ControllerBase
+class Leaves extends Phalcon\Mvc\Model
 {
-    public function indexAction()
+    public function validation()
     {
-        $this->view->setVar("tasksAssigned", $this->currentUser->getTasksAssigned());
+        if ($this->validationHasFailed() == true) {
+            return false;
+        }
+    }
 
-        $this->view->setVar('body_id', 'dashboard');
-
-
-        $activities = Notification::find(array(
-            'conditions' => 'user_id = "' . $this->currentUser->id . '"',
-            'order' => 'created_at DESC',
-        ));
-
-        $this->view->setVar('activities', $activities);
-
-        Phalcon\Tag::setTitle('Dashboard');
+    public function initialize()
+    {
+        $this->belongsTo('user_id', 'User', 'id');
     }
 }

@@ -24,6 +24,10 @@ ALTER TABLE `task` ADD `comments` INT(10) UNSIGNED NULL DEFAULT NULL AFTER `assi
 
 ALTER TABLE `note` CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
+ALTER TABLE `user` ADD `weekoffs` VARCHAR(255) NULL DEFAULT NULL AFTER `role_id`;
+ALTER TABLE `user` ADD `leaves` INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `role_id`;
+ALTER TABLE `user` ADD `leaves_assigned_on` DATETIME AFTER `leaves`;
+
 CREATE TABLE IF NOT EXISTS `notification` (
     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `user_id` int(10) unsigned NOT NULL,
@@ -35,6 +39,17 @@ CREATE TABLE IF NOT EXISTS `notification` (
     `upload_id` int(10) unsigned NULL,
     `read` tinyint(1) NOT NULL DEFAULT '0',
     `created_by` int(10) unsigned NOT NULL,
+    `created_at` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `leaves` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `user_id` int(10) unsigned NOT NULL,
+    `date` date NOT NULL,
+    `reason` text NULL,
+    `approved` tinyint(1) NULL,
+    `approved_by` int(10) unsigned NULL,
     `created_at` datetime NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

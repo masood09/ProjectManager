@@ -17,6 +17,8 @@
 class ControllerBase extends Phalcon\Mvc\Controller
 {
     protected $currentUser = null;
+    protected $userTodaysTime = null;
+    protected $currentAttendance = null;
 
     protected function _checkSystem()
     {
@@ -26,6 +28,18 @@ class ControllerBase extends Phalcon\Mvc\Controller
         }
 
         UpdateHelper::updateVersion(Config::getValue('core/version'), $this->AppVersion, $this->modelsMetadata);
+
+        $users = User::find();
+
+        foreach ($users AS $user) {
+            $timestamp = strtotime($user->leaves_assigned_on);
+
+            if ((int)date('Ym') > (int)date('Ym', $timestamp)) {
+                $user->leaves = $user->getAllocatedLeavesCount();
+                $user->leaves_assigned_on = new Phalcon\Db\RawValue('now()');
+                $user->save();
+            }
+        }
     }
 
     protected function initialize()
@@ -49,6 +63,38 @@ class ControllerBase extends Phalcon\Mvc\Controller
             ));
 
             $this->view->setVar('notifications', $notifications);
+
+            $this->userTodaysTime = $this->currentUser->getDaysTime();
+            $openTasksCount = $this->currentUser->getOpenTasksCount();
+            $allTasksCount = $this->currentUser->getAllTasksCount();
+            $closedTasksCount = $allTasksCount - $openTasksCount;
+
+            $this->view->setVar('openTasksCount', $openTasksCount);
+            $this->view->setVar('allTasksCount', $allTasksCount);
+            $this->view->setVar('taskPercent', ceil (($closedTasksCount / $allTasksCount) * 100));
+
+            $userTodaysTime = $this->userTodaysTime;
+            $userTodaysTimePercent = $this->currentUser->getDaysTimePercent($userTodaysTime);
+            $userMonthsTime = $this->currentUser->getMonthsTime();
+            $userMonthsTimePercent = $this->currentUser->getMonthsTimePercent($userMonthsTime);
+            $userTodaysProductivity = $this->currentUser->getDaysProductivity($userTodaysTime);
+
+            $this->view->setVar('userTodaysTime', $this->userTodaysTime);
+            $this->view->setVar('userTodaysProductivity', $userTodaysProductivity);
+            $this->view->setVar('userTodaysTimePercent', $userTodaysTimePercent);
+            $this->view->setVar('userMonthsTime', $userMonthsTime);
+            $this->view->setVar('userMonthsTimePercent', $userMonthsTimePercent);
+
+            $this->attendance = Attendance::findFirst('user_id = "' . $this->currentUser->id . '" AND date = CURDATE() AND end IS NULL');
+
+            if ($this->attendance) {
+                $this->view->setVar('currentAttendance', $this->attendance);
+                $this->view->setVar('userTasks', null);
+            }
+            else {
+                $this->view->setVar('currentAttendance', null);
+                $this->view->setVar('userTasks', $this->currentUser->getAllTasks());
+            }
         }
     }
 }

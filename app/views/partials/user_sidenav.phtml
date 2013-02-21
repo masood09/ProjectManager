@@ -1,0 +1,14 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<ul class="nav nav-tabs nav-stacked">
+    <li class="<?php echo ($action == 'account') ? 'active' : ''; ?>">
+        <a href="<?php echo $this->url->get('user/account'); ?>">
+            My Account
+        </a>
+    </li>
+    <li class="<?php echo ($action == 'leaves') ? 'active' : ''; ?>">
+        <a href="<?php echo $this->url->get('user/leaves'); ?>">
+            My Leaves
+        </a>
+    </li>
+</ul>
