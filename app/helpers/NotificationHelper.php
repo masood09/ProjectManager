@@ -170,6 +170,20 @@ class NotificationHelper
         }
     }
 
+    static function projectUserAddNotification($project, $user, $admin) {
+        $notification = new Notification();
+
+        $notification->user_id = $user->id;
+        $notification->type = 'project';
+        $notification->type_id = $project->id;
+        $notification->message = '<strong>' . $admin->full_name . '</strong> has added you to the project <strong>' . $project->name . '</strong>';
+        $notification->read = 0;
+        $notification->created_by = $admin->id;
+        $notification->created_at = new Phalcon\Db\RawValue('now()');
+
+        $notification->save();
+    }
+
     static function newNoteNotification($project, $note)
     {
         $projectUsers = ProjectUser::find('project_id = "' . $project->id . '" AND user_id != "' . $note->user_id . '"');

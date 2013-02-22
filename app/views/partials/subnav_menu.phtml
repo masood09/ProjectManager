@@ -68,7 +68,7 @@
         </li>
         <?php if ($currentUser->isAdmin()) { ?>
         <li>
-            <a href="#">
+            <a href="<?php echo $this->url->get('project/manage/' . $currentProject->id); ?>" <?php echo ($action == 'manage') ? 'class="active"' : ''; ?>>
                 <i class="icon-cogs icon-4x"></i>
                 <br>
                 Manage

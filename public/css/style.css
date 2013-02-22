@@ -326,6 +326,7 @@ div.media-files a {
 }
 
 #task_people .people {
+    min-height: 60px;
     padding: 20px;
 }
 

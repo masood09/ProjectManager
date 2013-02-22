@@ -60,6 +60,11 @@ class Security extends Phalcon\Mvc\User\Plugin
                     'saveemail',
                     'saveattendance',
                 ),
+                'project' => array(
+                    'manage',
+                    'managepost',
+                    'subscribeajax',
+                ),
             );
 
             // Resources to which only developers have access.

@@ -457,4 +457,152 @@ class ProjectController extends ControllerBase
         $this->view->disable();
         return;
     }
+
+    public function manageAction($id = null) {
+        if (is_null($id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$this->currentUser->isAdmin()) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $allUsers = User::find();
+
+        $this->view->setVar('currentProject', $project);
+        $this->view->setVar('allUsers', $allUsers);
+        $this->view->setVar('body_id', 'project_manage');
+        $this->view->setVar('url_params', $project->id);
+
+        Phalcon\Tag::setTitle($project->name . ' | Manage');
+    }
+
+    public function managepostAction($id = null) {
+        if ($this->request->isPost()) {
+            if (is_null($id)) {
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
+            }
+
+            $project = Project::findFirst('id = "' . $id . '"');
+
+            if (!$project) {
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
+            }
+
+            if (!$this->currentUser->isAdmin()) {
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
+            }
+
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'admin';
+                $action = 'index';
+            }
+
+            $name = $this->request->getPost('projectManageName');
+
+            if (is_null($name) || trim($name) == '') {
+                $this->flashSession->error('Project name cannot be blank');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            $project->name = $name;
+            $project->save();
+
+            $this->response->redirect($controller . '/' . $action);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index/');
+        $this->view->disable();
+        return;
+    }
+
+    public function subscribeajaxAction($id = null, $user_id = null) {
+        if (is_null($id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (is_null($user_id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $project = Project::findFirst('id = "' . $id . '"');
+
+        if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $user = User::findFirst('id = "' . $user_id . '"');
+
+        if (!$user) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if ($user->isAdmin()) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if (!$this->currentUser->isAdmin()) {
+
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        $projectUser = ProjectUser::findFirst('user_id = "' . $user_id . '" AND project_id = "' . $id . '"');
+
+        if (!$projectUser) {
+            $projectUser = new ProjectUser();
+            $projectUser->user_id = $user_id;
+            $projectUser->project_id = $id;
+            $projectUser->created_at = new Phalcon\Db\RawValue('now()');
+            $projectUser->save();
+
+            NotificationHelper::projectUserAddNotification($project, $user, $this->currentUser);
+
+            $return['subscribed'] = true;
+        }
+        else {
+            $projectUser->delete();
+            $return['subscribed'] = false;
+        }
+
+        echo json_encode($return);
+        $this->view->disable();
+        return;
+    }
 }

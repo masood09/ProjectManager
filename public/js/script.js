@@ -86,6 +86,16 @@ $(document).ready(function() {
         });
     }
 
+    if ($("#project_manage").get(0)) {
+        $('.people-checkbox').change(function() {
+            subscribeUrl = $(this).attr('data-url');
+
+            $.getJSON(subscribeUrl, function(data) {
+
+            });
+        });
+    }
+
     if ($('#fullCalendar').get(0)) {
         $('#fullCalendar').fullCalendar({
             events: $('#fullCalendarEvenUrl').val(),
