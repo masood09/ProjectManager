@@ -280,6 +280,12 @@ div.navbar-inner a.brand {
     margin-left: 20px;
 }
 
+.dropdown-menu li > a {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .header_bottom_block {
     color: #000;
     padding-bottom: 10px;
