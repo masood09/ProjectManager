@@ -56,6 +56,9 @@ class Security extends Phalcon\Mvc\User\Plugin
                     'getallleavesajax',
                     'applyleave',
                     'approveleave',
+                    'savegeneral',
+                    'saveemail',
+                    'saveattendance',
                 ),
             );
 

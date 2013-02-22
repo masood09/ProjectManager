@@ -161,7 +161,7 @@
         <div class="control-group">
             <label class="control-label" for="adminManageAttendanceWeekoffs">Weekoff's</label>
             <div class="controls">
-                <select name="attendance_weekoffs" id="adminManageAttendanceWeekoffs" autocomplete="off" multiple>
+                <select name="attendance_weekoffs[]" id="adminManageAttendanceWeekoffs" autocomplete="off" multiple>
                     <option value="7" <?php echo (in_array('7', $attendance_weekoffs)) ? 'selected="selected"' : ''; ?>>
                         Sunday
                     </option>

@@ -211,4 +211,205 @@ class AdminController extends ControllerBase
         $this->view->disable();
         return;
     }
+
+    public function savegeneralAction()
+    {
+        if ($this->request->isPost()) {
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'admin';
+                $action = 'index';
+            }
+
+            $core_name = $this->request->getPost('core_name');
+            $core_email = $this->request->getPost('core_email');
+
+            if (is_null($core_name) || trim($core_name) == '') {
+                $this->flashSession->error('Application name cannot be blank');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (is_null($core_email) || trim($core_email) == '') {
+                $this->flashSession->error('Application email cannot be blank');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            Config::setValue('core/name', $core_name);
+            Config::setValue('core/email', $core_email);
+
+            $this->response->redirect($controller . '/' . $action);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
+    public function saveemailAction()
+    {
+        if ($this->request->isPost()) {
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'admin';
+                $action = 'index';
+            }
+
+            $email_host = $this->request->getPost('email_host');
+            $email_username = $this->request->getPost('email_username');
+            $email_password = $this->request->getPost('email_password');
+            $email_port = $this->request->getPost('email_port');
+            $email_ssl = $this->request->getPost('email_ssl');
+
+            if (is_null($email_host) || trim($email_host) == '') {
+                $this->flashSession->error('Email server host cannot be blank');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (is_null($email_port) || trim($email_port) == '' || !is_numeric($email_port)) {
+                $this->flashSession->error('Email server port cannot be blank and should be a number');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (is_null($email_ssl) || trim($email_ssl) == '' || !in_array($email_ssl, array(0, 1))) {
+                $this->flashSession->error('Email server SSL option should be selected');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            Config::setValue('email/host', $email_host);
+            Config::setValue('email/username', $email_username);
+            Config::setValue('email/password', $email_password);
+            Config::setValue('email/port', $email_port);
+            Config::setValue('email/ssl', $email_ssl);
+
+            $this->response->redirect($controller . '/' . $action);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
+    public function saveattendanceAction()
+    {
+        if ($this->request->isPost()) {
+            $controller = $this->request->getPost('controller');
+            $action = $this->request->getPost('action');
+
+            if (!$controller || !$action) {
+                $controller = 'admin';
+                $action = 'index';
+            }
+
+            $attendance_days_target_time = $this->request->getPost('attendance_days_target_time');
+            $attendance_leaves_per_month = $this->request->getPost('attendance_leaves_per_month');
+            $attendance_leaves_per_quarter = $this->request->getPost('attendance_leaves_per_quarter');
+            $attendance_leaves_per_year = $this->request->getPost('attendance_leaves_per_year');
+            $attendance_leaves_method = $this->request->getPost('attendance_leaves_method');
+            $attendance_leaves_carries = $this->request->getPost('attendance_leaves_carries');
+            $attendance_weekoffs = $this->request->getPost('attendance_weekoffs');
+
+            if (is_array($attendance_weekoffs)) {
+                $attendance_weekoffs = implode(',', $attendance_weekoffs);
+            }
+            else {
+                $attendance_weekoffs = ' ';
+            }
+
+            if (is_null($attendance_days_target_time)
+                || trim($attendance_days_target_time) == ''
+                || !is_numeric($attendance_days_target_time)
+            ) {
+                $this->flashSession->error('Days target time cannot be blank and should be a number');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (is_null($attendance_leaves_per_month)
+                || trim($attendance_leaves_per_month) == ''
+                || !is_numeric($attendance_leaves_per_month)
+            ) {
+                $this->flashSession->error('Leaves per month cannot be blank and should be a number');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (is_null($attendance_leaves_per_quarter)
+                || trim($attendance_leaves_per_quarter) == ''
+                || !is_numeric($attendance_leaves_per_quarter)
+            ) {
+                $this->flashSession->error('Leaves per month cannot be blank and should be a number');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (is_null($attendance_leaves_per_year)
+                || trim($attendance_leaves_per_year) == ''
+                || !is_numeric($attendance_leaves_per_year)
+            ) {
+                $this->flashSession->error('Leaves per month cannot be blank and should be a number');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (!in_array($attendance_leaves_method, array('month', 'quarter', 'year'))) {
+                $this->flashSession->error('Leaves method should be selected');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            if (!in_array($attendance_leaves_carries, array(0, 1))) {
+                $this->flashSession->error('Leaves carries should be selected');
+                $this->response->redirect($controller . '/' . $action);
+                $this->view->disable();
+                return;
+            }
+
+            Config::setValue('attendance/days_target_time', $attendance_days_target_time);
+            Config::setValue('attendance/leaves_per_month', $attendance_leaves_per_month);
+            Config::setValue('attendance/leaves_per_quarter', $attendance_leaves_per_quarter);
+            Config::setValue('attendance/leaves_per_year', $attendance_leaves_per_year);
+            Config::setValue('attendance/leaves_method', $attendance_leaves_method);
+            Config::setValue('attendance/leaves_carries', $attendance_leaves_carries);
+            Config::setValue('attendance/weekoffs', $attendance_weekoffs);
+
+            $users = User::find();
+
+            foreach ($users AS $user) {
+                $user->leaves = $user->getAllocatedLeavesCount();
+                $user->leaves_assigned_on = new Phalcon\Db\RawValue('now()');
+                $user->save();
+            }
+
+            $this->response->redirect($controller . '/' . $action);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
 }
