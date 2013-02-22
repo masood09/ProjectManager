@@ -31,7 +31,7 @@
                             <i class="icon-home icon-white"></i>
                         </a>
                     </li>
-                    <li class="dropdown <?php echo ($controller == 'project' || $controller == 'task') ? 'active' : ''; ?>">
+                    <li class="dropdown <?php echo ($controller == 'project') ? 'active' : ''; ?>">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             Projects
                         </a>
@@ -45,11 +45,19 @@
                                 </li>
                                 <li class="divider"></li>
                             <?php } ?>
-                            <?php foreach($allProjects AS $project) { ?>
+                            <?php if (count($allProjects) > 0) { ?>
+                                <?php foreach($allProjects AS $project) { ?>
+                                    <li>
+                                        <a href="<?php echo $this->url->get('project/view/' . $project->id); ?>">
+                                            <?php echo $project->name; ?>
+                                        </a>
+                                <?php } ?>
+                            <?php } else { ?>
                                 <li>
-                                    <a href="<?php echo $this->url->get('project/view/' . $project->id); ?>">
-                                        <?php echo $project->name; ?>
+                                    <a href="javascript:void(0)">
+                                        No projects for you!
                                     </a>
+                                </li>
                             <?php } ?>
                         </ul>
                     </li>
