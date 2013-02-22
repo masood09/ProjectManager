@@ -192,7 +192,7 @@ class NotificationHelper
             $notification = new Notification();
 
             $notification->user_id = $projectUser->user_id;
-            $notification->type = 'notes';
+            $notification->type = 'note';
             $notification->type_id = $note->id;
             $notification->message = '<strong>' . $note->getUser()->full_name . '</strong> has created a new note <strong>' . $note->title . '</strong> for project <strong>' . $project->name . '</strong>';
             $notification->read = 0;
