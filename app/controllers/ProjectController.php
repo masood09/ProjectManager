@@ -77,7 +77,7 @@ class ProjectController extends ControllerBase
             Phalcon\Tag::setTitle($project->name . ' | ' . $currentTask->title);
         }
         else {
-            Phalcon\Tag::setTitle($project->name);
+            Phalcon\Tag::setTitle($project->name . ' | Tasks');
         }
     }
 
@@ -142,7 +142,7 @@ class ProjectController extends ControllerBase
             Phalcon\Tag::setTitle($project->name . ' | ' . $currentNote->title);
         }
         else {
-            Phalcon\Tag::setTitle($project->name);
+            Phalcon\Tag::setTitle($project->name . ' | Notes');
         }
     }
 
