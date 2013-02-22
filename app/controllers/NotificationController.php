@@ -18,87 +18,87 @@ class NotificationController extends ControllerBase
 {
     public function gotoAction($id=null)
     {
-	if (is_null($id)) {
-	    $this->response->redirect('dashboard/index');
-	    $this->view->disable();
-	    return;
-	}
+        if (is_null($id)) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
 
-	$notification = Notification::findFirst('id = "' . $id . '"');
+        $notification = Notification::findFirst('id = "' . $id . '"');
 
-	if (!$notification) {
-	    $this->response->redirect('dashboard/index');
-	    $this->view->disable();
-	    return;
-	}
+        if (!$notification) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
 
-	$type = $notification->type;
-	$type_id = $notification->type_id;
+        $type = $notification->type;
+        $type_id = $notification->type_id;
 
-	if ($type == 'project') {
-	    $project = Project::findFirst('id = "' . $type_id . '"');
+        if ($type == 'project') {
+            $project = Project::findFirst('id = "' . $type_id . '"');
 
-	    if (!$project) {
-		$this->response->redirect('dashboard/index');
-		$this->view->disable();
-		return;
-	    }
+            if (!$project) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+            }
 
-	    NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
+            NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
 
-	    $this->response->redirect('project/view/' . $project->id);
-	    $this->view->disable();
-	    return;
-	}
+            $this->response->redirect('project/view/' . $project->id);
+            $this->view->disable();
+            return;
+        }
 
-	if ($type == 'task') {
-	    $task = Task::findFirst('id = "' . $type_id . '"');
+        if ($type == 'task') {
+            $task = Task::findFirst('id = "' . $type_id . '"');
 
-	    if (!$task) {
-		$this->response->redirect('dashboard/index');
-		$this->view->disable();
-		return;
-	    }
+            if (!$task) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+            }
 
-	    NotificationHelper::markTaskRead($this->currentUser->id, $task->id);
+            NotificationHelper::markTaskRead($this->currentUser->id, $task->id);
 
-	    $this->response->redirect('project/view/' . $task->project_id . '/' . $task->id);
-	    $this->view->disable();
-	    return;
-	}
+            $this->response->redirect('project/view/' . $task->project_id . '/' . $task->id);
+            $this->view->disable();
+            return;
+        }
 
-	if ($type == 'comment') {
-	    $comment = Comment::findFirst('id = "' . $type_id . '"');
+        if ($type == 'comment') {
+            $comment = Comment::findFirst('id = "' . $type_id . '"');
 
-	    if (!$comment) {
-		$this->response->redirect('dashboard/index');
-		$this->view->disable();
-		return;
-	    }
+            if (!$comment) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+            }
 
-	    $task = $comment->getTask();
+            $task = $comment->getTask();
 
-	    NotificationHelper::markCommentRead($this->currentUser->id, $comment->id);
+            NotificationHelper::markCommentRead($this->currentUser->id, $comment->id);
 
-	    $this->response->redirect('project/view/' . $task->project_id . '/' . $task->id . '#comment-' . $comment->id);
-	    $this->view->disable();
-	    return;
-	}
+            $this->response->redirect('project/view/' . $task->project_id . '/' . $task->id . '#comment-' . $comment->id);
+            $this->view->disable();
+            return;
+        }
 
-	if ($type == 'note') {
-	    $note = Note::findFirst('id = "' . $type_id . '"');
+        if ($type == 'note') {
+            $note = Note::findFirst('id = "' . $type_id . '"');
 
-	    if (!$note) {
-		$this->response->redirect('dashboard/index');
-		$this->view->disable();
-		return;
-	    }
+            if (!$note) {
+            $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+            }
 
-	    NotificationHelper::markNoteRead($this->currentUser->id, $note->id);
+            NotificationHelper::markNoteRead($this->currentUser->id, $note->id);
 
-	    $this->response->redirect('project/notes/' . $note->project_id . '/' . $note->id);
-	    $this->view->disable();
-	    return;
-	}
+            $this->response->redirect('project/notes/' . $note->project_id . '/' . $note->id);
+            $this->view->disable();
+            return;
+        }
     }
 }
