@@ -237,6 +237,14 @@ class User extends Phalcon\Mvc\Model
 
     public function getAllProjects()
     {
+        if ($this->isAdmin()) {
+            $projects = Project::find(array(
+                'order' => 'name ASC'
+            ));
+
+            return $projects;
+        }
+
         $projects = array();
         $projectUsers = array();
         $projectIds = array();
