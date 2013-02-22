@@ -101,8 +101,8 @@ class UpdateHelper
                         $notification = new Notification();
 
                         $notification->user_id = $projectUser->user_id;
-			$notification->type = 'project';
-			$notification->type_id = $projectUser->project_id;
+                        $notification->type = 'project';
+                        $notification->type_id = $projectUser->project_id;
                         $notification->message = '<strong>' . $projectUser->getProject()->getUser()->full_name . '</strong> has added you to the project <strong>' . $projectUser->getProject()->name . '</strong>';
                         $notification->read = 1;
                         $notification->created_by = $projectUser->getProject()->getUser()->id;
@@ -119,8 +119,8 @@ class UpdateHelper
                         $notification = new Notification();
 
                         $notification->user_id = $task->assigned_to;
-			$notification->type = 'task';
-			$notification->type_id = $task->id;
+                        $notification->type = 'task';
+                        $notification->type_id = $task->id;
                         $notification->message = '<strong>' . $task->getCreatedBy()->full_name . '</strong> has assigned the task <strong>' . $task->title . '</strong> of the project <strong>' . $task->getProject()->name . '</strong> to you';
                         $notification->read = 1;
                         $notification->created_by = $task->getCreatedBy()->id;
@@ -151,8 +151,8 @@ class UpdateHelper
                             $notification = new Notification();
 
                             $notification->user_id = $taskUser->user_id;
-			    $notification->type = 'comment';
-			    $notification->type_id = $comment->id;
+                            $notification->type = 'comment';
+                            $notification->type_id = $comment->id;
                             $notification->message = '<strong>' . $comment->getUser()->full_name . '</strong> commented on your task <strong>' . $comment->getTask()->title . '</strong> : "' . substr(strip_tags($comment->comment), 0, 200) . '..."';
                             $notification->read = 1;
                             $notification->created_by = $comment->getUser()->id;
@@ -171,8 +171,8 @@ class UpdateHelper
                             $notification = new Notification();
 
                             $notification->user_id = $projectUser->user_id;
-			    $notification->type = 'note';
-			    $notification->type_id = $note->id;
+                            $notification->type = 'note';
+                            $notification->type_id = $note->id;
                             $notification->message = '<strong>' . $note->getUser()->full_name . '</strong> added a new note to the project <strong>' . $note->getProject()->name . '</strong> : "' . substr(strip_tags($note->content), 0, 200) . '..."';
                             $notification->read = 1;
                             $notification->created_by = $note->getUser()->id;
