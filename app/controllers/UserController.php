@@ -18,9 +18,37 @@ class UserController extends ControllerBase
 {
     public function loginAction()
     {
+        $url = $_GET['_url'];
+        $url_array = explode("/", $url);
+        $url = null;
+
+        if ($url_array[1] == 'user' && $url_array[2] == 'login') {
+            if ($returnUrl == null) {
+                $this->view->setVar('returnUrl', base64_encode('dashboard/index'));
+            }
+            else {
+                $this->view->setVar('returnUrl', $returnUrl);
+            }
+        }
+        else {
+            foreach($url_array AS $_url) {
+                if ($_url != '') {
+                    $url .= $_url . '/';
+                }
+            }
+
+            if ($url != null) {
+                $this->view->setVar('returnUrl', base64_encode($url));
+            }
+            else {
+                $this->view->setVar('returnUrl', base64_encode('dashboard/index'));
+            }
+        }
+
         if ($this->request->isPost()) {
             $email = $this->request->getPost('email', 'string');
             $password = $this->request->getPost('password');
+            $returnUrl = $this->request->getPost('returnUrl');
 
             $user = User::findFirst('email="' . $email . '" AND is_active="1"');
 
@@ -31,7 +59,7 @@ class UserController extends ControllerBase
                     $this->session->set('user_id', $user->id);
                     $this->flashSession->success('Welcome ' . $user->full_name . '!');
 
-                    $this->response->redirect('dashboard/index');
+                    $this->response->redirect(base64_decode($returnUrl));
                     $this->view->disable();
                     return;
                 }
