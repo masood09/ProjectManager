@@ -395,7 +395,7 @@ class AdminController extends ControllerBase
             Config::setValue('attendance/leaves_carries', $attendance_leaves_carries);
             Config::setValue('attendance/weekoffs', $attendance_weekoffs);
 
-            $users = User::find();
+            $users = User::getAllActiveUsers();
 
             foreach ($users AS $user) {
                 $user->leaves = $user->getAllocatedLeavesCount();

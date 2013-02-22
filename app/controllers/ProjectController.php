@@ -479,7 +479,7 @@ class ProjectController extends ControllerBase
             return;
         }
 
-        $allUsers = User::find();
+        $allUsers = User::getAllActiveUsers();
 
         $this->view->setVar('currentProject', $project);
         $this->view->setVar('allUsers', $allUsers);

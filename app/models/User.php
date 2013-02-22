@@ -440,4 +440,33 @@ class User extends Phalcon\Mvc\Model
 
         return explode(',', $weekoffs);
     }
+
+    static function getAllUsers()
+    {
+        $allUsers = User::find(array(
+            'order' => 'full_name ASC',
+        ));
+
+        return $allUsers;
+    }
+
+    static function getAllActiveUsers()
+    {
+        $allUsers = User::find(array(
+            'conditions' => 'is_active = "1"',
+            'order' => 'full_name ASC',
+        ));
+
+        return $allUsers;
+    }
+
+    static function getAllNonActiveUsers()
+    {
+        $allUsers = User::find(array(
+            'conditions' => 'is_active = "0"',
+            'order' => 'full_name ASC',
+        ));
+
+        return $allUsers;
+    }
 }

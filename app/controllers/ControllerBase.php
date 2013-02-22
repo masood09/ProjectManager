@@ -29,7 +29,7 @@ class ControllerBase extends Phalcon\Mvc\Controller
 
         UpdateHelper::updateVersion(Config::getValue('core/version'), $this->AppVersion, $this->modelsMetadata);
 
-        $users = User::find();
+        $users = User::getAllActiveUsers();
 
         foreach ($users AS $user) {
             $timestamp = strtotime($user->leaves_assigned_on);
