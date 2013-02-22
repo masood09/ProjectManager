@@ -144,6 +144,12 @@ $(document).ready(function() {
 
                 $('#leavesFrom').datepicker('setValue', start);
                 $('#leavesTo').datepicker('setValue', end);
+                $('#leavesReason').val('');
+
+                if ($('#admin_leaves').get(0)) {
+                    $('#leavesUser').val(0);
+                }
+
                 $('#newLeave').modal();
             }
         });
@@ -151,6 +157,10 @@ $(document).ready(function() {
         $('#applyLeaveFormSave').click(function(e) {
             e.stopPropagation();
             e.preventDefault();
+
+            if ($('#leavesUser').val() === "0") {
+                return false;
+            }
 
             $.ajax({
                 type: "POST",

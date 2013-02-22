@@ -33,6 +33,7 @@
                 <label class="control-label" for="leavesUser">User</label>
                 <div class="controls">
                     <select id="leavesUser" name="leavesUser" required="required">
+                        <option value="0" selected="selected">-- Please Select --</option>
                         <?php foreach ($allUsers AS $user) { ?>
                             <option value="<?php echo $user->id; ?>">
                                 <?php echo $user->full_name; ?>
