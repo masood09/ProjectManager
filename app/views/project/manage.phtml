@@ -1,0 +1,69 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<div class="span4">
+    <ul class="nav nav-tabs nav-stacked">
+        <li>
+            <a href="#projectManageSettings">
+                Project Settings
+            </a>
+        </li>
+        <li>
+            <a href="#projectManageUsers">
+                Project Users
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="span8">
+    <h4 id="projectManageSettings" class="header">Project Settings</h4>
+    <form action="<?php echo $this->url->get('project/managepost/' . $currentProject->id); ?>" method="post" class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="projectManageName">Project Name</label>
+            <div class="controls">
+                <input type="text" name="projectManageName" id="projectManageName" value="<?php echo $currentProject->name; ?>" autocomplete="off" required="required">
+            </div>
+        </div>
+
+        <input type="hidden" name="controller" value="<?php echo $controller; ?>">
+        <input type="hidden" name="action" value="<?php echo $action . '/' . $url_params; ?>">
+
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Save</button>
+            </div>
+        </div>
+    </form>
+
+    <br>
+
+    <h4 id="projectManageUsers" class="header">Project Users</h4>
+
+    <div id="task_people" class="people_block">
+        <?php $_i = 0; ?>
+        <?php foreach($allUsers AS $user) { ?>
+            <?php if ($_i % 2 == 0) { ?>
+                <div class="row">
+            <?php } ?>
+
+                <div class="span4">
+                    <div class="people">
+                        <img src="<?php echo $this->url->get('profile/' . $user->getProfilePicture()); ?>" class="img-rounded pull-left" alt="<?php echo $user->full_name; ?>">
+                        <div class="people-body">
+                            <h5><?php echo $user->full_name; ?></h5>
+                            <label class="checkbox">
+                                <input type="checkbox" <?php echo ($currentProject->isInProject($user)) ? 'checked="checked"' : ''; ?> <?php echo ($user->isAdmin()) ? 'disabled="disabled"' : ''; ?> class="people-checkbox" data-url="<?php echo $this->url->get('project/subscribeajax/' . $currentProject->id . '/' . $user->id); ?>">
+                                Subscribe
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            <?php if (($_i + 1) % 2 == 0 || ($_i + 1) == count($allUsers)) { ?>
+                </div>
+            <?php } ?>
+
+            <?php $_i++; ?>
+        <?php } ?>
+    </div>
+</div>
