@@ -349,6 +349,10 @@ div.media-files a {
     z-index: 10000;
 }
 
+.easyPieChart {
+    margin: 0 auto;
+}
+
 footer {
     padding: 20px 0;
     color: #999;
