@@ -50,7 +50,7 @@ class AttendanceHelper
 
         $holidays = AttendanceHelper::getHolidays($startDate, $endDate);
 
-        $leaves = Leaves::find('user_id = "' . $user_id . '" AND date >= "' . $startDate . '" AND date <= "' . $endDate . '"');
+        $leaves = Leaves::find('user_id = "' . $user_id . '" AND date >= "' . $startDate . '" AND date <= "' . $endDate . '" AND approved = "1"');
 
         foreach ($leaves AS $leave) {
             if (!in_array($leave->date, $holidays)) {
