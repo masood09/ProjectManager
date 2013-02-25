@@ -134,4 +134,16 @@ class Project extends Phalcon\Mvc\Model
 
         return $users;
     }
+
+    public function hasTasksAssignedIn($user_id)
+    {
+        $UsersTasks = Task::findFirst('project_id = "' . $this->id . '" AND assigned_to = "' . $user_id . '"');
+
+        if ($UsersTasks) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

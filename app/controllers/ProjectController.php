@@ -577,8 +577,13 @@ class ProjectController extends ControllerBase
         }
 
         if (!$this->currentUser->isAdmin()) {
-
             $this->response->redirect('dashboard/index');
+            $this->view->disable();
+            return;
+        }
+
+        if ($project->hasTasksAssignedIn($user_id)) {
+            $return['subscribed'] = true;
             $this->view->disable();
             return;
         }
@@ -599,6 +604,17 @@ class ProjectController extends ControllerBase
         else {
             $projectUser->delete();
             $return['subscribed'] = false;
+        }
+
+        $tasks = Task::find('project_id = "'. $id . '"');
+
+        foreach ($tasks AS $task) {
+            $taskUser = null;
+            $taskUser = TaskUser::findFirst('task_id = "' . $task->id . '" AND user_id = "' . $user_id . '"');
+
+            if ($taskUser) {
+                $taskUser->delete();
+            }
         }
 
         echo json_encode($return);

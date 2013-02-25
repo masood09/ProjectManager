@@ -52,7 +52,7 @@
                         <div class="people-body">
                             <h5><?php echo $user->full_name; ?></h5>
                             <label class="checkbox">
-                                <input type="checkbox" <?php echo ($currentProject->isInProject($user)) ? 'checked="checked"' : ''; ?> <?php echo ($user->isAdmin()) ? 'disabled="disabled"' : ''; ?> class="people-checkbox" data-url="<?php echo $this->url->get('project/subscribeajax/' . $currentProject->id . '/' . $user->id); ?>">
+                                <input type="checkbox" <?php echo ($currentProject->isInProject($user)) ? 'checked="checked"' : ''; ?> <?php echo ($user->isAdmin() || $currentProject->hasTasksAssignedIn($user->id)) ? 'disabled="disabled"' : ''; ?> class="people-checkbox" data-url="<?php echo $this->url->get('project/subscribeajax/' . $currentProject->id . '/' . $user->id); ?>">
                                 Subscribe
                             </label>
                         </div>
