@@ -104,9 +104,15 @@
 
                             <?php foreach ($comment->getUpload() AS $upload) { ?>
                                 <div class="media">
-                                    <a class="pull-left" href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>">
-                                        <img class="media-object" src="<?php echo $this->url->get('img/mimes/' . $upload->getIconFile()); ?>">
-                                    </a>
+                                    <?php if (!$upload->isImage()) { ?>
+                                        <a class="pull-left" href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>">
+                                            <img class="media-object" src="<?php echo $this->url->get('img/mimes/' . $upload->getIconFile()); ?>">
+                                        </a>
+                                    <?php } else { ?>
+                                        <a class="pull-left" href="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>">
+                                            <img class="media-object" src="<?php echo $this->url->get('uploads/' . $upload->getUrl()); ?>" height="60" width="60">
+                                        </a>
+                                    <?php } ?>
 
                                     <div class="media-body">
                                         <p class="media-heading">

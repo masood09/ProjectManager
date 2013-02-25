@@ -59,6 +59,9 @@ class AttendanceController extends ControllerBase
                 // Timer already running let's end the timer.
                 $attendance->end = new Phalcon\Db\RawValue('now()');
                 $attendance->save();
+
+                $task->hours_spent = $task->calculateTotalTimeSpent();
+                $task->save();
             }
             else {
                 // Timer not running. Lets start the timer.
