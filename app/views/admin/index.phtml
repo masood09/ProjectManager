@@ -26,14 +26,14 @@
         <div class="control-group">
             <label class="control-label" for="adminManageCoreName">Application Name</label>
             <div class="controls">
-                <input type="text" name="core_name" id="adminManageCoreName" value="<?php echo $core_name; ?>" autocomplete="off" required="required">
+                <input type="text" name="core_name" id="adminManageCoreName" value="<?php echo $core_name; ?>" autocomplete="off">
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label" for="adminManageCoreEmail">Application Email</label>
             <div class="controls">
-                <input type="email" name="core_email" id="adminManageCoreEmail" value="<?php echo $core_email; ?>" autocomplete="off" required="required">
+                <input type="email" name="core_email" id="adminManageCoreEmail" value="<?php echo $core_email; ?>" autocomplete="off">
             </div>
         </div>
 
@@ -54,7 +54,7 @@
         <div class="control-group">
             <label class="control-label" for="adminManageEmailHost">Host</label>
             <div class="controls">
-                <input type="text" name="email_host" id="adminManageEmailHost" value="<?php echo $email_host; ?>" autocomplete="off" required="required">
+                <input type="text" name="email_host" id="adminManageEmailHost" value="<?php echo $email_host; ?>" autocomplete="off">
             </div>
         </div>
 
@@ -75,14 +75,14 @@
         <div class="control-group">
             <label class="control-label" for="adminManageEmailPort">Port</label>
             <div class="controls">
-                <input type="number" name="email_port" id="adminManageEmailPort" value="<?php echo $email_port; ?>" required autocomplete="off">
+                <input type="number" name="email_port" id="adminManageEmailPort" value="<?php echo $email_port; ?>" autocomplete="off">
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label" for="adminManageEmailSsl">SSL</label>
             <div class="controls">
-                <select name="email_ssl" id="adminManageEmailSsl" required autocomplete="off">
+                <select name="email_ssl" id="adminManageEmailSsl" autocomplete="off">
                     <option value="0" <?php echo ($email_ssl == '0') ? 'selected="selected"' : ''; ?>>No</option>
                     <option value="1" <?php echo ($email_ssl == '1') ? 'selected="selected"' : ''; ?>>Yes</option>
                 </select>
@@ -106,35 +106,35 @@
         <div class="control-group">
             <label class="control-label" for="adminManageAttendanceDaysTargetTime">Days Target Hours</label>
             <div class="controls">
-                <input type="number" name="attendance_days_target_time" id="adminManageAttendanceDaysTargetTime" value="<?php echo $attendance_days_target_time; ?>" required autocomplete="off">
+                <input type="number" name="attendance_days_target_time" id="adminManageAttendanceDaysTargetTime" value="<?php echo $attendance_days_target_time; ?>" autocomplete="off">
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label" for="adminManageAttendanceLeavesPerMonth">Leaves Per Month</label>
             <div class="controls">
-                <input type="number" name="attendance_leaves_per_month" id="adminManageAttendanceLeavesPerMonth" value="<?php echo $attendance_leaves_per_month; ?>" required autocomplete="off">
+                <input type="number" name="attendance_leaves_per_month" id="adminManageAttendanceLeavesPerMonth" value="<?php echo $attendance_leaves_per_month; ?>" autocomplete="off">
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label" for="adminManageAttendanceLeavesPerQuarter">Leaves Per Quarter</label>
             <div class="controls">
-                <input type="number" name="attendance_leaves_per_quarter" id="adminManageAttendanceLeavesPerQuarter" value="<?php echo $attendance_leaves_per_quarter; ?>" required autocomplete="off">
+                <input type="number" name="attendance_leaves_per_quarter" id="adminManageAttendanceLeavesPerQuarter" value="<?php echo $attendance_leaves_per_quarter; ?>" autocomplete="off">
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label" for="adminManageAttendanceLeavesPerYear">Leaves Per Year</label>
             <div class="controls">
-                <input type="number" name="attendance_leaves_per_year" id="adminManageAttendanceLeavesPerYear" value="<?php echo $attendance_leaves_per_year; ?>" required autocomplete="off">
+                <input type="number" name="attendance_leaves_per_year" id="adminManageAttendanceLeavesPerYear" value="<?php echo $attendance_leaves_per_year; ?>" autocomplete="off">
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label" for="adminManageAttendanceLeavesMethod">Leaves Method</label>
             <div class="controls">
-                <select name="attendance_leaves_method" id="adminManageAttendanceLeavesMethod" required autocomplete="off">
+                <select name="attendance_leaves_method" id="adminManageAttendanceLeavesMethod" autocomplete="off">
                     <option value="month" <?php echo ($attendance_leaves_method == 'month') ? 'selected="selected"' : ''; ?>>
                         Month
                     </option>
@@ -151,7 +151,7 @@
         <div class="control-group">
             <label class="control-label" for="adminManageAttendanceLeavesCarries">Leaves Carries</label>
             <div class="controls">
-                <select name="attendance_leaves_carries" id="adminManageAttendanceLeavesCarries" required autocomplete="off">
+                <select name="attendance_leaves_carries" id="adminManageAttendanceLeavesCarries" autocomplete="off">
                     <option value="0" <?php echo ($attendance_leaves_carries == '0') ? 'selected="selected"' : ''; ?>>No</option>
                     <option value="1" <?php echo ($attendance_leaves_carries == '1') ? 'selected="selected"' : ''; ?>>Yes</option>
                 </select>
