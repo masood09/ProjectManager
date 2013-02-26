@@ -353,6 +353,15 @@ div.media-files a {
     margin: 0 auto;
 }
 
+table.align-center td,
+table.align-center th {
+    text-align: center !important;
+}
+
+table tfoot tr td {
+    font-weight: bold;
+}
+
 footer {
     padding: 20px 0;
     color: #999;
