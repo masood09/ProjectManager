@@ -376,3 +376,19 @@ footer a:hover {
     color: #333;
     text-decoration: none;
 }
+
+#body_content {
+    display: none;
+}
+
+#body_loading {
+    height: 100%;
+    position: absolute;
+    z-index: 100000;
+    width:100%;
+}
+
+#body_loading h4 {
+    width: 65px;
+    margin:20% auto 0 auto;
+}

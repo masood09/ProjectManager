@@ -49,6 +49,9 @@ $(document).ready(function() {
             e.stopPropagation();
             e.preventDefault();
 
+            $('#body_loading').show();
+            $('#body_content').hide();
+
             $(this).attr('disabled', 'disabled');
             $('#new-comment-comment').val($('#comment-textarea').val());
             $('#new-comment-form').submit();
@@ -102,12 +105,16 @@ $(document).ready(function() {
             eventClick: function(calEvent, jsEvent, view) {
                 if ($('#editLeave').get(0)) {
                     $('#editLeaveId').val(calEvent.leaveId);
+                    $('#editLeaveFormDecline').removeAttr('disabled');
+                    $('#editLeaveFormApprove').removeAttr('disabled');
                     $('#editLeave').modal();
                 }
                 else if ($('#editHoliday').get(0)) {
                     $('#editHolidayId').val(calEvent.holidayId);
                     $('#editHolidayDate').datepicker('setValue', calEvent.holidayDate);
                     $('#editHolidayName').val(calEvent.holidayName);
+                    $('#editHolidayFormSave').removeAttr('disabled');
+                    $('#editHolidayFormDelete').removeAttr('disabled');
                     $('#editHoliday').modal();
                 }
             },
@@ -142,6 +149,8 @@ $(document).ready(function() {
                 return false;
             }
 
+            $('#applyLeaveFormSave').attr('disabled', 'disabled');
+
             $.ajax({
                 type: "POST",
                 url: $('#applyLeaveForm').attr('action'),
@@ -153,6 +162,7 @@ $(document).ready(function() {
                     'leavesReason': $('#leavesReason').val()
                 }
             }).done (function (data) {
+                $('#applyLeaveFormSave').removeAttr('disabled');
                 $('#fullCalendar').fullCalendar('refetchEvents');
                 $('#newLeave').modal('hide');
             });
@@ -166,6 +176,8 @@ $(document).ready(function() {
                 return false;
             }
 
+            $('#applyHolidayFormSave').attr('disabled', 'disabled');
+
             $.ajax({
                 type: "POST",
                 url: $('#applyHolidayForm').attr('action'),
@@ -175,6 +187,7 @@ $(document).ready(function() {
                     'newHolidayName': $('#newHolidayName').val()
                 }
             }).done (function (data) {
+                $('#applyHolidayFormSave').removeAttr('disabled');
                 $('#fullCalendar').fullCalendar('refetchEvents');
                 $('#newHoliday').modal('hide');
             });
@@ -189,6 +202,9 @@ $(document).ready(function() {
                     return false;
                 }
 
+                $('#editHolidayFormSave').attr('disabled', 'disabled');
+                $('#editHolidayFormDelete').attr('disabled', 'disabled');
+
                 $.ajax({
                     type: "POST",
                     url: $('#editHolidayForm').attr('action'),
@@ -198,6 +214,8 @@ $(document).ready(function() {
                         'editHolidayId': $('#editHolidayId').val()
                     }
                 }).done (function (data) {
+                    $('#editHolidayFormSave').removeAttr('disabled');
+                    $('#editHolidayFormDelete').removeAttr('disabled');
                     $('#fullCalendar').fullCalendar('refetchEvents');
                     $('#editHoliday').modal('hide');
                 });
@@ -207,6 +225,9 @@ $(document).ready(function() {
                 e.stopPropagation();
                 e.preventDefault();
 
+                $('#editHolidayFormSave').attr('disabled', 'disabled');
+                $('#editHolidayFormDelete').attr('disabled', 'disabled');
+
                 $.ajax({
                     type: "POST",
                     url: $('#editHolidayDeleteUrl').val(),
@@ -214,6 +235,8 @@ $(document).ready(function() {
                         'editHolidayId': $('#editHolidayId').val()
                     }
                 }).done (function (data) {
+                    $('#editHolidayFormSave').removeAttr('disabled');
+                    $('#editHolidayFormDelete').removeAttr('disabled');
                     $('#fullCalendar').fullCalendar('refetchEvents');
                     $('#editHoliday').modal('hide');
                 });
@@ -225,6 +248,9 @@ $(document).ready(function() {
                 e.stopPropagation();
                 e.preventDefault();
 
+                $('#editLeaveFormDecline').attr('disabled', 'disabled');
+                $('#editLeaveFormApprove').attr('disabled', 'disabled');
+
                 $.ajax({
                     type: "POST",
                     url: $('#editLeaveForm').attr('action'),
@@ -233,6 +259,8 @@ $(document).ready(function() {
                         'approved': '0'
                     }
                 }).done (function (data) {
+                    $('#editLeaveFormDecline').removeAttr('disabled');
+                    $('#editLeaveFormApprove').removeAttr('disabled');
                     $('#fullCalendar').fullCalendar('refetchEvents');
                     $('#editLeave').modal('hide');
                 });
@@ -242,6 +270,9 @@ $(document).ready(function() {
                 e.stopPropagation();
                 e.preventDefault();
 
+                $('#editLeaveFormDecline').attr('disabled', 'disabled');
+                $('#editLeaveFormApprove').attr('disabled', 'disabled');
+
                 $.ajax({
                     type: "POST",
                     url: $('#editLeaveForm').attr('action'),
@@ -250,6 +281,8 @@ $(document).ready(function() {
                         'approved': '1'
                     }
                 }).done (function (data) {
+                    $('#editLeaveFormDecline').removeAttr('disabled');
+                    $('#editLeaveFormApprove').removeAttr('disabled');
                     $('#fullCalendar').fullCalendar('refetchEvents');
                     $('#editLeave').modal('hide');
                 });
@@ -308,8 +341,16 @@ $(document).ready(function() {
         $('#timer-form').submit();
     });
 
+    $('.a-show-loader').click(function (e) {
+        $('#body_loading').show();
+        $('#body_content').hide();
+    });
+
     $('.datepicker').datepicker();
 
     $(".date").easydate({ 'live': false });
     $(".date").show();
+
+    $('#body_loading').hide();
+    $('#body_content').show();
 });

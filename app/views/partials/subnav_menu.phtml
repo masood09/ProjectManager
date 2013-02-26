@@ -46,21 +46,21 @@
 <?php } else if ($controller == 'project') { ?>
     <ul>
         <li>
-            <a href="<?php echo $this->url->get('project/view/' . $currentProject->id); ?>" <?php echo ($action == 'view') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('project/view/' . $currentProject->id); ?>" class="<?php echo ($action == 'view') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-tasks icon-4x"></i>
                 <br>
                 Tasks
             </a>
         </li>
         <li>
-            <a href="<?php echo $this->url->get('project/notes/' . $currentProject->id); ?>" <?php echo ($action == 'notes') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('project/notes/' . $currentProject->id); ?>" class="<?php echo ($action == 'notes') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-file icon-4x"></i>
                 <br>
                 Notes
             </a>
         </li>
         <li>
-            <a href="<?php echo $this->url->get('project/files/' . $currentProject->id); ?>" <?php echo ($action == 'files') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('project/files/' . $currentProject->id); ?>" class="<?php echo ($action == 'files') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-cloud icon-4x"></i>
                 <br>
                 Files
@@ -68,7 +68,7 @@
         </li>
         <?php if ($currentUser->isAdmin()) { ?>
         <li>
-            <a href="<?php echo $this->url->get('project/manage/' . $currentProject->id); ?>" <?php echo ($action == 'manage') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('project/manage/' . $currentProject->id); ?>" class="<?php echo ($action == 'manage') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-cogs icon-4x"></i>
                 <br>
                 Manage
@@ -79,28 +79,28 @@
 <?php } else if ($controller == 'admin') { ?>
     <ul>
         <li>
-            <a href="<?php echo $this->url->get('admin/index'); ?>" <?php echo ($action == 'index') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('admin/index'); ?>" class="<?php echo ($action == 'index') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-cogs icon-4x"></i>
                 <br>
                 Manage
             </a>
         </li>
         <li>
-            <a href="<?php echo $this->url->get('admin/users'); ?>" <?php echo ($action == 'users') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('admin/users'); ?>" class="<?php echo ($action == 'users') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-group icon-4x"></i>
                 <br>
                 Users
             </a>
         </li>
         <li>
-            <a href="<?php echo $this->url->get('admin/leaves'); ?>" <?php echo ($action == 'leaves') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('admin/leaves'); ?>" class="<?php echo ($action == 'leaves') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-calendar icon-4x"></i>
                 <br>
                 Leaves
             </a>
         </li>
         <li>
-            <a href="<?php echo $this->url->get('admin/holidays'); ?>" <?php echo ($action == 'holidays') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('admin/holidays'); ?>" class="<?php echo ($action == 'holidays') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-calendar icon-4x"></i>
                 <br>
                 Holidays
@@ -110,14 +110,14 @@
 <?php } else if ($controller == 'report') { ?>
     <ul>
         <li>
-            <a href="<?php echo $this->url->get('report/attendance'); ?>" <?php echo ($action == 'attendance') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('report/attendance'); ?>" class="<?php echo ($action == 'attendance') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-calendar icon-4x"></i>
                 <br>
                 Attendance
             </a>
         </li>
         <li>
-            <a href="<?php echo $this->url->get('report/workreport'); ?>" <?php echo ($action == 'workreport') ? 'class="active"' : ''; ?>>
+            <a href="<?php echo $this->url->get('report/workreport'); ?>" class="<?php echo ($action == 'workreport') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-briefcase icon-4x"></i>
                 <br>
                 Work Report

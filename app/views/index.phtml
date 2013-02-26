@@ -30,6 +30,12 @@
     </head>
 
     <body <?php echo ($body_id) ? 'id="' . $body_id . '"' : ''; ?> <?php echo ($body_class) ? 'class="' . $body_class . '"' : ''; ?>>
+        <div id="body_loading">
+            <h4>
+                <i class="icon-spinner icon-spin icon-4x"></i>
+            </h4>
+        </div>
+        <div id="body_content">
         <header class="navbar navbar-fixed-top">
             <?php $this->partial('partials/header'); ?>
         </header>
@@ -81,6 +87,7 @@
                 <?php $this->partial('partials/new_project'); ?>
             <?php } ?>
         <?php } ?>
+        </div>
 
         <?php echo Tag::javascriptInclude('js/wysihtml5-0.3.0.min.js'); ?>
         <?php echo Tag::javascriptInclude('js/jquery-1.8.3.min.js'); ?>

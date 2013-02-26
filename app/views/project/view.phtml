@@ -20,7 +20,7 @@
 <div class="span4">
     <div class="message-sidebar">
         <?php foreach($allProjectTasks AS $projectTask) { ?>
-            <a href="<?php echo $this->url->get('project/view/' . $currentProject->id . '/' . $projectTask->id); ?>" class="message-preview <?php echo ($projectTask->status == 0) ? 'new' : ''; ?> <?php echo ($projectTask->id == $currentTask->id) ? 'active' : ''; ?>">
+            <a href="<?php echo $this->url->get('project/view/' . $currentProject->id . '/' . $projectTask->id); ?>" class="message-preview <?php echo ($projectTask->status == 0) ? 'new' : ''; ?> <?php echo ($projectTask->id == $currentTask->id) ? 'active' : ''; ?> a-show-loader">
                 <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($projectTask->created_at)); ?></abbr>
                 <h5>
                     <?php echo $projectTask->getUser()->full_name; ?>

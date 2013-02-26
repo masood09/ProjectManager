@@ -15,11 +15,11 @@
         </a>
 
         <?php if ($currentUser) { ?>
-            <a href="<?php echo $this->url->get('dashboard/index'); ?>" class="brand"><?php echo $AppName; ?></a>
+            <a href="<?php echo $this->url->get('dashboard/index'); ?>" class="brand a-show-loader"><?php echo $AppName; ?></a>
         <?php } else if ($controller == 'install') { ?>
-            <a href="<?php echo $this->url->get('install/index'); ?>" class="brand"><?php echo $AppName; ?></a>
+            <a href="<?php echo $this->url->get('install/index'); ?>" class="brand a-show-loader"><?php echo $AppName; ?></a>
         <?php } else { ?>
-            <a href="<?php echo $this->url->get('user/login'); ?>" class="brand"><?php echo $AppName; ?></a>
+            <a href="<?php echo $this->url->get('user/login'); ?>" class="brand a-show-loader"><?php echo $AppName; ?></a>
         <?php } ?>
 
         <div class="nav-collapse collapse">
@@ -27,7 +27,7 @@
                 <?php if ($currentUser) { ?>
                 <ul class="nav pull-left">
                     <li <?php echo ($controller == 'dashboard') ? 'class="active"' : ''; ?>>
-                        <a href="<?php echo $this->url->get('dashboard/index'); ?>">
+                        <a href="<?php echo $this->url->get('dashboard/index'); ?>" class="a-show-loader">
                             <i class="icon-home icon-white"></i>
                         </a>
                     </li>
@@ -48,7 +48,7 @@
                             <?php if (count($allProjects) > 0) { ?>
                                 <?php foreach($allProjects AS $project) { ?>
                                     <li>
-                                        <a href="<?php echo $this->url->get('project/view/' . $project->id); ?>">
+                                        <a href="<?php echo $this->url->get('project/view/' . $project->id); ?>" class="a-show-loader">
                                             <?php echo $project->name; ?>
                                         </a>
                                 <?php } ?>
@@ -62,7 +62,7 @@
                         </ul>
                     </li>
                     <li <?php echo ($controller == 'report') ? 'class="active"' : ''; ?>>
-                        <a href="<?php echo $this->url->get('report/attendance'); ?>">
+                        <a href="<?php echo $this->url->get('report/attendance'); ?>" class="a-show-loader">
                             Reports
                         </a>
                     </li>
@@ -72,7 +72,7 @@
                 <ul class="nav pull-right">
                     <?php if (!$currentUser) { ?>
                         <li class="active">
-                            <a href="<?php echo $this->url->get('user/login'); ?>">
+                            <a href="<?php echo $this->url->get('user/login'); ?>" class="a-show-loader">
                                 Log in
                             </a>
                         </li>
@@ -106,7 +106,7 @@
 
                                 <?php if ($currentAttendance) { ?>
                                     <li>
-                                        <a class="timer-task-a" href="#" data-task-id="<?php echo $currentAttendance->task_id; ?>">
+                                        <a class="timer-task-a a-show-loader" href="#" data-task-id="<?php echo $currentAttendance->task_id; ?>">
                                             <i class="icon-stop"></i>
                                             &nbsp;&nbsp;
                                             <?php if ($currentAttendance->task_id == 0) { ?>
@@ -120,7 +120,7 @@
                                     </li>
                                 <?php } else { ?>
                                     <li>
-                                        <a class="timer-task-a" href="#" data-task-id="0">
+                                        <a class="timer-task-a a-show-loader" href="#" data-task-id="0">
                                             <i class="icon-play"></i>
                                             &nbsp;&nbsp;
                                             No Task
@@ -128,7 +128,7 @@
                                     </li>
                                     <?php foreach ($userTasks AS $userTask) { ?>
                                         <li>
-                                            <a class="timer-task-a" href="#" data-task-id="<?php echo $userTask->id; ?>">
+                                            <a class="timer-task-a a-show-loader" href="#" data-task-id="<?php echo $userTask->id; ?>">
                                                 <i class="icon-play"></i>
                                                 &nbsp;&nbsp;
                                                 (<?php echo $userTask->getProject()->name; ?>)
@@ -156,7 +156,7 @@
                                     <?php } else { ?>
                                         <div id="notificationDropdown" class="activity span6">
                                             <?php foreach ($notifications AS $notification) { ?>
-                                                <a href="<?php echo $this->url->get($notification->getUrl()); ?>" class="activity-preview new">
+                                                <a href="<?php echo $this->url->get($notification->getUrl()); ?>" class="activity-preview new a-show-loader">
                                                     <div class="media">
                                                         <img class="media-object pull-left" src="<?php echo $this->url->get('profile/default.jpg'); ?>">
 
@@ -182,7 +182,7 @@
 
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="<?php echo $this->url->get('user/account'); ?>">
+                                    <a href="<?php echo $this->url->get('user/account'); ?>" class="a-show-loader">
                                         <i class="icon-user"></i>
                                         &nbsp;&nbsp;
                                         My Account
@@ -190,7 +190,7 @@
                                 </li>
                                 <?php if ($currentUser->isAdmin()) { ?>
                                     <li>
-                                        <a href="<?php echo $this->url->get('admin/index'); ?>">
+                                        <a href="<?php echo $this->url->get('admin/index'); ?>" class="a-show-loader">
                                             <i class="icon-cogs"></i>
                                             &nbsp;&nbsp;
                                             Admin
@@ -199,7 +199,7 @@
                                 <?php } ?>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="<?php echo $this->url->get('user/logout'); ?>">
+                                    <a href="<?php echo $this->url->get('user/logout'); ?>" class="a-show-loader">
                                         <i class="icon-off"></i>
                                         &nbsp;&nbsp;
                                         Logout

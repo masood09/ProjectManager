@@ -41,7 +41,7 @@ class AjaxController extends ControllerBase
         if (count($notifications) > 0) {
             $return['notificationDropdown'] = '';
             foreach ($notifications AS $notification) {
-                $return['notificationDropdown'] .= '<a href="' . $this->url->get($notification->getUrl()) . '" class="activity-preview new"><div class="media"><img class="media-object pull-left" src="' . $this->url->get('profile/' . $notification->getUser()->getProfilePicture()) . '"><abbr class="date pull-right">' . date('D, j M Y H:i:s O', strtotime($notification->created_at)) . '</abbr><div class="media-body"><p class="media-heading span4">' . $notification->message . '</p></div></div></a>
+                $return['notificationDropdown'] .= '<a href="' . $this->url->get($notification->getUrl()) . '" class="activity-preview new a-show-loader"><div class="media"><img class="media-object pull-left" src="' . $this->url->get('profile/' . $notification->getUser()->getProfilePicture()) . '"><abbr class="date pull-right">' . date('D, j M Y H:i:s O', strtotime($notification->created_at)) . '</abbr><div class="media-body"><p class="media-heading span4">' . $notification->message . '</p></div></div></a>
                 ';
             }
         }

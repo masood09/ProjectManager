@@ -20,7 +20,7 @@
 <div class="span4">
     <div class="message-sidebar">
         <?php foreach($allProjectNotes AS $projectNote) { ?>
-            <a href="<?php echo $this->url->get('project/notes/' . $currentProject->id . '/' . $projectNote->id); ?>" class="message-preview <?php echo ($projectNote->id == $currentNote->id) ? 'active' : ''; ?>">
+            <a href="<?php echo $this->url->get('project/notes/' . $currentProject->id . '/' . $projectNote->id); ?>" class="message-preview <?php echo ($projectNote->id == $currentNote->id) ? 'active' : ''; ?> a-show-loader">
                 <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($projectNote->created_at)); ?></abbr>
                 <h5>
                     <?php echo $projectNote->getUser()->full_name; ?>

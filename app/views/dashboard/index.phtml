@@ -10,7 +10,7 @@
     <?php } else { ?>
         <div class="message-sidebar">
             <?php foreach($tasksAssigned AS $assignedTask) { ?>
-                <a href="<?php echo $this->url->get('project/view/' . $assignedTask->getProject()->id . '/' . $assignedTask->id); ?>" class="message-preview new">
+                <a href="<?php echo $this->url->get('project/view/' . $assignedTask->getProject()->id . '/' . $assignedTask->id); ?>" class="message-preview new a-show-loader">
                     <abbr class="date pull-right"><?php echo date('D, j M Y H:i:s O', strtotime($assignedTask->created_at)); ?></abbr>
                     <h5>
                         <?php echo $assignedTask->getProject()->name; ?>
@@ -42,7 +42,7 @@
             </div>
         <?php } else { ?>
             <?php foreach ($activities AS $activity) { ?>
-                <a href="<?php echo $this->url->get($activity->getUrl()); ?>" class="activity-preview <?php echo ($activity->read == 0) ? 'new' : ''; ?>">
+                <a href="<?php echo $this->url->get($activity->getUrl()); ?>" class="activity-preview <?php echo ($activity->read == 0) ? 'new' : ''; ?> a-show-loader">
                     <div class="media">
                         <img class="media-object pull-left" src="<?php echo $this->url->get('profile/' . $activity->getUser()->getProfilePicture()); ?>">
 
