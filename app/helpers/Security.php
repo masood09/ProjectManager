@@ -112,6 +112,10 @@ class Security extends Phalcon\Mvc\User\Plugin
                     'files',
                     'newfile'
                 ),
+                'report' => array(
+                    'attendance',
+                    'workreport',
+                ),
                 'task' => array(
                     'updateajax',
                     'updatecommentajax',

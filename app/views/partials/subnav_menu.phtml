@@ -107,4 +107,21 @@
             </a>
         </li>
     </ul>
+<?php } else if ($controller == 'report') { ?>
+    <ul>
+        <li>
+            <a href="<?php echo $this->url->get('report/attendance'); ?>" <?php echo ($action == 'attendance') ? 'class="active"' : ''; ?>>
+                <i class="icon-calendar icon-4x"></i>
+                <br>
+                Attendance
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo $this->url->get('report/workreport'); ?>" <?php echo ($action == 'workreport') ? 'class="active"' : ''; ?>>
+                <i class="icon-briefcase icon-4x"></i>
+                <br>
+                Work Report
+            </a>
+        </li>
+    </ul>
 <?php } ?>
