@@ -60,8 +60,10 @@ class AttendanceController extends ControllerBase
                 $attendance->end = new Phalcon\Db\RawValue('now()');
                 $attendance->save();
 
-                $task->hours_spent = $task->calculateTotalTimeSpent();
-                $task->save();
+                if ($task) {
+                    $task->hours_spent = $task->calculateTotalTimeSpent();
+                    $task->save();
+                }
             }
             else {
                 // Timer not running. Lets start the timer.
