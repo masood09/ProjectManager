@@ -225,11 +225,14 @@ class UpdateHelper
     {
         $sqlDir = __DIR__ . '/../../install/sql/';
         $currentVersionArray = explode('.', $currentVersion);
+        $maintainanceFile = __DIR__ . '/../../public/maintainance.flag';
 
         while (!($currentVersionArray[0] == $targetVersion['major'] &&
             $currentVersionArray[1] == $targetVersion['minor'] &&
             $currentVersionArray[2] == $targetVersion['patch']))
         {
+            file_put_contents($maintainanceFile, 'maintainance mode');
+
             if ($currentVersionArray[2] == 9) {
                 $currentVersionArray[1]++;
                 $currentVersionArray[2] = 0;
@@ -258,5 +261,7 @@ class UpdateHelper
 
             UpdateHelper::updateAppPost($updateVersion);
         }
+
+        unlink($maintainanceFile);
     }
 }

@@ -15,8 +15,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 $configFile = __DIR__ . '/../app/config/config.xml';
+$maintainanceFile = __DIR__ . '/maintainance.flag';
 
 error_reporting(E_ALL);
+
+if (file_exists($maintainanceFile)) {
+    echo "Site in maintainance mode";
+    die;
+}
 
 if (!file_exists($configFile)) {
     require_once(__DIR__ . '/../install/install.php');
