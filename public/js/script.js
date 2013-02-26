@@ -353,4 +353,8 @@ $(document).ready(function() {
 
     $('#body_loading').hide();
     $('#body_content').show();
+
+    if ($('#fullCalendar').get(0)) {
+        $('#fullCalendar').fullCalendar('render');
+    }
 });
