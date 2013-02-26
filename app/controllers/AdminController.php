@@ -412,4 +412,145 @@ class AdminController extends ControllerBase
         $this->view->disable();
         return;
     }
+
+    public function holidaysAction()
+    {
+        $allHolidays = Holiday::find(array(
+            'conditions' => 'date >= CURDATE()',
+            'order' => 'date ASC',
+        ));
+
+        $this->view->setVar('allHolidays', $allHolidays);
+        $this->view->setVar('body_id', 'admin_holidays');
+        Phalcon\Tag::setTitle('Manage Holidays');
+    }
+
+    public function getallholidaysajaxAction()
+    {
+        $start = $this->request->getQuery('start');
+        $end = $this->request->getQuery('end');
+        $holidaysArray = array();
+
+        $holidays = Holiday::find(array(
+            'conditions' => 'date >= "' . date('Y-m-d', $start) . '" AND date <= "' . date('Y-m-d', $end) . '"',
+            'order' => 'date DESC',
+        ));
+
+        foreach ($holidays AS $holiday) {
+            $temp = array();
+            $temp['id'] = 'holiday_' . $holiday->id;
+            $temp['title'] = $holiday->name;
+            $temp['start'] = $holiday->date;
+            $temp['allDay'] = true;
+            $temp['color'] = '#d9edf7';
+            $temp['textColor'] = '#333333';
+
+            $temp['eventType'] = 'holiday';
+
+            $temp['holidayId'] = $holiday->id;
+            $temp['holidayName'] = $holiday->name;
+            $temp['holidayDate'] = $holiday->date;
+
+            $holidaysArray[] = $temp;
+        }
+
+        echo json_encode($holidaysArray);
+
+        $this->view->disable();
+        return;
+    }
+
+    public function applyholidayAction()
+    {
+        if ($this->request->isPost()) {
+            $from = $this->request->getPost('newHolidayStartDate');
+            $to = $this->request->getPost('newHolidayEndDate');
+            $name = $this->request->getPost('newHolidayName');
+
+            if (!$name) {
+                $this->view->disable();
+                return;
+            }
+
+            $newHolidays = array();
+
+            $counterFrom = strtotime($from);
+            $counterTo = strtotime($to);
+
+            while(strtotime('+1 day', $counterFrom) <= strtotime('+1 day', $counterTo)) {
+                $newHolidays[] = date('Y-m-d', $counterFrom);
+
+                $counterFrom = strtotime('+1 day', $counterFrom);
+            }
+
+            foreach ($newHolidays AS $newHoliday) {
+                $holiday = new Holiday();
+                $holiday->name = $name;
+                $holiday->date = $newHoliday;
+                $holiday->save();
+            }
+
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
+    public function editholidayAction()
+    {
+        if ($this->request->isPost()) {
+            $editHolidayDate = $this->request->getPost('editHolidayDate');
+            $editHolidayName = $this->request->getPost('editHolidayName');
+            $editHolidayId = $this->request->getPost('editHolidayId');
+
+            $holiday = Holiday::findFirst('id = "' . $editHolidayId . '"');
+
+            if (!$holiday) {
+                $this->view->disable();
+                return;
+            }
+
+            if (is_null($editHolidayName) || trim($editHolidayName) == '') {
+                $this->view->disable();
+                return;
+            }
+
+            $holiday->date = $editHolidayDate;
+            $holiday->name = $editHolidayName;
+            $holiday->save();
+
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
+    public function deleteholidayAction()
+    {
+        if ($this->request->isPost()) {
+            $editHolidayId = $this->request->getPost('editHolidayId');
+
+            $holiday = Holiday::findFirst('id = "' . $editHolidayId . '"');
+
+            if (!$holiday) {
+                $this->view->disable();
+                return;
+            }
+
+            $holiday->delete();
+
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
 }

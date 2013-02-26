@@ -59,6 +59,11 @@ class Security extends Phalcon\Mvc\User\Plugin
                     'savegeneral',
                     'saveemail',
                     'saveattendance',
+                    'holidays',
+                    'getallholidaysajax',
+                    'applyholiday',
+                    'editholiday',
+                    'deleteholiday',
                 ),
                 'project' => array(
                     'manage',

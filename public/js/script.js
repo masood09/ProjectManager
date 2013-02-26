@@ -104,53 +104,33 @@ $(document).ready(function() {
                     $('#editLeaveId').val(calEvent.leaveId);
                     $('#editLeave').modal();
                 }
+                else if ($('#editHoliday').get(0)) {
+                    $('#editHolidayId').val(calEvent.holidayId);
+                    $('#editHolidayDate').datepicker('setValue', calEvent.holidayDate);
+                    $('#editHolidayName').val(calEvent.holidayName);
+                    $('#editHoliday').modal();
+                }
             },
             selectable: true,
             select: function(start, end, allDay) {
-                startYear = start.getFullYear();
+                if ($('#newLeave').get(0)) {
+                    $('#leavesFrom').datepicker('setValue', start);
+                    $('#leavesTo').datepicker('setValue', end);
+                    $('#leavesReason').val('');
 
-                if (parseFloat(start.getMonth() + 1) < 10) {
-                    startMonth = '0' + parseFloat(start.getMonth() + 1);
-                }
-                else {
-                    startMonth = parseFloat(start.getMonth() + 1);
-                }
+                    if ($('#admin_leaves').get(0)) {
+                        $('#leavesUser').val(0);
+                    }
 
-                if (parseFloat(start.getDate()) < 10) {
-                    startDay = '0' + start.getDate();
+                    $('#newLeave').modal();
                 }
-                else {
-                    startDay = start.getDate();
+                else if ($('#newHoliday').get(0)) {
+                    $('#newHolidayStartDate').datepicker('setValue', start);
+                    $('#newHolidayEndDate').datepicker('setValue', end);
+                    $('#newHolidayName').val('');
+
+                    $('#newHoliday').modal();
                 }
-
-                endYear = end.getFullYear();
-
-                if (parseFloat(end.getMonth() + 1) < 10) {
-                    endMonth = '0' + parseFloat(end.getMonth() + 1);
-                }
-                else {
-                    endMonth = parseFloat(end.getMonth() + 1);
-                }
-
-                if (parseFloat(end.getDate()) < 10) {
-                    endDay = '0' + end.getDate();
-                }
-                else {
-                    endDay = end.getDate();
-                }
-
-                formattedStart = startYear + '-' + startMonth + '-' + startDay;
-                formattedEnd = endYear + '-' + endMonth + '-' + endDay;
-
-                $('#leavesFrom').datepicker('setValue', start);
-                $('#leavesTo').datepicker('setValue', end);
-                $('#leavesReason').val('');
-
-                if ($('#admin_leaves').get(0)) {
-                    $('#leavesUser').val(0);
-                }
-
-                $('#newLeave').modal();
             }
         });
 
@@ -177,6 +157,68 @@ $(document).ready(function() {
                 $('#newLeave').modal('hide');
             });
         });
+
+        $('#applyHolidayFormSave').click(function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            if ($('#newHolidayName').val() === "") {
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: $('#applyHolidayForm').attr('action'),
+                data: {
+                    'newHolidayStartDate': $('#newHolidayStartDate').val(),
+                    'newHolidayEndDate': $('#newHolidayEndDate').val(),
+                    'newHolidayName': $('#newHolidayName').val()
+                }
+            }).done (function (data) {
+                $('#fullCalendar').fullCalendar('refetchEvents');
+                $('#newHoliday').modal('hide');
+            });
+        });
+
+        if ($('#editHoliday').get(0)) {
+            $('#editHolidayFormSave').click(function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if ($('#editHolidayName').val() === "") {
+                    return false;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: $('#editHolidayForm').attr('action'),
+                    data: {
+                        'editHolidayDate': $('#editHolidayDate').val(),
+                        'editHolidayName': $('#editHolidayName').val(),
+                        'editHolidayId': $('#editHolidayId').val()
+                    }
+                }).done (function (data) {
+                    $('#fullCalendar').fullCalendar('refetchEvents');
+                    $('#editHoliday').modal('hide');
+                });
+            });
+
+            $('#editHolidayFormDelete').click(function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: $('#editHolidayDeleteUrl').val(),
+                    data: {
+                        'editHolidayId': $('#editHolidayId').val()
+                    }
+                }).done (function (data) {
+                    $('#fullCalendar').fullCalendar('refetchEvents');
+                    $('#editHoliday').modal('hide');
+                });
+            });
+        }
 
         if ($('#editLeave').get(0)) {
             $('#editLeaveFormDecline').click(function (e) {
