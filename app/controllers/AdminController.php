@@ -243,6 +243,7 @@ class AdminController extends ControllerBase
             Config::setValue('core/name', $core_name);
             Config::setValue('core/email', $core_email);
 
+            $this->flashSession->success('Changes have been saved successfully!');
             $this->response->redirect($controller . '/' . $action);
             $this->view->disable();
             return;
@@ -297,6 +298,7 @@ class AdminController extends ControllerBase
             Config::setValue('email/port', $email_port);
             Config::setValue('email/ssl', $email_ssl);
 
+            $this->flashSession->success('Changes have been saved successfully!');
             $this->response->redirect($controller . '/' . $action);
             $this->view->disable();
             return;
@@ -403,6 +405,7 @@ class AdminController extends ControllerBase
                 $user->save();
             }
 
+            $this->flashSession->success('Changes have been saved successfully!');
             $this->response->redirect($controller . '/' . $action);
             $this->view->disable();
             return;
