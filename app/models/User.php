@@ -87,13 +87,18 @@ class User extends Phalcon\Mvc\Model
         foreach ($attendances AS $attendance) {
             if ($i == 0) {
                 $start = strtotime($attendance->start);
+                $lastEnd = $start;
             }
 
-            if (is_null($attendance->end)) {
+            if (is_null($attendance->end) && $attendance->date == date('Y-m-d')) {
                 $end = time();
+            }
+            else if (is_null($attendance->end)) {
+                $end = $lastEnd;
             }
             else {
                 $end = strtotime($attendance->end);
+                $lastEnd = $end;
             }
 
             $i++;
@@ -139,8 +144,11 @@ class User extends Phalcon\Mvc\Model
         foreach ($attendances AS $attendance) {
             $start = strtotime($attendance->start);
 
-            if (is_null($attendance->end)) {
+            if (is_null($attendance->end) && $attendance->date == date('Y-m-d')) {
                 $end = time();
+            }
+            else if (is_null($attendance->end)) {
+                $end = strtotime($attendance->start);
             }
             else {
                 $end = strtotime($attendance->end);
