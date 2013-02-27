@@ -18,7 +18,7 @@ class DashboardController extends ControllerBase
 {
     public function indexAction()
     {
-        $this->view->setVar("tasksAssigned", $this->currentUser->getTasksAssigned());
+        $this->view->setVar("tasksAssigned", $this->currentUser->getAllTasks());
 
         $this->view->setVar('body_id', 'dashboard');
 

@@ -5,7 +5,7 @@
     <br>
     <?php if (count($tasksAssigned) == 0) { ?>
     <div class="align-center">
-        <h5>No tasks are open for you!</h5>
+        <h5>You are not participating in any tasks!</h5>
     </div>
     <?php } else { ?>
         <div class="message-sidebar">
@@ -21,6 +21,7 @@
                         </span>
                     </h5>
                     <h6><?php echo $assignedTask->title; ?></h6>
+                    <h6><?php echo $assignedTask->getUser()->full_name; ?></h6>
                     <?php if ($assignedTask->status == 0 && $assignedTask->hours > 0) { ?>
                         <div class="progress">
                             <?php
