@@ -41,10 +41,26 @@ class User extends Phalcon\Mvc\Model
 
     public function getTasksAssigned()
     {
+        $tasks = array();
+        $projects = array();
+
         $tasks = Task::find(array(
             'conditions' => 'assigned_to = "' . $this->id . '" AND status = 0',
             'order' => 'created_at DESC'
         ));
+
+        foreach ($tasks AS $task) {
+            $projects[$task->getProject()->name][] = $task;
+        }
+
+        ksort($projects);
+        $tasks = array();
+
+        foreach ($projects AS $project) {
+            foreach ($project AS $task) {
+                $tasks[] = $task;
+            }
+        }
 
         return $tasks;
     }
@@ -278,6 +294,7 @@ class User extends Phalcon\Mvc\Model
         $tasks = array();
         $userTasks = array();
         $taskIds = array();
+        $projects = array();
 
         $userTasks = TaskUser::find('user_id = "' . $this->id . '"');
 
@@ -288,8 +305,21 @@ class User extends Phalcon\Mvc\Model
         if (count($taskIds) > 0) {
             $tasks = Task::find(array(
                 'conditions' => 'id IN ("' . implode('", "', $taskIds) . '") AND status = 0',
-                'order' => 'project_id ASC, created_at DESC'
+                'order' => 'project_id DESC, created_at DESC'
             ));
+
+            foreach ($tasks AS $task) {
+                $projects[$task->getProject()->name][] = $task;
+            }
+
+            ksort($projects);
+            $tasks = array();
+
+            foreach ($projects AS $project) {
+                foreach ($project AS $task) {
+                    $tasks[] = $task;
+                }
+            }
         }
 
         return $tasks;
