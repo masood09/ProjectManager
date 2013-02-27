@@ -23,7 +23,20 @@
                     <h6><?php echo $assignedTask->title; ?></h6>
                     <?php if ($assignedTask->status == 0 && $assignedTask->hours > 0) { ?>
                         <div class="progress">
-                            <div style="width: <?php echo $assignedTask->getTimePercent(); ?>%;" class="bar bar-success"></div>
+                            <?php
+                                $timePercent = $assignedTask->getTimePercent();
+
+                                if ($timePercent > 100) {
+                                    $timeClass = 'bar-danger';
+                                }
+                                else if ($timePercent > 75) {
+                                    $timeClass = 'bar-warning';
+                                }
+                                else {
+                                    $timeClass = 'bar-success';
+                                }
+                            ?>
+                            <div style="width: <?php echo $timePercent; ?>%;" class="bar <?php echo $timeClass; ?>"></div>
                         </div>
                     <?php } ?>
                 </a>
