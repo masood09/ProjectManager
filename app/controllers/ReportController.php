@@ -109,6 +109,104 @@ class ReportController extends ControllerBase
 
     public function workreportAction()
     {
+        $dates = array();
+        $records = array();
+
+        if ($this->currentUser->isAdmin()) {
+            $allUsers = User::getAllUsers();
+        }
+        else {
+            $allUsers = null;
+        }
+
+        if ($this->request->isPost()) {
+            $user_id = $this->request->getPost('user_id');
+            $workreportStartDate = $this->request->getPost('workreportFrom');
+            $workreportEndDate = $this->request->getPost('workreportTo');
+        }
+        else {
+            $user_id = $this->currentUser->id;
+            $workreportStartDate = date('Y-m-d', strtotime('-7 day', time()));
+            $workreportEndDate = date('Y-m-d');
+        }
+
+        if ($user_id != 0) {
+            $attendances = Attendance::find('user_id = "' . $user_id . '" AND date >= "' . $workreportStartDate . '" AND date <= "' . $workreportEndDate . '"');
+        }
+        else {
+            $attendances = Attendance::find('date >= "' . $workreportStartDate . '" AND date <= "' . $workreportEndDate . '"');
+        }
+
+        foreach ($attendances AS $attendance) {
+            if (!is_null($attendance->task_id) && $attendance->task_id != 0) {
+                if (!isset($dates[$attendance->date])) {
+                    $dates[$attendance->date] = array();
+                }
+
+                if (!isset($dates[$attendance->date][$attendance->user_id])){
+                    $dates[$attendance->date][$attendance->user_id] = array();
+                }
+
+                $dates[$attendance->date][$attendance->user_id][$attendance->task_id] = $attendance->task_id;
+            }
+        }
+
+        foreach($dates AS $date => $_user_ids) {
+            foreach ($_user_ids AS $_user_id => $task_ids) {
+                $_user = User::findFirst('id = "' . $_user_id . '"');
+
+                if (!$_user) {
+                    continue;
+                }
+
+                foreach ($task_ids AS $task_id) {
+                    $timeSpentStamp = 0;
+                    $task = Task::findFirst('id = "' . $task_id . '"');
+                    $attendances = Attendance::find('user_id = "' . $_user_id . '" AND date = "' . $date . '" AND task_id = "' . $task_id . '"');
+
+                    foreach ($attendances AS $attendance) {
+                        $start = strtotime($attendance->start);
+
+                        if (is_null($attendance->end) && $attendance->date == date('Y-m-d')) {
+                            $end = time();
+                        }
+                        else if (is_null($attendance->end)) {
+                            $end = strtotime($attendance->start);
+                        }
+                        else {
+                            $end = strtotime($attendance->end);
+                        }
+
+                        $timeSpentStamp += $end - $start;
+                    }
+
+                    $oldTimeZone = date_default_timezone_get();
+                    date_default_timezone_set('UTC');
+                    $timeSpent = date('H:i', $timeSpentStamp);
+                    date_default_timezone_set($oldTimeZone);
+
+                    if (!$task) {
+                        continue;
+                    }
+
+                    $temp = array();
+                    $temp['Date'] = $date;
+                    $temp['User'] = $_user->full_name;
+                    $temp['JobId'] = $task->job_id;
+                    $temp['Project'] = $task->getProject()->name;
+                    $temp['Task'] = $task->title;
+                    $temp['TimeSpent'] = $timeSpent;
+
+                    $records[] = $temp;
+                }
+            }
+        }
+
+        $this->view->setVar('records', $records);
+        $this->view->setVar('workreportStartDate', $workreportStartDate);
+        $this->view->setVar('workreportEndDate', $workreportEndDate);
+        $this->view->setVar('workreportUserId', $user_id);
+        $this->view->setVar('allUsers', $allUsers);
         $this->view->setVar('body_id', 'report_workreport');
         Phalcon\Tag::setTitle('Reports | Work Report');
     }

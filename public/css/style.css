@@ -362,6 +362,11 @@ table tfoot tr td {
     font-weight: bold;
 }
 
+td.a-center,
+th.a-center {
+    text-align: center !important;
+}
+
 footer {
     padding: 20px 0;
     color: #999;
