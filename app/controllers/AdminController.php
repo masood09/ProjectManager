@@ -36,7 +36,7 @@ class AdminController extends ControllerBase
         $this->view->setVar('attendance_weekoffs', explode(',', Config::getValue('attendance/weekoffs')));
 
         $this->view->setVar('body_id', 'admin_manage');
-        Phalcon\Tag::setTitle('Administration - Manage');
+        Phalcon\Tag::setTitle('Administration | Manage');
     }
 
     public function applyleaveAction()
@@ -109,7 +109,7 @@ class AdminController extends ControllerBase
 
         $this->view->setVar('allUsers', $allUsers);
         $this->view->setVar('body_id', 'admin_leaves');
-        Phalcon\Tag::setTitle('Manage Leaves');
+        Phalcon\Tag::setTitle('Administration | Leaves');
     }
 
     public function getallleavesajaxAction()
@@ -425,7 +425,7 @@ class AdminController extends ControllerBase
 
         $this->view->setVar('allHolidays', $allHolidays);
         $this->view->setVar('body_id', 'admin_holidays');
-        Phalcon\Tag::setTitle('Manage Holidays');
+        Phalcon\Tag::setTitle('Administration | Holidays');
     }
 
     public function getallholidaysajaxAction()
