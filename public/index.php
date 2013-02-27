@@ -16,10 +16,11 @@
 
 $configFile = __DIR__ . '/../app/config/config.xml';
 $maintainanceFile = __DIR__ . '/maintainance.flag';
+$updateFile = __DIR__ . 'update.flag';
 
 error_reporting(E_ALL);
 
-if (file_exists($maintainanceFile)) {
+if (file_exists($maintainanceFile) || file_exists($updateFile)) {
     echo "Site in maintainance mode";
     die;
 }
