@@ -143,6 +143,61 @@ class User extends Phalcon\Mvc\Model
         return ceil(($_daysTime / $_totalDaysTime) * 100);
     }
 
+    public function getTotalDaysTime($date = null, $month = null, $year = null)
+    {
+        if (is_null($date)) {
+            $date = date('d');
+        }
+
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
+        $start = 0;
+        $end = 0;
+
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND DAY(date) = "' . $date. '" AND MONTH(date) = "' . $month . '" AND YEAR(date) = "' . $year . '"');
+
+        $i = 0;
+
+        foreach ($attendances AS $attendance) {
+            if ($i == 0) {
+                $start = strtotime($attendance->start);
+                $lastEnd = $start;
+            }
+
+            if (is_null($attendance->end) && $attendance->date == date('Y-m-d')) {
+                $end = time();
+            }
+            else if (is_null($attendance->end)) {
+                $end = $lastEnd;
+            }
+            else {
+                $end = strtotime($attendance->end);
+                $lastEnd = $end;
+            }
+
+            $i++;
+        }
+
+        $totalDaysTimeStamp = $end - $start;
+
+        if ($totalDaysTimeStamp == 0) {
+            return 0;
+        }
+
+        $oldTimeZone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+        $totalDaysTime = date('H:i', $totalDaysTimeStamp);
+        date_default_timezone_set($oldTimeZone);
+
+        return $totalDaysTime;
+    }
+
     public function getDaysTime($date=null, $month=null, $year=null)
     {
         if (is_null($date)) {
@@ -518,5 +573,126 @@ class User extends Phalcon\Mvc\Model
         ));
 
         return $allUsers;
+    }
+
+    public function generateDailyReport($day = null, $month = null, $year = null)
+    {
+        if (is_null($day)) {
+            $day = date('d') - 1;
+        }
+
+        if (is_null($month)) {
+            $month = date('m');
+        }
+
+        if (is_null($year)) {
+            $year = date('Y');
+        }
+
+        $date = $year . '-' . $month . '-' . $day;
+
+        $_report = ReportDaily::findFirst('user_id = "' . $this->id . '" AND date = "' . $date . '"');
+
+        if ($_report) {
+            return;
+        }
+
+        $attendances = Attendance::find('user_id = "' . $this->id . '" AND date = "' . $date . '" AND end IS NOT NULL');
+        $i = 0;
+        $startTime = '00:00:00';
+        $endTime = '00:00:00';
+        $noTasksWorked = 0;
+        $timeOnTasksStamp = 0;
+        $avgTimeOnTasksStamp = 0;
+        $noRealTasksWorked = 0;
+        $timeOnRealTasksStamp = 0;
+        $avgTimeOnRealTasksStamp = 0;
+
+        $taskIds = array();
+
+        foreach ($attendances AS $attendance) {
+            if ($i == 0) {
+                $startTime = date('H:i:00', strtotime($attendance->start));
+            }
+
+            if (!isset($taskIds[$attendance->task_id])) {
+                $noTasksWorked++;
+
+                if ($attendance->task_id != 0) {
+                    $noRealTasksWorked++;
+                }
+
+                $taskIds[$attendance->task_id] = $attendance->task_id;
+            }
+
+            $timeOnTasksStamp += strtotime($attendance->end) - strtotime($attendance->start);
+
+            if ($attendance->task_id != 0) {
+                $timeOnRealTasksStamp += strtotime($attendance->end) - strtotime($attendance->start);
+            }
+
+            $endTime = date('H:i:00', strtotime($attendance->end));
+
+            $i++;
+        }
+
+        if (count($attendances) > 0) {
+            $avgTimeOnTasksStamp = $timeOnTasksStamp / $noTasksWorked;
+
+            if ($noRealTasksWorked > 0) {
+                $avgTimeOnRealTasksStamp = $timeOnRealTasksStamp / $noRealTasksWorked;
+            }
+        }
+
+        $oldTimeZone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+        $timeOnTasks = date('H:i', $timeOnTasksStamp);
+        $avgTimeOnTasks = date('H:i', $avgTimeOnTasksStamp);
+        $timeOnRealTasks = date('H:i', $timeOnRealTasksStamp);
+        $avgTimeOnRealTasks = date('H:i', $avgTimeOnRealTasksStamp);
+        date_default_timezone_set($oldTimeZone);
+
+        $data = array();
+
+        $report = new ReportDaily();
+        $report->user_id = $this->id;
+        $report->date = $date;
+        $report->started = $startTime;
+        $report->ended = $endTime;
+        $report->total_hours = $this->getTotalDaysTime($day, $month, $year) . ':00';
+        $report->logged_hours = $this->getDaysTime($day, $month, $year) . ':00';
+        $report->productivity = $this->getDaysProductivity($report->logged_hours, $day, $month, $year);
+        $report->no_tasks_worked = $noTasksWorked;
+        $report->time_on_tasks = $timeOnTasks . ':00';
+        $report->avg_time_on_tasks = $avgTimeOnTasks . ':00';
+        $report->no_real_tasks_worked = $noRealTasksWorked;
+        $report->time_on_real_tasks = $timeOnRealTasks . ':00';
+        $report->avg_time_on_real_tasks = $avgTimeOnRealTasks . ':00';
+
+        $report->save();
+    }
+
+    public function getLatestDailyReportDate()
+    {
+        $report = ReportDaily::findFirst(array(
+            'conditions' => 'user_id = "' . $this->id . '"',
+            'order' => 'date DESC',
+        ));
+
+        if (!$report) {
+            $report = Attendance::findFirst(array(
+                'conditions' => 'user_id = "' . $this->id . '"',
+                'order' => 'date ASC',
+            ));
+        }
+
+        if (!$report) {
+            $date = date('Y-m-d');
+        }
+        else {
+            $date = $report->date;
+        }
+
+        return $date;
     }
 }

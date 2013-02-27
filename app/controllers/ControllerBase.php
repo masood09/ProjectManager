@@ -39,6 +39,14 @@ class ControllerBase extends Phalcon\Mvc\Controller
                 $user->leaves_assigned_on = new Phalcon\Db\RawValue('now()');
                 $user->save();
             }
+
+            $curDate = strtotime($user->getLatestDailyReportDate());
+
+            while ($curDate < strtotime(date('Y-m-d'))) {
+                $user->generateDailyReport(date('d', $curDate), date('m', $curDate), date('Y', $curDate));
+
+                $curDate = strtotime('+1 day', $curDate);
+            }
         }
     }
 

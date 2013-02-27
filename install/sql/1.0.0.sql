@@ -50,3 +50,21 @@ CREATE TABLE IF NOT EXISTS `leaves` (
     `created_at` datetime NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+CREATE TABLE IF NOT EXISTS `report_daily` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id` INT(10) UNSIGNED NOT NULL,
+    `date` DATE NOT NULL,
+    `started` TIME NULL,
+    `ended` TIME NULL,
+    `total_hours` TIME NULL,
+    `logged_hours` TIME NULL,
+    `productivity` INT(10) NULL DEFAULT 0,
+    `no_tasks_worked` INT(10) NULL DEFAULT 0,
+    `time_on_tasks` TIME NULL,
+    `avg_time_on_tasks` TIME NULL,
+    `no_real_tasks_worked` INT(10) NULL DEFAULT 0,
+    `time_on_real_tasks` TIME NULL,
+    `avg_time_on_real_tasks` TIME NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
