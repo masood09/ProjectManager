@@ -136,6 +136,10 @@ class User extends Phalcon\Mvc\Model
         $explode = explode(':', $totalDaysTime);
         $_totalDaysTime = ($explode[0] * 60) + $explode[1];
 
+        if ($_daysTime == 0 || $_totalDaysTime == 0) {
+            return 0;
+        }
+
         return ceil(($_daysTime / $_totalDaysTime) * 100);
     }
 
