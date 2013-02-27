@@ -262,6 +262,8 @@ class UpdateHelper
             UpdateHelper::updateAppPost($updateVersion);
         }
 
-        unlink($maintainanceFile);
+        if (file_exists($maintainanceFile)) {
+            unlink($maintainanceFile);
+        }
     }
 }
