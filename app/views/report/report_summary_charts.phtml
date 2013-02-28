@@ -1,0 +1,154 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<?php if (is_null($reports)) { ?>
+    <div id="reportSummaryChartsNoRecords">
+        <h4>No Reports!</h4>
+    </div>
+<?php } else { ?>
+    <h5 class="header">Logged in hours</h5>
+    <div class="verticalChart">
+        <?php foreach ($reports AS $report) { ?>
+            <?php
+                $perLabel = '';
+                $singleBarClass = '';
+
+                if ($report['isHoliday']) {
+                    $singleBarClass = 'singleBarHoliday';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['logged_hours_label'];
+                    }
+                }
+                else if ($report['isWeekOff']) {
+                    $singleBarClass = 'singleBarWeekoff';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['logged_hours_label'];
+                    }
+                }
+                else if ($report['isLeave']) {
+                    $singleBarClass = 'singleBarLeave';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['logged_hours_label'];
+                    }
+                }
+                else {
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['logged_hours_label'];
+                    }
+                    else {
+                        $singleBarClass = 'singleBarAbsent';
+                    }
+                }
+            ?>
+            <div class="singleBar <?php echo $singleBarClass; ?>">
+                <div class="bar">
+                    <div class="value">
+                        <span class="perValue"><?php echo $report['logged_hours_value']; ?>%</span>
+                        <span class="perLabel"><?php echo $perLabel; ?></span>
+                    </div>
+                </div>
+                <div class="title"><?php echo $report['title']; ?></div>
+            </div>
+        <?php } ?>
+    </div>
+
+    <h5 class="header">Productivity</h5>
+    <div class="verticalChart">
+        <?php foreach ($reports AS $report) { ?>
+            <?php
+                $perLabel = '';
+                $singleBarClass = '';
+
+                if ($report['isHoliday']) {
+                    $singleBarClass = 'singleBarHoliday';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['productivity'] . '%';
+                    }
+                }
+                else if ($report['isWeekOff']) {
+                    $singleBarClass = 'singleBarWeekoff';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['productivity'] . '%';
+                    }
+                }
+                else if ($report['isLeave']) {
+                    $singleBarClass = 'singleBarLeave';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['productivity'] . '%';
+                    }
+                }
+                else {
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['productivity'] . '%';
+                    }
+                    else {
+                        $singleBarClass = 'singleBarAbsent';
+                    }
+                }
+            ?>
+            <div class="singleBar <?php echo $singleBarClass; ?>">
+                <div class="bar">
+                    <div class="value">
+                        <span class="perValue"><?php echo $report['productivity']; ?>%</span>
+                        <span class="perLabel"><?php echo $perLabel; ?></span>
+                    </div>
+                </div>
+                <div class="title"><?php echo $report['title']; ?></div>
+            </div>
+        <?php } ?>
+    </div>
+
+    <h5 class="header">Number of Tasks</h5>
+    <div class="verticalChart">
+        <?php foreach ($reports AS $report) { ?>
+            <?php
+                $perLabel = '';
+                $singleBarClass = '';
+
+                if ($report['isHoliday']) {
+                    $singleBarClass = 'singleBarHoliday';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['no_real_tasks_worked_label'];
+                    }
+                }
+                else if ($report['isWeekOff']) {
+                    $singleBarClass = 'singleBarWeekoff';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['no_real_tasks_worked_label'];
+                    }
+                }
+                else if ($report['isLeave']) {
+                    $singleBarClass = 'singleBarLeave';
+
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['no_real_tasks_worked_label'];
+                    }
+                }
+                else {
+                    if ($report['logged_hours_value'] > 0) {
+                        $perLabel = $report['no_real_tasks_worked_label'];
+                    }
+                    else {
+                        $singleBarClass = 'singleBarAbsent';
+                    }
+                }
+            ?>
+            <div class="singleBar <?php echo $singleBarClass; ?>">
+                <div class="bar">
+                    <div class="value">
+                        <span class="perValue"><?php echo $report['no_real_tasks_worked_value']; ?>%</span>
+                        <span class="perLabel"><?php echo $perLabel; ?></span>
+                    </div>
+                </div>
+                <div class="title"><?php echo $report['title']; ?></div>
+            </div>
+        <?php } ?>
+    </div>
+<?php } ?>

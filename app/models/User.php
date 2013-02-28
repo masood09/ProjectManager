@@ -518,6 +518,23 @@ class User extends Phalcon\Mvc\Model
         return $leaves;
     }
 
+    public function getApprovedLeaveDates()
+    {
+        $approvedLeaves = array();
+
+        $dbLeaves = Leaves::find('user_id = "' . $this->id . '" AND approved = "1"');
+
+        $holidays = AttendanceHelper::getHolidays();
+
+        foreach ($dbLeaves AS $dbLeave) {
+            if (!in_array($dbLeave->date, $holidays)) {
+                $approvedLeaves[] = $dbLeave->date;
+            }
+        }
+
+        return $approvedLeaves;
+    }
+
     public function getAvailLeavesCount()
     {
         $availLeaves = 0;
@@ -714,5 +731,125 @@ class User extends Phalcon\Mvc\Model
         }
 
         return $date;
+    }
+
+    public function getAttendanceStats()
+    {
+        $data = null;
+        $daysWorked = 0;
+        $workingDays = 0;
+        $leavesApproved = 0;
+        $unscheduledLeaves = 0;
+        $startTimeStamp = 0;
+        $avgStartTimeStamp = 0;
+        $endTimeStamp = 0;
+        $avgEndTimeStamp = 0;
+        $totalHoursStamp = 0;
+        $avgTotalHoursStamp = 0;
+        $loggedHoursStamp = 0;
+        $avgLoggedHoursStamp = 0;
+        $totalProductivity = 0;
+        $avgProductivity = 0;
+        $noTasksWorked = 0;
+        $noRealTasksWorked = 0;
+        $avgNoTaksWorked = 0;
+        $avgNoRealTasksWorked = 0;
+        $avgTimeOnTasksStamp = 0;
+        $avgTimeOnTasks = 0;
+        $avgTimeOnRealTasksStamp = 0;
+        $avgTimeOnRealTasks = 0;
+
+        $reports = ReportDaily::find(array(
+            'conditions' => 'user_id = "' . $this->id . '"',
+            'order' => 'date ASC',
+        ));
+
+        $i = 0;
+
+        foreach ($reports AS $report) {
+            if ($report->started != '00:00:00' && $report->ended != '00:00:00') {
+                $daysWorked++;
+
+                if ($i == 0) {
+                    $reportStartDate = $report->date;
+                }
+
+                $_explode = explode(':', $report->started);
+                $startTimeStamp += ($_explode[0] * 3600) + ($_explode[1] * 60) + ($_explode[2]);
+
+                $_explode = explode(':', $report->ended);
+                $endTimeStamp += ($_explode[0] * 3600) + ($_explode[1] * 60) + ($_explode[2]);
+
+                $_explode = explode(':', $report->total_hours);
+                $totalHoursStamp += ($_explode[0] * 3600) + ($_explode[1] * 60) + ($_explode[2]);
+
+                $_explode = explode(':', $report->logged_hours);
+                $loggedHoursStamp += ($_explode[0] * 3600) + ($_explode[1] * 60) + ($_explode[2]);
+
+                $totalProductivity += $report->productivity;
+
+                $noTasksWorked += $report->no_tasks_worked;
+                $noRealTasksWorked += $report->no_real_tasks_worked;
+
+                $_explode = explode(':', $report->time_on_tasks);
+                $avgTimeOnTasksStamp += ($_explode[0] * 3600) + ($_explode[1] * 60) + ($_explode[2]);
+
+                $_explode = explode(':', $report->time_on_real_tasks);
+                $avgTimeOnRealTasksStamp += ($_explode[0] * 3600) + ($_explode[1] * 60) + ($_explode[2]);
+
+                $reportEndDate = $report->date;
+                $i++;
+            }
+        }
+
+        if ($daysWorked > 0) {
+            $holidays = AttendanceHelper::getHolidays($reportStartDate, $reportEndDate);
+            $dbLeaves = Leaves::find(array(
+                'conditions' => 'user_id = "' . $this->id . '" AND approved = "1" AND date >= "' . $reportStartDate . '" AND date <= "' . $reportEndDate . '"',
+                'order' => 'date ASC',
+            ));
+
+            foreach ($dbLeaves AS $dbLeave) {
+                if (!in_array($dbLeave->date, $holidays)) {
+                    $leavesApproved++;
+                }
+            }
+
+            $workingDays = AttendanceHelper::getWorkingDays($this->id, $reportStartDate, $reportEndDate);
+            $unscheduledLeaves = $workingDays - $daysWorked;
+            $avgStartTimeStamp = $startTimeStamp / $daysWorked;
+            $avgEndTimeStamp = $endTimeStamp / $daysWorked;
+            $avgTotalHoursStamp = $totalHoursStamp / $daysWorked;
+            $avgLoggedHoursStamp = $loggedHoursStamp / $daysWorked;
+            $avgProductivity = round(($totalProductivity / $daysWorked), 2);
+            $avgNoTasksWorked = round(($noTasksWorked / $daysWorked), 2);
+            $avgNoRealTasksWorked = round(($noRealTasksWorked / $daysWorked), 2);
+
+            $avgTimeOnTasks = $avgTimeOnTasksStamp / $daysWorked;
+            $avgTimeOnRealTasks = $avgTimeOnRealTasksStamp / $daysWorked;
+
+            $oldTimeZone = date_default_timezone_get();
+            date_default_timezone_set('UTC');
+            $data['full_name'] = $this->full_name;
+            $data['reportStartDate'] = $reportStartDate;
+            $data['reportEndDate'] = $reportEndDate;
+            $data['totalDays'] = count($reports);
+            $data['daysWorked'] = $daysWorked;
+            $data['workingDays'] = $workingDays;
+            $data['leavesApproved'] = $leavesApproved;
+            $data['unscheduledLeaves'] = $unscheduledLeaves;
+            $data['avgStartTime'] = date('H:i', $avgStartTimeStamp);
+            $data['avgEndTime'] = date('H:i', $avgEndTimeStamp);
+            $data['avgTotalHours'] = date('H:i', $avgTotalHoursStamp);
+            $data['avgLoggedHours'] = date('H:i', $avgLoggedHoursStamp);
+            $data['avgProductivity'] = $avgProductivity . '%';
+            $data['avgNoTasksWorked'] = $avgNoTasksWorked;
+            $data['avgTimeOnTasks'] = date('H:i', $avgTimeOnTasks);
+            $data['avgNoRealTasksWorked'] = $avgNoRealTasksWorked;
+            $data['avgTimeOnRealTasks'] = date('H:i', $avgTimeOnRealTasks);
+            date_default_timezone_set($oldTimeZone);
+        }
+
+        return $data;
     }
 }

@@ -357,4 +357,102 @@ $(document).ready(function() {
     if ($('#fullCalendar').get(0)) {
         $('#fullCalendar').fullCalendar('render');
     }
+
+    if ($('.verticalChart')) {
+        $('.verticalChart .singleBar').each(function() {
+            var percent = $(this).find('.value span.perValue').html();
+
+            $(this).find('.value').animate(
+                {
+                    height:percent
+                },
+                2000,
+                function() {
+                    $(this).find('span.perLabel').fadeIn();
+                }
+            );
+        });
+
+        $('#reportSummaryChartsPrev').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $('#reportSummaryChartsContent').hide();
+            $('#reportSummaryChartsLoading').show();
+
+            $.ajax({
+                type: "POST",
+                url: $('#reportSummaryPrevAjaxUrl').val(),
+                dataType: 'json',
+                data: {
+                    'userId': $('#reportSummaryUserId').val(),
+                    'startDate': $('#reportSummaryStartDate').val()
+                }
+            }).done (function (data) {
+                $('#reportSummaryChartsContent').show();
+                $('#reportSummaryChartsLoading').hide();
+
+                $('#reportSummaryChartsContent').html(data.chartContent);
+                $('#reportSummaryStartDate').val(data.startDate);
+                $('#reportSummaryBetween').html(data.startDate + ' to ' + data.endDate);
+
+                if ($('.verticalChart')) {
+                    $('.verticalChart .singleBar').each(function() {
+                        var percent = $(this).find('.value span.perValue').html();
+
+                        $(this).find('.value').animate(
+                            {
+                                height:percent
+                            },
+                            2000,
+                            function() {
+                                $(this).find('span.perLabel').fadeIn();
+                            }
+                        );
+                    });
+                }
+            });
+        });
+
+        $('#reportSummaryChartsNext').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $('#reportSummaryChartsContent').hide();
+            $('#reportSummaryChartsLoading').show();
+
+            $.ajax({
+                type: "POST",
+                url: $('#reportSummaryNextAjaxUrl').val(),
+                dataType: 'json',
+                data: {
+                    'userId': $('#reportSummaryUserId').val(),
+                    'startDate': $('#reportSummaryStartDate').val()
+                }
+            }).done (function (data) {
+                $('#reportSummaryChartsContent').show();
+                $('#reportSummaryChartsLoading').hide();
+
+                $('#reportSummaryChartsContent').html(data.chartContent);
+                $('#reportSummaryStartDate').val(data.startDate);
+                $('#reportSummaryBetween').html(data.startDate + ' to ' + data.endDate);
+
+                if ($('.verticalChart')) {
+                    $('.verticalChart .singleBar').each(function() {
+                        var percent = $(this).find('.value span.perValue').html();
+
+                        $(this).find('.value').animate(
+                            {
+                                height:percent
+                            },
+                            2000,
+                            function() {
+                                $(this).find('span.perLabel').fadeIn();
+                            }
+                        );
+                    });
+                }
+            });
+        });
+    }
 });

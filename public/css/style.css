@@ -395,5 +395,89 @@ footer a:hover {
 
 #body_loading h4 {
     width: 65px;
-    margin:50px auto;
+    margin: 50px auto;
+}
+
+#reportSummaryChartsLoading {
+    display: none;
+    width:100%;
+}
+
+#reportSummaryChartsLoading h4 {
+    width: 65px;
+    margin: 100px auto 0 auto;
+}
+
+#reportSummaryChartsNoRecords {
+    width:100%;
+    text-align: center;
+}
+
+#reportSummaryChartsNoRecords h4 {
+    margin: 100px 0;
+}
+
+.verticalChart {
+    height: 300px;
+}
+
+.verticalChart .singleBar {
+    display: block;
+    float: left;
+    margin: 0 1% 0;
+    width: 4.65%;
+}
+
+.verticalChart .singleBar .title {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.verticalChart .singleBar .bar {
+    background: #F9F9F9;
+    border-radius: 4px 4px 4px 4px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.verticalChart .singleBarHoliday .bar {
+    background: #D9EDF7;
+}
+
+.verticalChart .singleBarWeekoff .bar {
+    background: #FCF8E3;
+}
+
+.verticalChart .singleBarLeave .bar {
+    background: #DFF0D8;
+}
+
+.verticalChart .singleBarAbsent .bar {
+    background: #999999;
+}
+
+.verticalChart .singleBar .bar .value {
+    background: #FA603D;
+    border-radius: 4px 4px 4px 4px;
+    bottom: 0;
+    color: #fff;
+    position: absolute;
+    width: 100%;
+}
+
+.verticalChart .singleBar .bar .value span.perValue {
+    display: none;
+}
+
+.verticalChart .singleBar .bar .value span.perLabel {
+    bottom: 0;
+    color: #fff;
+    display: none;
+    font-size: 12px;
+    height: 20px;
+    position: absolute;
+    text-align: center;
+    text-shadow: 0 -1px 0 #FA603D, 0 1px 0 #FA603D, 1px 0 0 #FA603D, -1px 0 0 #FA603D, -1px -1px 0 #FA603D, -1px 1px 0 #FA603D, 1px 1px 0 #FA603D, 1px -1px 0 #FA603D;
+    width: 100%;
 }

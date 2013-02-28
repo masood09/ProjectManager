@@ -16,6 +16,174 @@
 
 class ReportController extends ControllerBase
 {
+    protected function _generateReport($user, $startDate, $endDate)
+    {
+        $reports = null;
+
+        $dbReports = ReportDaily::find(array(
+            'conditions' => 'user_id = "' . $user->id . '" AND date >= "' . $startDate . '" AND date <= "' . $endDate . '"',
+            'order' => 'date ASC',
+        ));
+
+        $results = $this->modelsManager->executeQuery('SELECT MAX( logged_hours ) AS max_logged_hours, MAX ( no_real_tasks_worked )  AS max_no_real_tasks_worked FROM ReportDaily WHERE user_id = "' . $user->id . '" AND date >= "' . $startDate . '" AND date <= "' . $endDate . '"');
+        $holidays = AttendanceHelper::getHolidays($startDate, $endDate);
+        $leaves = $user->getApprovedLeaveDates();
+
+        foreach ($results AS $result) {
+            if (is_null($result->max_logged_hours)) {
+                return $reports;
+            }
+
+            $_explode = explode(':', $result->max_logged_hours);
+            $max_logged_hours = ($_explode[0] * 3600) + ($_explode[1] * 60) + $_explode[2];
+            $max_no_real_tasks_worked = $result->max_no_real_tasks_worked;
+        }
+
+        foreach ($dbReports AS $dbReport) {
+            $temp = array();
+
+            $_explode = explode(':', $dbReport->logged_hours);
+            $temp['title'] = date('j M', strtotime($dbReport->date));
+            $temp['logged_hours_value'] = round(((($_explode[0] * 3600) + ($_explode[1] * 60) + $_explode[2]) / $max_logged_hours), 4) * 100;
+            $temp['logged_hours_label'] = $_explode[0] .  ':' . $_explode[1];
+            $temp['productivity'] = $dbReport->productivity;
+            $temp['no_real_tasks_worked_value'] = round(($dbReport->no_real_tasks_worked / $max_no_real_tasks_worked), 4) * 100;
+            $temp['no_real_tasks_worked_label'] = $dbReport->no_real_tasks_worked;
+            $temp['isWeekOff'] = (in_array(date('N', strtotime($dbReport->date)), $user->getWeekOffs())) ? true : false;
+            $temp['isHoliday'] = (in_array($dbReport->date, $holidays)) ? true : false;
+            $temp['isLeave'] = (in_array($dbReport->date, $leaves)) ? true : false;
+
+            $reports[] = $temp;
+        }
+
+        return $reports;
+    }
+
+    public function indexAction($userId = null)
+    {
+        if (is_null($userId)) {
+            $userId = $this->currentUser->id;
+        }
+        else if (!$this->currentUser->isAdmin()) {
+            $userId = $this->currentUser->id;
+        }
+
+        $user = User::findFirst('id = "' . $userId . '"');
+
+        if (!$user) {
+            $user = $this->currentUser;
+        }
+
+        if ($this->currentUser->isAdmin()) {
+            $allUsers = User::getAllUsers();
+        }
+        else {
+            $allUsers = null;
+        }
+
+        $startDate = date('Y-m-d', strtotime("-15 days", time()));
+        $endDate = date('Y-m-d', strtotime("-1 days", time()));
+
+        $reports = $this->_generateReport($user, $startDate, $endDate);
+
+        $attendanceStat = $user->getAttendanceStats();
+
+        $this->view->setVar('attendanceStat', $attendanceStat);
+        $this->view->setVar('reportSummaryUserId', $userId);
+        $this->view->setVar('reportSummaryStartDate', $startDate);
+        $this->view->setVar('reportSummaryEndDate', $endDate);
+        $this->view->setVar('reportSummaryUser', $user);
+        $this->view->setVar('reports', $reports);
+        $this->view->setVar('allUsers', $allUsers);
+        Phalcon\Tag::setTitle('Reports | Summary');
+    }
+
+    public function getajaxreportprevAction()
+    {
+        if ($this->request->isPost()) {
+            $curDate = $this->request->getPost('startDate');
+            $userId = $this->request->getPost('userId');
+
+            $startDate = date('Y-m-d', strtotime("-15 days", strtotime($curDate)));
+            $endDate = date('Y-m-d', strtotime("-1 days", strtotime($curDate)));
+
+            if (is_null($userId)) {
+                $userId = $this->currentUser->id;
+            }
+            else if (!$this->currentUser->isAdmin()) {
+                $userId = $this->currentUser->id;
+            }
+
+            $user = User::findFirst('id = "' . $userId . '"');
+
+            if (!$user) {
+                $user = $this->currentUser;
+            }
+
+            $reports = $this->_generateReport($user, $startDate, $endDate);
+
+            $this->view->setVar('reportSummaryUser', $user);
+            $this->view->setVar('reports', $reports);
+            $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
+            $this->view->render('report', 'report_summary_charts');
+            $this->view->finish();
+            $data['chartContent'] = $this->view->getContent();
+            $data['startDate'] = $startDate;
+            $data['endDate'] = $endDate;
+
+            echo json_encode($data);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
+    public function getajaxreportnextAction()
+    {
+        if ($this->request->isPost()) {
+            $curDate = $this->request->getPost('startDate');
+            $userId = $this->request->getPost('userId');
+
+            $startDate = date('Y-m-d', strtotime("+15 days", strtotime($curDate)));
+            $endDate = date('Y-m-d', strtotime("+30 days", strtotime($curDate)));
+
+            if (is_null($userId)) {
+                $userId = $this->currentUser->id;
+            }
+            else if (!$this->currentUser->isAdmin()) {
+                $userId = $this->currentUser->id;
+            }
+
+            $user = User::findFirst('id = "' . $userId . '"');
+
+            if (!$user) {
+                $user = $this->currentUser;
+            }
+
+            $reports = $this->_generateReport($user, $startDate, $endDate);
+
+            $this->view->setVar('reportSummaryUser', $user);
+            $this->view->setVar('reports', $reports);
+            $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
+            $this->view->render('report', 'report_summary_charts');
+            $this->view->finish();
+            $data['chartContent'] = $this->view->getContent();
+            $data['startDate'] = $startDate;
+            $data['endDate'] = $endDate;
+
+            echo json_encode($data);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
+    }
+
     public function attendanceAction()
     {
         if ($this->currentUser->isAdmin()) {

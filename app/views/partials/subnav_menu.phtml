@@ -110,6 +110,13 @@
 <?php } else if ($controller == 'report') { ?>
     <ul>
         <li>
+            <a href="<?php echo $this->url->get('report/index'); ?>" class="<?php echo ($action == 'index') ? 'active' : ''; ?> a-show-loader">
+                <i class="icon-bar-chart icon-4x"></i>
+                <br>
+                Summary
+            </a>
+        </li>
+        <li>
             <a href="<?php echo $this->url->get('report/attendance'); ?>" class="<?php echo ($action == 'attendance') ? 'active' : ''; ?> a-show-loader">
                 <i class="icon-calendar icon-4x"></i>
                 <br>
