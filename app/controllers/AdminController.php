@@ -58,18 +58,12 @@ class AdminController extends ControllerBase
             }
 
             $appliedLeaves = array();
-            $Bcrypt = new Bcrypt();
-            $uuid = $Bcrypt->hash($user->id . $user->email . time());
-            $holidays = AttendanceHelper::getHolidays($from, $to);
 
             $counterFrom = strtotime($from);
             $counterTo = strtotime($to);
 
             while(strtotime('+1 day', $counterFrom) <= strtotime('+1 day', $counterTo)) {
-                if (
-                    !in_array(date('N', $counterFrom), $user->getWeekOffs())
-                    && !in_array(date('Y-m-d', $counterFrom), $holidays)
-                ) {
+                if (!in_array(date('N', $counterFrom), $user->getWeekOffs())) {
                     $appliedLeaves[] = date('Y-m-d', $counterFrom);
                 }
 
@@ -117,11 +111,20 @@ class AdminController extends ControllerBase
         $start = $this->request->getQuery('start');
         $end = $this->request->getQuery('end');
         $leavesArray = array();
+        $leaves = array();
 
-        $leaves = Leaves::find(array(
+        $dbLeaves = Leaves::find(array(
             'conditions' => 'date >= "' . date('Y-m-d', $start) . '" AND date <= "' . date('Y-m-d', $end) . '"',
             'order' => 'date DESC',
         ));
+
+        $holidays = AttendanceHelper::getHolidays();
+
+        foreach ($dbLeaves AS $dbLeave) {
+            if (!in_array($dbLeave->date, $holidays)) {
+                $leaves[] = $dbLeave;
+            }
+        }
 
         foreach ($leaves AS $leave) {
             $temp = array();

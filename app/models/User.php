@@ -520,18 +520,38 @@ class User extends Phalcon\Mvc\Model
 
     public function getAvailLeavesCount()
     {
+        $availLeaves = 0;
+
         $allocatedLeaves = $this->leaves;
 
-        $leaves = Leaves::find('user_id = "' . $this->id . '" AND approved = "1"');
+        $dbLeaves = Leaves::find('user_id = "' . $this->id . '" AND approved = "1"');
 
-        return $allocatedLeaves - count($leaves);
+        $holidays = AttendanceHelper::getHolidays();
+
+        foreach ($dbLeaves AS $dbLeave) {
+            if (!in_array($dbLeave->date, $holidays)) {
+                $availLeaves++;
+            }
+        }
+
+        return $allocatedLeaves - $availLeaves;
     }
 
     public function getPendingLeavesCount()
     {
-        $leaves = Leaves::find('user_id = "' . $this->id . '" AND approved IS NULL');
+        $pendingLeaves = 0;
 
-        return count($leaves);
+        $dbLeaves = Leaves::find('user_id = "' . $this->id . '" AND approved IS NULL');
+
+        $holidays = AttendanceHelper::getHolidays();
+
+        foreach ($dbLeaves AS $dbLeave) {
+            if (!in_array($dbLeave->date, $holidays)) {
+                $pendingLeaves++;
+            }
+        }
+
+        return $pendingLeaves;
     }
 
     public function getWeekOffs()

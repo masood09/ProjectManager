@@ -98,11 +98,20 @@ class UserController extends ControllerBase
         $start = $this->request->getQuery('start');
         $end = $this->request->getQuery('end');
         $leavesArray = array();
+        $leaves = array();
 
-        $leaves = Leaves::find(array(
+        $dbLeaves = Leaves::find(array(
             'conditions' => 'date >= "' . date('Y-m-d', $start) . '" AND date <= "' . date('Y-m-d', $end) . '" AND user_id = "' . $this->currentUser->id . '"',
             'order' => 'date DESC',
         ));
+
+        $holidays = AttendanceHelper::getHolidays(date('Y-m-d', $start), date('Y-m-d', $end));
+
+        foreach ($dbLeaves AS $dbLeave) {
+            if (!in_array($dbLeave->date, $holidays)) {
+                $leaves[] = $dbLeave;
+            }
+        }
 
         foreach ($leaves AS $leave) {
             $temp = array();
@@ -187,10 +196,7 @@ class UserController extends ControllerBase
             $counterTo = strtotime($to);
 
             while(strtotime('+1 day', $counterFrom) <= strtotime('+1 day', $counterTo)) {
-                if (
-                    !in_array(date('N', $counterFrom), $user->getWeekOffs())
-                    && !in_array(date('Y-m-d', $counterFrom), $holidays)
-                ) {
+                if (!in_array(date('N', $counterFrom), $user->getWeekOffs())) {
                     $appliedLeaves[] = date('Y-m-d', $counterFrom);
                 }
 
