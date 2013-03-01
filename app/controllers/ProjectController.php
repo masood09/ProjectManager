@@ -298,6 +298,12 @@ class ProjectController extends ControllerBase
                 }
             }
 
+            $taskUser = new TaskUser();
+            $taskUser->user_id = $this->currentUser->id;
+            $taskUser->task_id = $task->id;
+            $taskUser->created_at = new Phalcon\Db\RawValue('now()');
+            $taskUser->save();
+
             $this->response->redirect('project/view/' . $project->id . '/' . $task->id);
             $this->view->disable();
             return;
