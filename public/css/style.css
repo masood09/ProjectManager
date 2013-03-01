@@ -481,3 +481,18 @@ footer a:hover {
     text-shadow: 0 -1px 0 #FA603D, 0 1px 0 #FA603D, 1px 0 0 #FA603D, -1px 0 0 #FA603D, -1px -1px 0 #FA603D, -1px 1px 0 #FA603D, 1px 1px 0 #FA603D, 1px -1px 0 #FA603D;
     width: 100%;
 }
+
+.verticalChart .singleBar .bar .value span.textLabel {
+    bottom: 50px;
+    color: red;
+    display: none;
+    font-size: 12px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    transform:rotate(270deg);
+    -ms-transform:rotate(270deg); /* IE 9 */
+    -moz-transform:rotate(270deg); /* Firefox */
+    -webkit-transform:rotate(270deg); /* Safari and Chrome */
+    -o-transform:rotate(270deg); /* Opera */
+}

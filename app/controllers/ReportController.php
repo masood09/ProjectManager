@@ -41,6 +41,7 @@ class ReportController extends ControllerBase
 
         foreach ($dbReports AS $dbReport) {
             $temp = array();
+            $barLabel = '';
 
             $_explode = explode(':', $dbReport->logged_hours);
             $temp['title'] = date('j M', strtotime($dbReport->date));
@@ -49,6 +50,22 @@ class ReportController extends ControllerBase
             $temp['productivity'] = $dbReport->productivity;
             $temp['no_real_tasks_worked_value'] = round(($dbReport->no_real_tasks_worked / $max_no_real_tasks_worked), 4) * 100;
             $temp['no_real_tasks_worked_label'] = $dbReport->no_real_tasks_worked;
+
+            if (in_array($dbReport->date, $holidays)) {
+                $holiday = Holiday::findFirst('date = "' . $dbReport->date . '"');
+                $barLabel = $holiday->name;
+            }
+            else if (in_array(date('N', strtotime($dbReport->date)), $user->getWeekOffs())) {
+                $barLabel = date('l', strtotime($dbReport->date));
+            }
+            else if (in_array($dbReport->date, $leaves)) {
+                $barLabel = 'Approved Leave';
+            }
+            else if ($temp['logged_hours_value'] == 0) {
+                $barLabel = 'Unscheduled Leave';
+            }
+
+            $temp['barLabel'] = $barLabel;
             $temp['isWeekOff'] = (in_array(date('N', strtotime($dbReport->date)), $user->getWeekOffs())) ? true : false;
             $temp['isHoliday'] = (in_array($dbReport->date, $holidays)) ? true : false;
             $temp['isLeave'] = (in_array($dbReport->date, $leaves)) ? true : false;

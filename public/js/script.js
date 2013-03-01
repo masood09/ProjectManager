@@ -369,6 +369,7 @@ $(document).ready(function() {
                 2000,
                 function() {
                     $(this).find('span.perLabel').fadeIn();
+                    $(this).find('span.textLabel').fadeIn();
                 }
             );
         });
@@ -407,6 +408,7 @@ $(document).ready(function() {
                             2000,
                             function() {
                                 $(this).find('span.perLabel').fadeIn();
+                                $(this).find('span.textLabel').fadeIn();
                             }
                         );
                     });
@@ -448,6 +450,7 @@ $(document).ready(function() {
                             2000,
                             function() {
                                 $(this).find('span.perLabel').fadeIn();
+                                $(this).find('span.textLabel').fadeIn();
                             }
                         );
                     });
