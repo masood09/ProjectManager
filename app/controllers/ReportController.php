@@ -112,6 +112,8 @@ class ReportController extends ControllerBase
         $this->view->setVar('reportSummaryUser', $user);
         $this->view->setVar('reports', $reports);
         $this->view->setVar('allUsers', $allUsers);
+        $this->view->setVar('url_params', $user->id);
+        $this->view->setVar('body_id', 'report_summary');
         Phalcon\Tag::setTitle('Reports | Summary');
     }
 
