@@ -844,9 +844,9 @@ class User extends Phalcon\Mvc\Model
             $data['avgLoggedHours'] = date('H:i', $avgLoggedHoursStamp);
             $data['avgProductivity'] = $avgProductivity . '%';
             $data['avgNoTasksWorked'] = $avgNoTasksWorked;
-            $data['avgTimeOnTasks'] = date('H:i', $avgTimeOnTasks);
+            $data['avgTimeOnTasks'] = date('H:i', ceil($avgTimeOnTasks / $avgNoTasksWorked));
             $data['avgNoRealTasksWorked'] = $avgNoRealTasksWorked;
-            $data['avgTimeOnRealTasks'] = date('H:i', $avgTimeOnRealTasks);
+            $data['avgTimeOnRealTasks'] = date('H:i', ceil($avgTimeOnRealTasks / $avgNoRealTasksWorked));
             date_default_timezone_set($oldTimeZone);
         }
 
