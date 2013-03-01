@@ -187,7 +187,7 @@ class ReportController extends ControllerBase
             $this->view->setVar('reportSummaryUser', $user);
             $this->view->setVar('reports', $reports);
             $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
-            $this->view->render('report', 'report_summary_charts');
+            $this->view->render('partials', 'report_summary_charts');
             $this->view->finish();
             $data['chartContent'] = $this->view->getContent();
             $data['startDate'] = $startDate;
