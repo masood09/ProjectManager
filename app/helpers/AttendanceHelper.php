@@ -18,16 +18,20 @@ class AttendanceHelper
 {
     static function getHolidays($startDate = null, $endDate = null)
     {
-        if ($startDate == null) {
-            $startDate = date('Y-m-d', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        }
-
-        if ($endDate == null) {
-            $endDate = date('Y-m-t', mktime(0, 0, 0, date('m'), 1, date('Y')));
-        }
-
         $results = null;
-        $results = Holiday::find('date >= "' . $startDate . '" AND date <= "' . $endDate . '"');
+
+        if (is_null($startDate) && is_null($endDate)) {
+            $results = Holiday::find();
+        }
+        else if (is_null($startDate) && !is_null($endDate)) {
+            $results = Holiday::find('date <= "' . $endDate . '"');
+        }
+        else if (!is_null($startDate) && is_null($endDate)) {
+            $results = Holiday::find('date >= "' . $startDate . '"');
+        }
+        else {
+            $results = Holiday::find('date >= "' . $startDate . '" AND date <= "' . $endDate . '"');
+        }
 
         $holidays = array();
 
