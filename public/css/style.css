@@ -398,14 +398,16 @@ footer a:hover {
     margin: 50px auto;
 }
 
+#reportSummaryLoading,
 #reportSummaryChartsLoading {
     display: none;
     width:100%;
 }
 
+#reportSummaryLoading h4,
 #reportSummaryChartsLoading h4 {
     width: 65px;
-    margin: 100px auto 0 auto;
+    margin: 75px auto 50px auto;
 }
 
 #reportSummaryChartsNoRecords {

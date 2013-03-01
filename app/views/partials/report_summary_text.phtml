@@ -1,0 +1,35 @@
+<?php use Phalcon\Tag as Tag ?>
+
+<?php
+if ($currentUser->id == $reportSummaryUser->id) {
+    $_fullName = 'You';
+    $_has = 'have';
+}
+else {
+    $_fullName = $reportSummaryUser->full_name;
+    $_has = 'has';
+}
+?>
+
+<?php if (is_null($attendanceStat)) { ?>
+    <p>No data present to display!</p>
+<?php } else { ?>
+    <h5><?php echo $reportSummaryTitle; ?></h5>
+    <p>
+        <?php echo $_fullName; ?> usually comes to office at <?php echo $attendanceStat['avgStartTime']; ?> and leaves at <?php echo $attendanceStat['avgEndTime']; ?>.
+    </p>
+    <p>
+        <?php echo $_fullName; ?> usually works for <?php echo $attendanceStat['avgLoggedHours']; ?> hours out of <?php echo $attendanceStat['avgTotalHours']; ?> hours present in office, with an average productivity of <?php echo $attendanceStat['avgProductivity']; ?>.
+    </p>
+    <p>
+        <?php echo $_fullName; ?> usually works on <?php echo $attendanceStat['avgNoTasksWorked']; ?> tasks per day with an average of <?php echo $attendanceStat['avgTimeOnTasks']; ?> hours for each task per day.
+    </p>
+    <p>
+        <?php echo $_fullName; ?> <?php echo $_has; ?> worked <?php echo $attendanceStat['daysWorked']; ?> out of <?php echo $attendanceStat['workingDays']; ?> days, (<?php echo $attendanceStat['leavesApproved']; ?> approved leaves, <?php echo $attendanceStat['unscheduledLeaves']; ?> unscheduled leaves).
+    </p>
+    <p>
+        <small class="pull-right">
+            This summary is generated based on data between <?php echo $attendanceStat['reportStartDate']; ?> and <?php echo $attendanceStat['reportEndDate']; ?>
+        </small>
+    </p>
+<?php } ?>

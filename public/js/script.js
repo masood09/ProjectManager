@@ -458,4 +458,28 @@ $(document).ready(function() {
             });
         });
     }
+
+    if ($('#reportSummaryText').get(0)) {
+        $('#generateSummarySelect').change(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            $('#reportSummaryText').hide();
+            $('#reportSummaryLoading').show();
+
+            $.ajax({
+                type: "POST",
+                url: $('#reportSummaryAjaxUrl').val(),
+                dataType: 'json',
+                data: {
+                    'userId': $('#reportSummaryUserId').val(),
+                    'dateRange': $('#generateSummarySelect').val()
+                }
+            }).done (function (data) {
+                $('#reportSummaryText').html(data.summaryContent);
+                $('#reportSummaryText').show();
+                $('#reportSummaryLoading').hide();
+            });
+        });
+    }
 });

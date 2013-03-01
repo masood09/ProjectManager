@@ -105,6 +105,7 @@ class ReportController extends ControllerBase
 
         $attendanceStat = $user->getAttendanceStats();
 
+        $this->view->setVar('reportSummaryTitle', 'All time summary');
         $this->view->setVar('attendanceStat', $attendanceStat);
         $this->view->setVar('reportSummaryUserId', $userId);
         $this->view->setVar('reportSummaryStartDate', $startDate);
@@ -115,6 +116,52 @@ class ReportController extends ControllerBase
         $this->view->setVar('url_params', $user->id);
         $this->view->setVar('body_id', 'report_summary');
         Phalcon\Tag::setTitle('Reports | Summary');
+    }
+
+    public function getsummaryajaxAction()
+    {
+        if ($this->request->isPost()) {
+            if ($this->currentUser->isAdmin()) {
+                $user_id = $this->request->getPost('userId');
+                $user = User::findFirst('id = "' . $user_id . '"');
+
+                if (!$user) {
+                    $user = $this->currentUser;
+                }
+            }
+            else {
+                $user = $this->currentUser;
+            }
+
+            $dateRange = (string)$this->request->getPost('dateRange');
+
+            if ($dateRange == '0') {
+                $attendanceStat = $user->getAttendanceStats();
+                $reportSummaryTitle = 'All time summary';
+            }
+            else {
+                $_explode = explode('::', $dateRange);
+
+                $attendanceStat = $user->getAttendanceStats($_explode[0], $_explode[1]);
+                $reportSummaryTitle = 'Summary for the month ' . date('M, Y', strtotime($_explode[0]));
+            }
+
+            $this->view->setVar('reportSummaryTitle', $reportSummaryTitle);
+            $this->view->setVar('reportSummaryUser', $user);
+            $this->view->setVar('attendanceStat', $attendanceStat);
+            $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
+            $this->view->render('partials', 'report_summary_text');
+            $this->view->finish();
+            $data['summaryContent'] = $this->view->getContent();
+
+            echo json_encode($data);
+            $this->view->disable();
+            return;
+        }
+
+        $this->response->redirect('dashboard/index');
+        $this->view->disable();
+        return;
     }
 
     public function getajaxreportprevAction()
@@ -144,7 +191,7 @@ class ReportController extends ControllerBase
             $this->view->setVar('reportSummaryUser', $user);
             $this->view->setVar('reports', $reports);
             $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
-            $this->view->render('report', 'report_summary_charts');
+            $this->view->render('partials', 'report_summary_charts');
             $this->view->finish();
             $data['chartContent'] = $this->view->getContent();
             $data['startDate'] = $startDate;

@@ -733,7 +733,7 @@ class User extends Phalcon\Mvc\Model
         return $date;
     }
 
-    public function getAttendanceStats()
+    public function getAttendanceStats($startDate = null, $endDate = null)
     {
         $data = null;
         $daysWorked = 0;
@@ -759,19 +759,57 @@ class User extends Phalcon\Mvc\Model
         $avgTimeOnRealTasksStamp = 0;
         $avgTimeOnRealTasks = 0;
 
-        $reports = ReportDaily::find(array(
-            'conditions' => 'user_id = "' . $this->id . '"',
-            'order' => 'date ASC',
-        ));
+        $reportMonths = array();
+
+        if (is_null($startDate) && is_null($endDate)) {
+            $reports = ReportDaily::find(array(
+                'conditions' => 'user_id = "' . $this->id . '"',
+                'order' => 'date ASC',
+            ));
+        }
+        else if (is_null($startDate) && !is_null($endDate)) {
+            $reports = ReportDaily::find(array(
+                'conditions' => 'user_id = "' . $this->id . '" AND date <= "' . $endDate . '"',
+                'order' => 'date ASC',
+            ));
+        }
+        else if (!is_null($startDate) && is_null($endDate)) {
+            $reports = ReportDaily::find(array(
+                'conditions' => 'user_id = "' . $this->id . '" AND date >= "' . $startDate . '"',
+                'order' => 'date ASC',
+            ));
+        }
+        else {
+            $reports = ReportDaily::find(array(
+                'conditions' => 'user_id = "' . $this->id . '" AND date >= "' . $startDate . '" AND date <= "' . $endDate . '"',
+                'order' => 'date ASC',
+            ));
+        }
 
         $i = 0;
+
+        $holidays = AttendanceHelper::getHolidays();
 
         foreach ($reports AS $report) {
             if ($report->started != '00:00:00' && $report->ended != '00:00:00') {
                 $daysWorked++;
 
+                $reportMonths[date('M Y', strtotime($report->date))] = date('Y-m-d', mktime(0, 0, 0, date('m', strtotime($report->date)), 1, date('Y', strtotime($report->date)))) . '::' . date('Y-m-t', mktime(0, 0, 0, date('m', strtotime($report->date)), 1, date('Y', strtotime($report->date))));
+
                 if ($i == 0) {
                     $reportStartDate = $report->date;
+                }
+
+                $_leave = Leaves::findFirst('user_id = "' . $this->id . '" AND date = "' . $report->date . '" AND approved = "1"');
+
+                if (in_array($report->date, $holidays)) {
+                    $daysWorked--;
+                }
+                else if (in_array(date('N', strtotime($report->date)), $this->getWeekOffs())) {
+                    $daysWorked--;
+                }
+                else if ($_leave) {
+                    $daysWorked--;
                 }
 
                 $_explode = explode(':', $report->started);
@@ -802,8 +840,9 @@ class User extends Phalcon\Mvc\Model
             }
         }
 
+        $reportMonths = array_reverse($reportMonths);
+
         if ($daysWorked > 0) {
-            $holidays = AttendanceHelper::getHolidays($reportStartDate, $reportEndDate);
             $dbLeaves = Leaves::find(array(
                 'conditions' => 'user_id = "' . $this->id . '" AND approved = "1" AND date >= "' . $reportStartDate . '" AND date <= "' . $reportEndDate . '"',
                 'order' => 'date ASC',
@@ -833,6 +872,7 @@ class User extends Phalcon\Mvc\Model
             $data['full_name'] = $this->full_name;
             $data['reportStartDate'] = $reportStartDate;
             $data['reportEndDate'] = $reportEndDate;
+            $data['reportMonths'] = $reportMonths;
             $data['totalDays'] = count($reports);
             $data['daysWorked'] = $daysWorked;
             $data['workingDays'] = $workingDays;

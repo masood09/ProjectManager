@@ -2,6 +2,7 @@
 
 <input type="hidden" id="reportSummaryUserId" value="<?php echo $reportSummaryUserId; ?>">
 <input type="hidden" id="reportSummaryStartDate" value="<?php echo $reportSummaryStartDate; ?>">
+<input type="hidden" id="reportSummaryAjaxUrl" value="<?php echo $this->url->get('report/getsummaryajax'); ?>">
 <input type="hidden" id="reportSummaryPrevAjaxUrl" value="<?php echo $this->url->get('report/getajaxreportprev'); ?>">
 <input type="hidden" id="reportSummaryNextAjaxUrl" value="<?php echo $this->url->get('report/getajaxreportnext'); ?>">
 
@@ -18,33 +19,36 @@
 <?php } ?>
 
 <div class="<?php echo ($currentUser->isAdmin()) ? 'span9' : 'span12'; ?>">
+    <?php if (!is_null($attendanceStat)) { ?>
+        <p class="pull-right">
+            <select id="generateSummarySelect" class="input-small">
+                <option value="0" selected="selected">All Time</option>
+
+                <?php foreach($attendanceStat['reportMonths'] AS $reportMonthLabel => $reportMonthValue) { ?>
+                    <option value="<?php echo $reportMonthValue; ?>">
+                        <?php echo $reportMonthLabel; ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </p>
+    <?php } ?>
     <?php if ($currentUser->id == $reportSummaryUser->id) { ?>
         <h4 class="header">Your Summary</h4>
-        <?php $_fullName = 'You'; ?>
-        <?php $_has = 'have'; ?>
     <?php } else { ?>
         <h4 class="header">Summary for <?php echo $reportSummaryUser->full_name; ?></h4>
-        <?php $_fullName = $reportSummaryUser->full_name; ?>
-        <?php $_has = 'has'; ?>
     <?php } ?>
 
-    <?php if (is_null($attendanceStat)) { ?>
-        <p>No data present to display!</p>
-    <?php } else { ?>
-        <p>
-            <?php echo $_fullName; ?> usually comes to office at <?php echo $attendanceStat['avgStartTime']; ?> and leaves at <?php echo $attendanceStat['avgEndTime']; ?>.
-        </p>
-        <p>
-            <?php echo $_fullName; ?> usually works for <?php echo $attendanceStat['avgLoggedHours']; ?> hours out of <?php echo $attendanceStat['avgTotalHours']; ?> hours present in office, with an average productivity of <?php echo $attendanceStat['avgProductivity']; ?>.
-        </p>
-        <p>
-            <?php echo $_fullName; ?> usually works on <?php echo $attendanceStat['avgNoTasksWorked']; ?> tasks per day with an average of <?php echo $attendanceStat['avgTimeOnTasks']; ?> hours for each task per day.
-        </p>
-        <p>
-            <?php echo $_fullName; ?> <?php echo $_has; ?> worked <?php echo $attendanceStat['daysWorked']; ?> out of <?php echo $attendanceStat['workingDays']; ?> days, (<?php echo $attendanceStat['leavesApproved']; ?> approved leaves, <?php echo $attendanceStat['unscheduledLeaves']; ?> unscheduled leaves).
-        </p>
-    <?php } ?>
+    <div id="reportSummaryLoading">
+        <h4>
+            <i class="icon-spinner icon-spin icon-4x"></i>
+        </h4>
+    </div>
 
+    <div id="reportSummaryText">
+        <?php $this->partial('partials/report_summary_text'); ?>
+    </div>
+
+    <br>
     <br>
     <br>
 
@@ -64,7 +68,7 @@
         </div>
 
         <div id="reportSummaryChartsContent">
-            <?php $this->partial('report/report_summary_charts'); ?>
+            <?php $this->partial('partials/report_summary_charts'); ?>
         </div>
     </div>
 </div>

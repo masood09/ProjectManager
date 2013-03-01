@@ -114,6 +114,7 @@ class Security extends Phalcon\Mvc\User\Plugin
                 ),
                 'report' => array(
                     'attendance',
+                    'getsummaryajax',
                     'getajaxreportprev',
                     'getajaxreportnext',
                     'index',
