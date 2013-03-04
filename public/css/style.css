@@ -420,11 +420,11 @@ footer a:hover {
 }
 
 .verticalChart {
-    height: 300px;
+    height: 225px;
+    width: 100%;
 }
 
 .verticalChart .singleBar {
-    display: block;
     float: left;
     margin: 0 1% 0;
     width: 4.65%;
