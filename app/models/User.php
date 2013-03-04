@@ -363,7 +363,7 @@ class User extends Phalcon\Mvc\Model
 
         if (count($taskIds) > 0) {
             $tasks = Task::find(array(
-                'conditions' => 'id IN ("' . implode('", "', $taskIds) . '") AND status = 0',
+                'conditions' => 'id IN ("' . implode('", "', $taskIds) . '") AND status = "0"',
                 'order' => 'project_id DESC, created_at DESC'
             ));
 

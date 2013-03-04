@@ -91,13 +91,13 @@ class Project extends Phalcon\Mvc\Model
         if ($inclTasks) {
             $uploads = Upload::find(array(
                 'conditions' => 'project_id = "' . $this->id . '"',
-                'order' => 'uploaded_at DESC',
+                'order' => 'created_at DESC',
             ));
         }
         else {
             $uploads = Upload::find(array(
                 'conditions' => 'project_id = "' . $this->id . '" AND task_id IS NULL AND comment_id IS NULL',
-                'order' => 'uploaded_at DESC',
+                'order' => 'created_at DESC',
             ));
         }
 
@@ -108,7 +108,7 @@ class Project extends Phalcon\Mvc\Model
     {
         $uploads = Upload::find(array(
             'conditions' => 'project_id = "' . $this->id . '" AND (task_id IS NOT NULL OR comment_id IS NOT NULL)',
-            'order' => 'uploaded_at DESC',
+            'order' => 'created_at DESC',
         ));
 
         return $uploads;

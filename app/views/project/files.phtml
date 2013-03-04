@@ -88,7 +88,7 @@
                         <p class="comment-link"><?php echo $upload->getSize(); ?></p>
                         <p class="comment-link">Uploaded by <?php echo $upload->getUser()->full_name; ?></p>
                         <p class="comment-link">
-                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->uploaded_at)); ?></abbr>
+                            <abbr class="date"><?php echo date('D, j M Y H:i:s O', strtotime($upload->created_at)); ?></abbr>
                         </p>
                     </div>
                 </div>
