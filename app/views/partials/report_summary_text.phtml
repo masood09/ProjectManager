@@ -22,7 +22,7 @@ else {
         <?php echo $_fullName; ?> usually works for <?php echo $attendanceStat['avgLoggedHours']; ?> hours out of <?php echo $attendanceStat['avgTotalHours']; ?> hours present in office, with an average productivity of <?php echo $attendanceStat['avgProductivity']; ?>.
     </p>
     <p>
-        <?php echo $_fullName; ?> usually works on <?php echo $attendanceStat['avgNoTasksWorked']; ?> tasks per day with an average of <?php echo $attendanceStat['avgTimeOnTasks']; ?> hours for each task per day.
+        <?php echo $_fullName; ?> usually works on <?php echo $attendanceStat['avgNumTasksWorked']; ?> tasks per day with an average of <?php echo $attendanceStat['avgTimeOnTasks']; ?> hours for each task per day.
     </p>
     <p>
         <?php echo $_fullName; ?> <?php echo $_has; ?> worked <?php echo $attendanceStat['daysWorked']; ?> out of <?php echo $attendanceStat['workingDays']; ?> days, (<?php echo $attendanceStat['leavesApproved']; ?> approved leaves, <?php echo $attendanceStat['unscheduledLeaves']; ?> unscheduled leaves).

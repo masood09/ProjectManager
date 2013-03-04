@@ -70,8 +70,6 @@ class UploadHelper extends Phalcon\Mvc\User\Plugin
 
         $upload = new Upload();
         $upload->filename = $fileName;
-        $upload->filepath = $filePath;
-        $upload->type = $type;
         $upload->size = $size;
         $upload->user_id = $user_id;
         $upload->project_id = $project_id;
@@ -84,7 +82,8 @@ class UploadHelper extends Phalcon\Mvc\User\Plugin
             $upload->comment_id = $comment_id;
         }
 
-        $upload->uploaded_at = new Phalcon\Db\RawValue('now()');
+        $upload->created_at = new Phalcon\Db\RawValue('now()');
+        $upload->updated_at = new Phalcon\Db\RawValue('now()');
 
         if ($upload->save() == false) {
             foreach ($upload->getMessages() as $message) {

@@ -213,6 +213,7 @@ class UserController extends ControllerBase
                     $leave->reason = $reason;
                     $leave->approved_by = $this->currentUser->id;
                     $leave->created_at = new Phalcon\Db\RawValue('now()');
+                    $leave->updated_at = new Phalcon\Db\RawValue('now()');
                     $leave->save();
                 }
             }
@@ -279,6 +280,7 @@ class UserController extends ControllerBase
 
             $this->currentUser->full_name = $full_name;
             $this->currentUser->email = $email;
+            $this->currentUser->updated_at = new Phalcon\Db\RawValue('now()');
 
             if (!$this->currentUser->save()) {
                 foreach ($this->currentUser->getMessages() as $message) {

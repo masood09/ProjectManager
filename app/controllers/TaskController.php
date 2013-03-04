@@ -58,7 +58,7 @@ class TaskController extends ControllerBase
                             $taskUser->user_id = $assignedUser->id;
                             $taskUser->task_id = $task->id;
                             $taskUser->created_at = new Phalcon\Db\RawValue('now()');
-
+                            $taskUser->updated_at = new Phalcon\Db\RawValue('now()');
                             $taskUser->save();
                         }
 
@@ -93,6 +93,7 @@ class TaskController extends ControllerBase
                 }
             }
 
+            $task->updated_at = new Phalcon\Db\RawValue('now()');
             $task->save();
         }
 
@@ -127,6 +128,7 @@ class TaskController extends ControllerBase
 
             if ($data_name == 'comment') {
                 $comment->comment = $value;
+                $comment->updated_at = new Phalcon\Db\RawValue('now()');
                 $comment->save();
 
                 NotificationHelper::updateCommentNotification(
@@ -184,6 +186,7 @@ class TaskController extends ControllerBase
             $comment->task_id = $task->id;
             $comment->comment = $message;
             $comment->created_at = new Phalcon\Db\RawValue('now()');
+            $comment->updated_at = new Phalcon\Db\RawValue('now()');
 
             if ($comment->save() != true) {
                 foreach ($comment->getMessages() as $message) {
@@ -202,11 +205,12 @@ class TaskController extends ControllerBase
                 $taskUser->user_id = $this->currentUser->id;
                 $taskUser->task_id = $task->id;
                 $taskUser->created_at = new Phalcon\Db\RawValue('now()');
-
+                $taskUser->updated_at = new Phalcon\Db\RawValue('now()');
                 $taskUser->save();
             }
 
-            $task->comments += 1;
+            $task->num_comments += 1;
+            $task->updated_at = new Phalcon\Db\RawValue('now()');
             $task->save();
 
             if ($this->request->hasFiles() == true) {
@@ -307,7 +311,7 @@ class TaskController extends ControllerBase
             $taskUser->user_id = $user->id;
             $taskUser->task_id = $task->id;
             $taskUser->created_at = new Phalcon\Db\RawValue('now()');
-
+            $taskUser->updated_at = new Phalcon\Db\RawValue('now()');
             $taskUser->save();
 
             $return['subscribed'] = true;

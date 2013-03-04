@@ -43,6 +43,7 @@ class NoteController extends ControllerBase
 
             if ($data_name == 'content') {
                 $note->content = $value;
+                $note->updated_at = new Phalcon\Db\RawValue('now()');
                 $note->save();
             }
         }

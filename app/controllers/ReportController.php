@@ -25,7 +25,7 @@ class ReportController extends ControllerBase
             'order' => 'date ASC',
         ));
 
-        $results = $this->modelsManager->executeQuery('SELECT MAX( logged_hours ) AS max_logged_hours, MAX ( no_real_tasks_worked )  AS max_no_real_tasks_worked FROM ReportDaily WHERE user_id = "' . $user->id . '" AND date >= "' . $startDate . '" AND date <= "' . $endDate . '"');
+        $results = $this->modelsManager->executeQuery('SELECT MAX( logged_hours ) AS max_logged_hours, MAX ( num_real_tasks_worked )  AS max_num_real_tasks_worked FROM ReportDaily WHERE user_id = "' . $user->id . '" AND date >= "' . $startDate . '" AND date <= "' . $endDate . '"');
         $holidays = AttendanceHelper::getHolidays($startDate, $endDate);
         $leaves = $user->getApprovedLeaveDates();
 
@@ -36,7 +36,7 @@ class ReportController extends ControllerBase
 
             $_explode = explode(':', $result->max_logged_hours);
             $max_logged_hours = ($_explode[0] * 3600) + ($_explode[1] * 60) + $_explode[2];
-            $max_no_real_tasks_worked = $result->max_no_real_tasks_worked;
+            $max_num_real_tasks_worked = $result->max_num_real_tasks_worked;
         }
 
         foreach ($dbReports AS $dbReport) {
@@ -48,8 +48,8 @@ class ReportController extends ControllerBase
             $temp['logged_hours_value'] = round(((($_explode[0] * 3600) + ($_explode[1] * 60) + $_explode[2]) / $max_logged_hours), 4) * 100;
             $temp['logged_hours_label'] = $_explode[0] .  ':' . $_explode[1];
             $temp['productivity'] = $dbReport->productivity;
-            $temp['no_real_tasks_worked_value'] = round(($dbReport->no_real_tasks_worked / $max_no_real_tasks_worked), 4) * 100;
-            $temp['no_real_tasks_worked_label'] = $dbReport->no_real_tasks_worked;
+            $temp['num_real_tasks_worked_value'] = round(($dbReport->num_real_tasks_worked / $max_num_real_tasks_worked), 4) * 100;
+            $temp['num_real_tasks_worked_label'] = $dbReport->num_real_tasks_worked;
 
             if (in_array($dbReport->date, $holidays)) {
                 $holiday = Holiday::findFirst('date = "' . $dbReport->date . '"');

@@ -69,6 +69,7 @@ class NotificationHelper
                 $notification->read = 0;
                 $notification->created_by = $user->id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
+                $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
                 $notification->save();
             }
@@ -88,6 +89,7 @@ class NotificationHelper
                 $notification->read = 0;
                 $notification->created_by = $user->id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
+                $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
                 $notification->save();
             }
@@ -105,6 +107,7 @@ class NotificationHelper
         $notification->read = 0;
         $notification->created_by = $user->id;
         $notification->created_at = new Phalcon\Db\RawValue('now()');
+        $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
         $notification->save();
     }
@@ -124,6 +127,7 @@ class NotificationHelper
                 $notification->read = 0;
                 $notification->created_by = $comment->user_id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
+                $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
                 $notification->save();
             }
@@ -145,6 +149,7 @@ class NotificationHelper
                 $notification->read = 0;
                 $notification->created_by = $comment->user_id;
                 $notification->created_at = new Phalcon\Db\RawValue('now()');
+                $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
                 $notification->save();
             }
@@ -165,6 +170,7 @@ class NotificationHelper
             $notification->read = 0;
             $notification->created_by = $user->id;
             $notification->created_at = new Phalcon\Db\RawValue('now()');
+            $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
             $notification->save();
         }
@@ -180,6 +186,7 @@ class NotificationHelper
         $notification->read = 0;
         $notification->created_by = $admin->id;
         $notification->created_at = new Phalcon\Db\RawValue('now()');
+        $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
         $notification->save();
     }
@@ -198,6 +205,7 @@ class NotificationHelper
             $notification->read = 0;
             $notification->created_by = $note->user_id;
             $notification->created_at = new Phalcon\Db\RawValue('now()');
+            $notification->updated_at = new Phalcon\Db\RawValue('now()');
 
             $notification->save();
         }

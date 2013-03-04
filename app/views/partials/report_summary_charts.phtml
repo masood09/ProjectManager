@@ -120,26 +120,26 @@
                     $singleBarClass = 'singleBarHoliday';
 
                     if ($report['logged_hours_value'] > 0) {
-                        $perLabel = $report['no_real_tasks_worked_label'];
+                        $perLabel = $report['num_real_tasks_worked_label'];
                     }
                 }
                 else if ($report['isWeekOff']) {
                     $singleBarClass = 'singleBarWeekoff';
 
                     if ($report['logged_hours_value'] > 0) {
-                        $perLabel = $report['no_real_tasks_worked_label'];
+                        $perLabel = $report['num_real_tasks_worked_label'];
                     }
                 }
                 else if ($report['isLeave']) {
                     $singleBarClass = 'singleBarLeave';
 
                     if ($report['logged_hours_value'] > 0) {
-                        $perLabel = $report['no_real_tasks_worked_label'];
+                        $perLabel = $report['num_real_tasks_worked_label'];
                     }
                 }
                 else {
                     if ($report['logged_hours_value'] > 0) {
-                        $perLabel = $report['no_real_tasks_worked_label'];
+                        $perLabel = $report['num_real_tasks_worked_label'];
                     }
                     else {
                         $singleBarClass = 'singleBarAbsent';
@@ -149,7 +149,7 @@
             <div class="singleBar <?php echo $singleBarClass; ?>">
                 <div class="bar">
                     <div class="value">
-                        <span class="perValue"><?php echo $report['no_real_tasks_worked_value']; ?>%</span>
+                        <span class="perValue"><?php echo $report['num_real_tasks_worked_value']; ?>%</span>
                         <span class="perLabel"><?php echo $perLabel; ?></span>
                         <span class="textLabel"><?php echo $report['barLabel']; ?></span>
                     </div>

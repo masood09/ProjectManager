@@ -212,8 +212,9 @@ class ProjectController extends ControllerBase
             $project = new Project();
             $project->name = htmlspecialchars($name);
             $project->created_by = $this->currentUser->id;
-            $project->created_at = new Phalcon\Db\RawValue('now()');
             $project->status = 1;
+            $project->created_at = new Phalcon\Db\RawValue('now()');
+            $project->updated_at = new Phalcon\Db\RawValue('now()');
 
             if (!$project->save()) {
                 foreach ($project->getMessages() as $message) {
@@ -229,9 +230,10 @@ class ProjectController extends ControllerBase
 
             foreach ($admins AS $admin) {
                 $projectUser = new ProjectUser();
-                $projectUser->user_id = $admin->id;
                 $projectUser->project_id = $project->id;
+                $projectUser->user_id = $admin->id;
                 $projectUser->created_at = new Phalcon\Db\RawValue('now()');
+                $projectUser->updated_at = new Phalcon\Db\RawValue('now()');
 
                 $projectUser->save();
             }
@@ -302,6 +304,7 @@ class ProjectController extends ControllerBase
             $taskUser->user_id = $this->currentUser->id;
             $taskUser->task_id = $task->id;
             $taskUser->created_at = new Phalcon\Db\RawValue('now()');
+            $taskUser->updated_at = new Phalcon\Db\RawValue('now()');
             $taskUser->save();
 
             $this->response->redirect('project/view/' . $project->id . '/' . $task->id);
@@ -352,6 +355,7 @@ class ProjectController extends ControllerBase
             $note->project_id = $project_id;
             $note->user_id = $this->currentUser->id;
             $note->created_at = new Phalcon\Db\RawValue('now()');
+            $note->updated_at = new Phalcon\Db\RawValue('now()');
 
             if (!$note->save()) {
                 foreach ($note->getMessages() as $message) {
@@ -535,6 +539,7 @@ class ProjectController extends ControllerBase
             }
 
             $project->name = $name;
+            $project->updated_at = new Phalcon\Db\RawValue('now()');
             $project->save();
 
             $this->response->redirect($controller . '/' . $action);
@@ -598,9 +603,10 @@ class ProjectController extends ControllerBase
 
         if (!$projectUser) {
             $projectUser = new ProjectUser();
-            $projectUser->user_id = $user_id;
             $projectUser->project_id = $id;
+            $projectUser->user_id = $user_id;
             $projectUser->created_at = new Phalcon\Db\RawValue('now()');
+            $projectUser->updated_at = new Phalcon\Db\RawValue('now()');
             $projectUser->save();
 
             NotificationHelper::projectUserAddNotification($project, $user, $this->currentUser);

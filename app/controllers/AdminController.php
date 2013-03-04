@@ -81,6 +81,7 @@ class AdminController extends ControllerBase
                     $leave->approved = $approved;
                     $leave->approved_by = $this->currentUser->id;
                     $leave->created_at = new Phalcon\Db\RawValue('now()');
+                    $leave->updated_at = new Phalcon\Db\RawValue('now()');
                     $leave->save();
                 }
             }
@@ -204,6 +205,7 @@ class AdminController extends ControllerBase
 
             $leave->approved = $approved;
             $leave->approved_by = $this->currentUser->id;
+            $leave->updated_at = new Phalcon\Db\RawValue('now()');
             $leave->save();
 
             $this->view->disable();
@@ -493,6 +495,8 @@ class AdminController extends ControllerBase
                 $holiday = new Holiday();
                 $holiday->name = $name;
                 $holiday->date = $newHoliday;
+                $holiday->created_at = new Phalcon\Db\RawValue('now()');
+                $holiday->updated_at = new Phalcon\Db\RawValue('now()');
                 $holiday->save();
             }
 
@@ -526,6 +530,7 @@ class AdminController extends ControllerBase
 
             $holiday->date = $editHolidayDate;
             $holiday->name = $editHolidayName;
+            $holiday->updated_at = new Phalcon\Db\RawValue('now()');
             $holiday->save();
 
             $this->view->disable();

@@ -638,10 +638,10 @@ class User extends Phalcon\Mvc\Model
         $i = 0;
         $startTime = '00:00:00';
         $endTime = '00:00:00';
-        $noTasksWorked = 0;
+        $numTasksWorked = 0;
         $timeOnTasksStamp = 0;
         $avgTimeOnTasksStamp = 0;
-        $noRealTasksWorked = 0;
+        $numRealTasksWorked = 0;
         $timeOnRealTasksStamp = 0;
         $avgTimeOnRealTasksStamp = 0;
 
@@ -653,10 +653,10 @@ class User extends Phalcon\Mvc\Model
             }
 
             if (!isset($taskIds[$attendance->task_id])) {
-                $noTasksWorked++;
+                $numTasksWorked++;
 
                 if ($attendance->task_id != 0) {
-                    $noRealTasksWorked++;
+                    $numRealTasksWorked++;
                 }
 
                 $taskIds[$attendance->task_id] = $attendance->task_id;
@@ -674,10 +674,10 @@ class User extends Phalcon\Mvc\Model
         }
 
         if (count($attendances) > 0) {
-            $avgTimeOnTasksStamp = $timeOnTasksStamp / $noTasksWorked;
+            $avgTimeOnTasksStamp = $timeOnTasksStamp / $numTasksWorked;
 
-            if ($noRealTasksWorked > 0) {
-                $avgTimeOnRealTasksStamp = $timeOnRealTasksStamp / $noRealTasksWorked;
+            if ($numRealTasksWorked > 0) {
+                $avgTimeOnRealTasksStamp = $timeOnRealTasksStamp / $numRealTasksWorked;
             }
         }
 
@@ -699,12 +699,14 @@ class User extends Phalcon\Mvc\Model
         $report->total_hours = $this->getTotalDaysTime($day, $month, $year) . ':00';
         $report->logged_hours = $this->getDaysTime($day, $month, $year) . ':00';
         $report->productivity = $this->getDaysProductivity($report->logged_hours, $day, $month, $year);
-        $report->no_tasks_worked = $noTasksWorked;
+        $report->num_tasks_worked = $numTasksWorked;
         $report->time_on_tasks = $timeOnTasks . ':00';
         $report->avg_time_on_tasks = $avgTimeOnTasks . ':00';
-        $report->no_real_tasks_worked = $noRealTasksWorked;
+        $report->num_real_tasks_worked = $numRealTasksWorked;
         $report->time_on_real_tasks = $timeOnRealTasks . ':00';
         $report->avg_time_on_real_tasks = $avgTimeOnRealTasks . ':00';
+        $report->created_at = new Phalcon\Db\RawValue('now()');
+        $report->updated_at = new Phalcon\Db\RawValue('now()');
 
         $report->save();
     }
@@ -750,10 +752,10 @@ class User extends Phalcon\Mvc\Model
         $avgLoggedHoursStamp = 0;
         $totalProductivity = 0;
         $avgProductivity = 0;
-        $noTasksWorked = 0;
-        $noRealTasksWorked = 0;
-        $avgNoTaksWorked = 0;
-        $avgNoRealTasksWorked = 0;
+        $numTasksWorked = 0;
+        $numRealTasksWorked = 0;
+        $avgNumTaksWorked = 0;
+        $avgNumRealTasksWorked = 0;
         $avgTimeOnTasksStamp = 0;
         $avgTimeOnTasks = 0;
         $avgTimeOnRealTasksStamp = 0;
@@ -826,8 +828,8 @@ class User extends Phalcon\Mvc\Model
 
                 $totalProductivity += $report->productivity;
 
-                $noTasksWorked += $report->no_tasks_worked;
-                $noRealTasksWorked += $report->no_real_tasks_worked;
+                $numTasksWorked += $report->num_tasks_worked;
+                $numRealTasksWorked += $report->num_real_tasks_worked;
 
                 $_explode = explode(':', $report->time_on_tasks);
                 $avgTimeOnTasksStamp += ($_explode[0] * 3600) + ($_explode[1] * 60) + ($_explode[2]);
@@ -861,8 +863,8 @@ class User extends Phalcon\Mvc\Model
             $avgTotalHoursStamp = $totalHoursStamp / $daysWorked;
             $avgLoggedHoursStamp = $loggedHoursStamp / $daysWorked;
             $avgProductivity = round(($totalProductivity / $daysWorked), 2);
-            $avgNoTasksWorked = round(($noTasksWorked / $daysWorked), 2);
-            $avgNoRealTasksWorked = round(($noRealTasksWorked / $daysWorked), 2);
+            $avgNumTasksWorked = round(($numTasksWorked / $daysWorked), 2);
+            $avgNumRealTasksWorked = round(($numRealTasksWorked / $daysWorked), 2);
 
             $avgTimeOnTasks = $avgTimeOnTasksStamp / $daysWorked;
             $avgTimeOnRealTasks = $avgTimeOnRealTasksStamp / $daysWorked;
@@ -883,10 +885,10 @@ class User extends Phalcon\Mvc\Model
             $data['avgTotalHours'] = date('H:i', $avgTotalHoursStamp);
             $data['avgLoggedHours'] = date('H:i', $avgLoggedHoursStamp);
             $data['avgProductivity'] = $avgProductivity . '%';
-            $data['avgNoTasksWorked'] = $avgNoTasksWorked;
-            $data['avgTimeOnTasks'] = date('H:i', ceil($avgTimeOnTasks / $avgNoTasksWorked));
-            $data['avgNoRealTasksWorked'] = $avgNoRealTasksWorked;
-            $data['avgTimeOnRealTasks'] = date('H:i', ceil($avgTimeOnRealTasks / $avgNoRealTasksWorked));
+            $data['avgNumTasksWorked'] = $avgNumTasksWorked;
+            $data['avgTimeOnTasks'] = date('H:i', ceil($avgTimeOnTasks / $avgNumTasksWorked));
+            $data['avgNumRealTasksWorked'] = $avgNumRealTasksWorked;
+            $data['avgTimeOnRealTasks'] = date('H:i', ceil($avgTimeOnRealTasks / $avgNumRealTasksWorked));
             date_default_timezone_set($oldTimeZone);
         }
 

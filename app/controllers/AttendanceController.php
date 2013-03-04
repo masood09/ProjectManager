@@ -58,6 +58,7 @@ class AttendanceController extends ControllerBase
             if ($attendance) {
                 // Timer already running let's end the timer.
                 $attendance->end = new Phalcon\Db\RawValue('now()');
+                $attendance->updated_at = new Phalcon\Db\RawValue('now()');
                 $attendance->save();
 
                 if ($task) {
@@ -72,6 +73,8 @@ class AttendanceController extends ControllerBase
                 $attendance->task_id = $task_id;
                 $attendance->date = new Phalcon\Db\RawValue('CURDATE()');
                 $attendance->start = new Phalcon\Db\RawValue('now()');
+                $attendance->created_at = new Phalcon\Db\RawValue('now()');
+                $attendance->updated_at = new Phalcon\Db\RawValue('now()');
                 $attendance->save();
             }
 

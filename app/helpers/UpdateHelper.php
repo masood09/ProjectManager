@@ -91,12 +91,45 @@ class UpdateHelper
                 foreach ($users AS $user) {
                     $user->leaves = $user->getAllocatedLeavesCount();
                     $user->leaves_assigned_on = new Phalcon\Db\RawValue('now()');
+                    $user->updated_at = $user->created_at;
                     $user->save();
+                }
+
+                $attendances = Attendance::find();
+
+                foreach ($attendances AS $attendance) {
+                    $attendance->created_at = $attendance->start;
+
+                    if (!is_null($attendance->end)) {
+                        $attendance->updated_at = $attendance->end;
+                    }
+                    else {
+                        $attendance->updated_at = $attendance->start;
+                    }
+
+                    $attendance->save();
+                }
+
+                $holidays = Holiday::find();
+
+                foreach ($holidays AS $holiday) {
+                    $holiday->created_at = new Phalcon\Db\RawValue('now()');
+                    $holiday->updated_at = new Phalcon\Db\RawValue('now()');
+                }
+
+                $projects = Project::find();
+
+                foreach ($projects AS $project) {
+                    $project->updated_at = $project->created_at;
+                    $project->save();
                 }
 
                 $projectUsers = ProjectUser::find();
 
                 foreach ($projectUsers AS $projectUser) {
+                    $projectUser->updated_at = $projectUser->created_at;
+                    $projectUser->save();
+
                     if ($projectUser->user_id != $projectUser->getProject()->created_by) {
                         $notification = new Notification();
 
@@ -107,6 +140,7 @@ class UpdateHelper
                         $notification->read = 1;
                         $notification->created_by = $projectUser->getProject()->getUser()->id;
                         $notification->created_at = $projectUser->created_at;
+                        $notification->updated_at = $projectUser->created_at;
 
                         $notification->save();
                     }
@@ -125,13 +159,14 @@ class UpdateHelper
                         $notification->read = 1;
                         $notification->created_by = $task->getCreatedBy()->id;
                         $notification->created_at = $task->created_at;
+                        $notification->updated_at = $task->created_at;
 
                         $notification->save();
                     }
 
                     $task->hours_spent = $task->calculateTotalTimeSpent();
 
-                    $task->comments = count($task->getComments());
+                    $task->num_comments = count($task->getComments());
 
                     if ($task->status == 1) {
                         $task->closed_by = $task->assigned_to;
@@ -140,12 +175,17 @@ class UpdateHelper
                         $task->completed_on = null;
                     }
 
+                    $task->updated_at = $task->created_at;
+
                     $task->save();
                 }
 
                 $comments = Comment::find();
 
                 foreach ($comments AS $comment) {
+                    $comment->updated_at = $comment->created_at;
+                    $comment->save();
+
                     foreach ($comment->getTask()->getTaskUser() AS $taskUser) {
                         if ($taskUser->user_id != $comment->user_id) {
                             $notification = new Notification();
@@ -157,6 +197,7 @@ class UpdateHelper
                             $notification->read = 1;
                             $notification->created_by = $comment->getUser()->id;
                             $notification->created_at = $comment->created_at;
+                            $notification->updated_at = $comment->created_at;
 
                             $notification->save();
                         }
@@ -166,6 +207,9 @@ class UpdateHelper
                 $notes = Note::find();
 
                 foreach ($notes AS $note) {
+                    $note->updated_at = $note->created_at;
+                    $note->save();
+
                     foreach ($note->getProject()->getProjectUser() AS $projectUser) {
                         if ($note->user_id != $projectUser->user_id) {
                             $notification = new Notification();
@@ -177,10 +221,25 @@ class UpdateHelper
                             $notification->read = 1;
                             $notification->created_by = $note->getUser()->id;
                             $notification->created_at = $note->created_at;
+                            $notification->updated_at = $note->created_at;
 
                             $notification->save();
                         }
                     }
+                }
+
+                $taskUsers = TaskUser::find();
+
+                foreach ($taskUsers AS $taskUser) {
+                    $taskUser->updated_at = $taskUser->created_at;
+                    $taskUser->save();
+                }
+
+                $uploads = Upload::find();
+
+                foreach ($uploads AS $upload) {
+                    $upload->updated_at = $upload->created_at;
+                    $upload->save();
                 }
 
                 Config::setValue('core/version', $version);
