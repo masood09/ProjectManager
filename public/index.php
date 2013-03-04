@@ -16,7 +16,7 @@
 
 $configFile = __DIR__ . '/../app/config/config.xml';
 $maintainanceFile = __DIR__ . '/maintainance.flag';
-$updateFile = __DIR__ . 'update.flag';
+$updateFile = __DIR__ . '/update.flag';
 
 error_reporting(E_ALL);
 
