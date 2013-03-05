@@ -287,8 +287,9 @@ class ProjectController extends ControllerBase
             $task->title = htmlspecialchars($title);
             $task->project_id = $project_id;
             $task->created_by = $this->currentUser->id;
-            $task->created_at = new Phalcon\Db\RawValue('now()');
             $task->assigned_to = $this->currentUser->id;
+            $task->created_at = new Phalcon\Db\RawValue('now()');
+            $task->updated_at = new Phalcon\Db\RawValue('now()');
             $task->status = 0;
 
             if (!$task->save()) {
