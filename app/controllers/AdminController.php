@@ -208,6 +208,8 @@ class AdminController extends ControllerBase
             $leave->updated_at = new Phalcon\Db\RawValue('now()');
             $leave->save();
 
+            NotificationHelper::approveLeaveNotification($leave, $this->currentUser, $approved);
+
             $this->view->disable();
             return;
         }

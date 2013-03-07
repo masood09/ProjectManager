@@ -210,4 +210,74 @@ class NotificationHelper
             $notification->save();
         }
     }
+
+    static function newLeaveNotification($leave, $from, $to)
+    {
+        if ($from == $to) {
+            $message = '<strong>' . $leave->getUser()->full_name . '</strong> has applied for leave on ' . date('M j Y', strtotime($from));
+        }
+        else {
+            $message = '<strong>' . $leave->getUser()->full_name . '</strong> has applied for leave from ' . date('M j Y', strtotime($from)) . ' to ' . date('j, M Y', strtotime($to));
+        }
+
+        $adminUsers = User::find('role_id = "1" AND is_active = "1"');
+
+        foreach ($adminUsers AS $user) {
+            $notification = new Notification();
+            $notification->user_id = $user->id;
+            $notification->type = 'leave';
+            $notification->type_id = 0;
+            $notification->message = $message;
+            $notification->read = 0;
+            $notification->created_by = $leave->user->id;
+            $notification->created_at = new Phalcon\Db\RawValue('now()');
+            $notification->updated_at = new Phalcon\Db\RawValue('now()');
+
+            $notification->save();
+        }
+    }
+
+    static function approveLeaveNotification($leave, $user, $appoved)
+    {
+        if ($appoved == 1) {
+            $message = '<strong>' . $user->full_name . '</strong> has approved your leave for ' . date('M j Y', strtotime($leave->date));
+        }
+        else {
+            $message = '<strong>' . $user->full_name . '</strong> has declined your leave for ' . date('M j Y', strtotime($leave->date));
+        }
+
+        $notification = Notification::findFirst('user_id = "' . $leave->user_id . '" AND type = "leave" AND type_id = "' . $leave->id . '"');
+
+        if (!$notification) {
+            $notification = new Notification();
+            $notification->user_id = $leave->user_id;
+            $notification->type = 'leave';
+            $notification->type_id = $leave->id;
+            $notification->message = $message;
+            $notification->read = 0;
+            $notification->created_by = $user->id;
+            $notification->created_at = new Phalcon\Db\RawValue('now()');
+            $notification->updated_at = new Phalcon\Db\RawValue('now()');
+        }
+        else {
+            $notification->message = $message;
+            $notification->read = 0;
+            $notification->created_by = $user->id;
+            $notification->created_at = new Phalcon\Db\RawValue('now()');
+            $notification->updated_at = new Phalcon\Db\RawValue('now()');
+        }
+
+        $notification->save();
+    }
+
+    static function markLeaveAsRead($id)
+    {
+        $notification = Notification::findFirst('id = "' . $id . '"');
+
+        if ($notification) {
+            $notification->read = "1";
+            $notification->updated_at = new Phalcon\Db\RawValue('now()');
+            $notification->save();
+        }
+    }
 }

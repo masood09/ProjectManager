@@ -178,6 +178,7 @@ class UserController extends ControllerBase
             $to = $this->request->getPost('leavesTo');
             $reason = $this->request->getPost('leavesReason');
             $user = $this->currentUser;
+            $t_leave = null;
 
             if (!$user) {
                 $this->view->disable();
@@ -215,7 +216,13 @@ class UserController extends ControllerBase
                     $leave->created_at = new Phalcon\Db\RawValue('now()');
                     $leave->updated_at = new Phalcon\Db\RawValue('now()');
                     $leave->save();
+
+                    $t_leave = $leave;
                 }
+            }
+
+            if ($t_leave) {
+                NotificationHelper::newLeaveNotification($t_leave, $from, $to);
             }
 
             $this->view->disable();

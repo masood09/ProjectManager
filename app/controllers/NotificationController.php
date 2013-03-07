@@ -39,9 +39,9 @@ class NotificationController extends ControllerBase
             $project = Project::findFirst('id = "' . $type_id . '"');
 
             if (!$project) {
-            $this->response->redirect('dashboard/index');
-            $this->view->disable();
-            return;
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
             }
 
             NotificationHelper::markProjectRead($this->currentUser->id, $project->id);
@@ -55,9 +55,9 @@ class NotificationController extends ControllerBase
             $task = Task::findFirst('id = "' . $type_id . '"');
 
             if (!$task) {
-            $this->response->redirect('dashboard/index');
-            $this->view->disable();
-            return;
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
             }
 
             NotificationHelper::markTaskRead($this->currentUser->id, $task->id);
@@ -71,9 +71,9 @@ class NotificationController extends ControllerBase
             $comment = Comment::findFirst('id = "' . $type_id . '"');
 
             if (!$comment) {
-            $this->response->redirect('dashboard/index');
-            $this->view->disable();
-            return;
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
             }
 
             $task = $comment->getTask();
@@ -89,9 +89,9 @@ class NotificationController extends ControllerBase
             $note = Note::findFirst('id = "' . $type_id . '"');
 
             if (!$note) {
-            $this->response->redirect('dashboard/index');
-            $this->view->disable();
-            return;
+                $this->response->redirect('dashboard/index');
+                $this->view->disable();
+                return;
             }
 
             NotificationHelper::markNoteRead($this->currentUser->id, $note->id);
@@ -99,6 +99,21 @@ class NotificationController extends ControllerBase
             $this->response->redirect('project/notes/' . $note->project_id . '/' . $note->id);
             $this->view->disable();
             return;
+        }
+
+        if ($type = 'leave') {
+            NotificationHelper::markLeaveAsRead($id);
+
+            if ($type_id == 0) {
+                $this->response->redirect('admin/leaves');
+                $this->view->disable();
+                return;
+            }
+            else {
+                $this->response->redirect('user/leaves');
+                $this->view->disable();
+                return;
+            }
         }
     }
 }
